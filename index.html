@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'none';"/>
   <meta name="mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -822,17 +823,33 @@ let slideIdx=0, slideTimer=null, isAnim=false;
 const SLIDE_MS = 5000;
 
 function buildSlides() {
-  const slides = heroSlides.slice(0,5);
-  if (!slides.length) return;
+  const slides = heroSlides.slice(0, 5);
+  if (!slides.length) {
+    // Fun empty state for the hero banner
+    document.getElementById('hero-slider').innerHTML = `
+      <div class="hero-slide hero-empty" style="background:linear-gradient(135deg,#2C1206 0%,#3B1A08 60%,#4A2210 100%)">
+        <div class="slide-pat"></div>
+        <div class="slide-glow"></div>
+        <div class="slide-body">
+          <div class="slide-tag">👀 Coming Soon</div>
+          <h1>No Featured Stories Yet</h1>
+          <p>The creator is probably dreaming up something amazing... or just taking a nap. 😴 Check back soon!</p>
+          <div class="slide-acts">
+            <span class="btn-out" style="cursor:default;opacity:.6;">✍️ Stay tuned</span>
+          </div>
+        </div>
+      </div>`;
+    return;
+  }
   document.getElementById('hero-track').innerHTML = slides.map(s=>`
-    <div class="hero-slide" style="background:${esc(s.bg)}">
+    <div class="hero-slide" style="background:${safeCss(s.bg)}">
       <div class="slide-pat"></div><div class="slide-glow"></div>
       <div class="slide-body">
         <div class="slide-tag">${esc(s.tag)}</div>
         <h1>${esc(s.title)}</h1>
         <p>${esc(s.description)}</p>
         <div class="slide-acts">
-          <a class="btn-pri" href="${esc(s.readHref||'#')}">▶ Read Now</a>
+          <a class="btn-pri" href="${safeUrl(s.readHref)}" rel="noopener noreferrer">▶ Read Now</a>
           <a class="btn-out" href="#">+ Bookmark</a>
         </div>
       </div>
@@ -945,15 +962,15 @@ function renderMiniBookmarks() {
     return;
   }
   el.innerHTML = bookmarks.slice(0,4).map(b=>`
-    <a class="bm-item" href="${esc(b.href||'#')}" onclick="closeBmMini()">
-      <div class="bm-cover" style="background:${esc(b.bg||'linear-gradient(160deg,#E8622A,#3B1A08)')}">
+    <a class="bm-item" href="${safeUrl(b.href)}" rel="noopener noreferrer" onclick="closeBmMini()">
+      <div class="bm-cover" style="background:${safeCss(b.bg||'linear-gradient(160deg,#E8622A,#3B1A08)')}">
         ${esc(b.emoji||'📖')}
       </div>
       <div class="bm-info">
         <div class="bm-title">${esc(b.title)}</div>
         <div class="bm-meta">${esc(b.genre||'')}</div>
       </div>
-      <button class="bm-remove" onclick="removeBookmark(event,${b.id})">✕</button>
+      <button class="bm-remove" onclick="removeBookmark(event,${safeNum(b.id,0)|0})">✕</button>
     </a>`).join('');
 }
 
@@ -977,7 +994,8 @@ function renderDrawerBookmarks() {
 }
 
 function goToNovel(href) {
-  if (href && href !== '#') { window.location.href = href; }
+  const url = safeUrl(href);
+  if (url && url !== '#') { window.location.href = url; }
   else { toast('Novel page coming soon!'); }
 }
 
@@ -1066,20 +1084,50 @@ function swSub(name, btn) {
 }
 
 /* ═══════════════════════════════════════════
+   SECURITY HELPERS
+═══════════════════════════════════════════ */
+
+// Escape HTML — prevents XSS in innerHTML contexts
+function esc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#x27;');
+}
+// Allow only safe URL schemes — blocks javascript:, data:, vbscript:
+function safeUrl(u) {
+  const s = String(u || '#').trim();
+  return /^(https?:\/\/|\/|#)/i.test(s) ? esc(s) : '#';
+}
+// Strip dangerous CSS patterns — blocks url(), expression(), javascript: inside style attrs
+function safeCss(s) {
+  return esc(String(s || '')
+    .replace(/url\s*\(/gi, '')
+    .replace(/expression\s*\(/gi, '')
+    .replace(/javascript\s*:/gi, ''));
+}
+// Coerce to safe finite number — prevents NaN crashes from bad data
+function safeNum(n, fallback = 0) {
+  const v = parseFloat(n);
+  return isFinite(v) ? v : fallback;
+}
+// Whitelist a string against an allowed set — prevents class/type injection
+function safeChoice(val, allowed, fallback) {
+  return allowed.includes(String(val)) ? String(val) : fallback;
+}
+
+/* ═══════════════════════════════════════════
    RENDER HELPERS
 ═══════════════════════════════════════════ */
-function esc(s) {
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+
 function nCard(n, badge='', bCls='new-b') {
   return `<div class="nc">
-    <div class="nc-cov" style="background:${esc(n.bg||'linear-gradient(160deg,#E8622A,#3B1A08)')}">
+    <div class="nc-cov" style="background:${safeCss(n.bg||'linear-gradient(160deg,#E8622A,#3B1A08)')}">
       <div class="nc-ph">${esc(n.emoji||'📖')}</div>
-      ${badge?`<span class="nc-b ${bCls}">${badge}</span>`:''}
+      ${badge?`<span class="nc-b ${bCls}">${esc(badge)}</span>`:''}
     </div>
     <div class="nc-inf">
       <div class="nc-t">${esc(n.title)}</div>
-      <div class="nc-m"><span class="nc-s">★</span> ${(n.rating||0).toFixed(1)} <span style="color:var(--carrot-pale)">•</span> ${esc(n.genre||'')}</div>
+      <div class="nc-m"><span class="nc-s">★</span> ${safeNum(n.rating).toFixed(1)} <span style="color:var(--carrot-pale)">•</span> ${esc(n.genre||'')}</div>
     </div></div>`;
 }
 function phCards(label, count=5) {
@@ -1143,44 +1191,52 @@ function renderAll() {
   });
 
   // What's New
-  const newArr = novelsNew.filter(n=>n.isNew);
-  document.getElementById('car-new').innerHTML = newArr.length
-    ? newArr.map(n=>nCard(n,'New')).join('') : phCards('Coming Soon',4);
-  document.getElementById('new-list').innerHTML = !newArr.length
-    ? emH('🆕','No new titles yet','Set <strong>isNew: true</strong> on a novel in <strong>novelsNew</strong>.',
-        `{ title:'My Novel', isNew: true, ... }`)
-    : newArr.map(n=>`<div class="lc">
+  const newArr = novelsNew.filter(n => n.isNew === true);
+  const carNew = document.getElementById('car-new');
+  const newList = document.getElementById('new-list');
+  if (newArr.length) {
+    carNew.classList.remove('hidden');
+    carNew.innerHTML = newArr.map(n => nCard(n, 'New')).join('');
+    newList.innerHTML = newArr.map(n=>`<div class="lc">
         <div class="lc-cov">${esc(n.emoji||'📖')}</div>
         <div class="lc-bd">
           <div class="lc-t">${esc(n.title)}</div>
           <div class="lc-d">${esc(n.description||'')}</div>
           <div class="tags"><span class="tag o">${esc(n.genre||'')}</span><span class="tag">${esc(n.status||'')}</span></div>
         </div></div>`).join('');
+  } else {
+    carNew.classList.add('hidden');
+    newList.innerHTML = emptySection('🆕', "Nothing new just yet — the creator's workshop is still running. Fresh titles incoming soon! 🏗️");
+  }
 
   // Updates
-  document.getElementById('upd-list').innerHTML = !updatesData.length
-    ? emH('🔄','No updates yet','Add objects to <strong>updatesData</strong> in the script.',
-        `{ novelTitle:'My Novel', emoji:'📖',\n  chapter:5, chapterTitle:'The Beginning',\n  time:'2h ago' }`)
-    : updatesData.map((u,i)=>`<div class="upd">
+  const updList = document.getElementById('upd-list');
+  if (updatesData.length) {
+    updList.innerHTML = updatesData.map((u,i)=>`<div class="upd">
         <div class="upd-ico">${esc(u.emoji||'📖')}</div>
         <div class="upd-bd">
           <div class="upd-t">${esc(u.novelTitle)}${i<3?'<span class="np-pill">NEW</span>':''}</div>
-          <div class="upd-s">Chapter ${u.chapter} — ${esc(u.chapterTitle||'')}</div>
+          <div class="upd-s">Chapter ${safeNum(u.chapter,0)|0} — ${esc(u.chapterTitle||'')}</div>
         </div>
         <div class="upd-tm">${esc(u.time||'')}</div></div>`).join('');
+  } else {
+    updList.innerHTML = emptySection('🔄', "No chapter updates yet — looks like the authors are still typing away. The chapters will appear here once they drop! ✍️");
+  }
 
   // Announcements
   const annEl = document.getElementById('ann-list');
-  if (!announcementsData.length) {
-    annEl.innerHTML = emH('📢','No announcements yet',
-      'Add objects to <strong>announcementsData</strong> in the script.',
-      `{ title:'Welcome!', body:'Platform is live.',\n  type:'new', date:'2026-04-03' }`);
+  if (announcementsData.length) {
+    const ALLOWED_TYPES = ['new', 'event', 'system'];
+    const lbl = { new:'✨ New', event:'🎉 Event', system:'⚙️ System' };
+    annEl.innerHTML = announcementsData.map(a => {
+      const type = safeChoice(a.type, ALLOWED_TYPES, 'new');
+      return `<div class="ann">
+        <span class="ann-tp ${type}">${lbl[type]}</span>
+        <div class="ann-date">${esc(a.date||'')}</div>
+        <h3>${esc(a.title)}</h3><p>${esc(a.body)}</p></div>`;
+    }).join('');
   } else {
-    const lbl={new:'✨ New',event:'🎉 Event',system:'⚙️ System'};
-    annEl.innerHTML = announcementsData.map(a=>`<div class="ann">
-      <span class="ann-tp ${esc(a.type||'new')}">${lbl[a.type]||'✨ New'}</span>
-      <div class="ann-date">${esc(a.date||'')}</div>
-      <h3>${esc(a.title)}</h3><p>${esc(a.body)}</p></div>`).join('');
+    annEl.innerHTML = emptySection('📢', "Radio silence for now — no announcements have been posted. When the creator has big news, you'll see it right here! 🎙️");
   }
 }
 
