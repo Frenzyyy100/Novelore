@@ -500,13 +500,102 @@ footer strong{color:var(--amber);}
   text-align:center;
   transition:background var(--tr);
 }
-.sec-empty-icon{font-size:2.4rem;margin-bottom:10px;line-height:1;}
+.sec-empty{animation:secEmptyIn .4s ease both;}
+.sec-empty-icon{font-size:2.4rem;margin-bottom:10px;line-height:1;display:inline-block;animation:emptyBounce 2.6s ease-in-out infinite;}
 .sec-empty-msg{font-size:.82rem;color:var(--text-muted);line-height:1.65;max-width:300px;margin:0 auto;}
+@keyframes secEmptyIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes emptyBounce{0%,100%{transform:translateY(0)}48%{transform:translateY(-7px)}56%{transform:translateY(-4px)}}
 .hidden{display:none!important;}
+
+/* ══════════ SKELETON SHIMMER ══════════ */
+.sk-wrap{display:flex;gap:13px;padding:6px 16px 10px;overflow:hidden;}
+.sk-card{flex:0 0 148px;border-radius:var(--radius);overflow:hidden;background:var(--bg-card);box-shadow:var(--shadow);}
+.sk-cov{height:198px;background:var(--bg-elevated);position:relative;overflow:hidden;}
+.sk-inf{padding:10px;}
+.sk-line{height:10px;border-radius:6px;background:var(--bg-elevated);margin-bottom:7px;position:relative;overflow:hidden;}
+.sk-line.short{width:58%;}
+.sk-cov::after,.sk-line::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.07) 50%,transparent 100%);animation:shimmer 1.5s ease-in-out infinite;}
+.sk-line::after{background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.1) 50%,transparent 100%);}
+@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(200%)}}
+@media(min-width:600px){.sk-card{flex-basis:162px;}.sk-cov{height:218px;}}
+
+/* ══════════ LIGHT MODE NAV OVERRIDES ══════════ */
+[data-theme="light"] #topnav{background:#FFFFFF;box-shadow:0 2px 16px rgba(44,18,6,.1);}
+[data-theme="light"] .nav-logo{color:var(--carrot);}
+[data-theme="light"] .nav-logo em{color:var(--carrot-deep);}
+[data-theme="light"] .burger{background:rgba(44,18,6,.07);color:var(--carrot);}
+[data-theme="light"] .burger:hover,[data-theme="light"] .burger:active{background:var(--carrot);color:#fff;}
+[data-theme="light"] .nav-search{background:rgba(44,18,6,.05);border-color:rgba(44,18,6,.12);}
+[data-theme="light"] .nav-search input{color:var(--text-main);}
+[data-theme="light"] .nav-search input::placeholder{color:var(--text-faint);}
+[data-theme="light"] .nav-ico{background:rgba(44,18,6,.07);color:var(--carrot);}
+[data-theme="light"] .nav-ico:hover,[data-theme="light"] .nav-ico:active{background:var(--carrot);color:#fff;}
+[data-theme="light"] .nav-badge{border-color:#FFFFFF;}
+[data-theme="light"] #tabbar{background:var(--bg-elevated);border-bottom-color:var(--border-mid);}
+[data-theme="light"] .tab-btn{color:var(--text-faint);}
+[data-theme="light"] .tab-btn.active{color:var(--carrot);border-bottom-color:var(--carrot);}
+
+/* ══════════ FOOTER LINK ══════════ */
+.footer-link{color:var(--amber);cursor:pointer;font-weight:600;transition:color .2s;}
+.footer-link:hover{color:var(--carrot-light);text-decoration:underline;}
+
+/* ══════════ DECORATIVE BUTTON (non-interactive) ══════════ */
+.btn-decorative{display:inline-flex;align-items:center;gap:7px;border:1px dashed rgba(255,240,230,.22);color:rgba(255,240,230,.45);padding:10px 16px;border-radius:26px;font-size:.84rem;pointer-events:none;user-select:none;}
+
+/* ══════════ LOADING SCREEN ══════════ */
+#loading-screen{
+  position:fixed;inset:0;z-index:9999;
+  background:var(--bg,#1A0D05);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;
+  transition:opacity .55s ease, visibility .55s ease;
+  overflow:hidden;
+}
+#loading-screen::before{content:'';position:absolute;inset:0;opacity:.04;background-image:repeating-linear-gradient(45deg,var(--amber,#F5B942) 0,var(--amber,#F5B942) 1px,transparent 0,transparent 50%);background-size:22px 22px;pointer-events:none;}
+#loading-screen::after{content:'';position:absolute;top:-100px;right:-80px;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(232,98,42,.16),transparent 70%);pointer-events:none;}
+#loading-screen.fade-out{opacity:0;visibility:hidden;}
+.ls-logo{
+  font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;
+  color:#F5B942;letter-spacing:-.5px;
+}
+.ls-logo em{color:#F4924A;font-style:normal;}
+.ls-sub{font-size:.82rem;color:rgba(255,200,150,.45);letter-spacing:.5px;}
+.ls-bar-wrap{
+  width:160px;height:3px;background:rgba(255,255,255,.08);
+  border-radius:3px;overflow:hidden;margin-top:6px;
+}
+.ls-bar{
+  height:100%;width:0;background:linear-gradient(90deg,var(--carrot,#E8622A),var(--amber,#F5B942));
+  border-radius:3px;
+  transition:width .4s cubic-bezier(.4,0,.2,1);
+}
+.ls-dots{display:flex;gap:6px;margin-top:4px;}
+.ls-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:rgba(232,98,42,.5);
+  animation:lsDot 1.2s ease-in-out infinite;
+}
+.ls-dot:nth-child(2){animation-delay:.2s;}
+.ls-dot:nth-child(3){animation-delay:.4s;}
+@keyframes lsDot{
+  0%,80%,100%{transform:scale(.6);opacity:.35;}
+  40%{transform:scale(1);opacity:1;}
+}
 
   </style>
 </head>
 <body>
+<!-- ── LOADING SCREEN ── -->
+<div id="loading-screen">
+  <div class="ls-logo">📖 Novél<em>ore</em></div>
+  <div class="ls-sub">Read Without Limits</div>
+  <div class="ls-bar-wrap"><div class="ls-bar"></div></div>
+  <div class="ls-dots">
+    <div class="ls-dot"></div>
+    <div class="ls-dot"></div>
+    <div class="ls-dot"></div>
+  </div>
+</div>
+
 <!-- ── OVERLAYS ── -->
 <div id="overlay" onclick="closeSB()"></div>
 <div id="panel-overlay" class="panel-overlay" onclick="closeAllPanels()"></div>
@@ -582,7 +671,7 @@ footer strong{color:var(--amber);}
     <span class="nav-logo">Novél<em>ore</em></span>
     <label class="nav-search">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input type="search" placeholder="Search…"/>
+      <input type="search" id="search-input" placeholder="Search…"/>
     </label>
     <!-- Bookmark button -->
     <button class="nav-ico" id="bm-btn" onclick="toggleBmMini()" aria-label="Bookmarks">
@@ -597,10 +686,10 @@ footer strong{color:var(--amber);}
   </header>
 
   <div id="tabbar">
-    <button class="tab-btn active" onclick="swTab('home',this)">🏠 Home</button>
-    <button class="tab-btn" onclick="swTab('new',this)">✨ What's New</button>
-    <button class="tab-btn" onclick="swTab('updates',this)">🔄 Updates</button>
-    <button class="tab-btn" onclick="swTab('announce',this)">📢 Announce</button>
+    <button class="tab-btn active" data-tab="home" onclick="swTab('home',this)">🏠 Home</button>
+    <button class="tab-btn" data-tab="new" onclick="swTab('new',this)">✨ What's New</button>
+    <button class="tab-btn" data-tab="updates" onclick="swTab('updates',this)">🔄 Updates</button>
+    <button class="tab-btn" data-tab="announce" onclick="swTab('announce',this)">📢 Announce</button>
   </div>
 
   <div id="app-wrap">
@@ -654,7 +743,7 @@ footer strong{color:var(--amber);}
       </main>
       <footer>
         <strong>NovéLore</strong> &nbsp;|&nbsp; Read Without Limits<br/>
-        © <span id="fy"></span> NovéLore · All rights reserved
+        © <span id="fy"></span> NovéLore · All rights reserved · <span class="footer-link" onclick="goAbout()">About</span>
       </footer>
     </div>
   </div>
@@ -717,7 +806,7 @@ footer strong{color:var(--amber);}
     <div class="contact-icon">📧</div>
     <div class="contact-info">
       <div class="contact-label">Business Email</div>
-      <a href="mailto:frenzyyybusinessemail@gmail.com" class="contact-link">frenzyyybusinessemail@gmail.com</a>
+      <a href="/cdn-cgi/l/email-protection#6c0a1e0902161515150e191f0502091f1f09010d05002c0b010d0500420f0301" class="contact-link"><span class="__cf_email__" data-cfemail="97f1e5f2f9edeeeeeef5e2e4fef9f2e4e4f2faf6fefbd7f0faf6fefbb9f4f8fa">[email&#160;protected]</span></a>
     </div>
   </div>
 
@@ -743,20 +832,16 @@ footer strong{color:var(--amber);}
 ════════════════════════════════════════════ -->
 
   <!-- Scripts -->
-  <script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 'use strict';
 
 /* ═══════════════════════════════════════════
    ✏️  YOUR CONTENT
 ═══════════════════════════════════════════ */
 
-// Hero slides (max 5)
+// Hero slides (max 5) — leave empty to show the "coming soon" panel
 const heroSlides = [
-  { tag:'🔥 Featured', title:'Slide 1 Title', description:'Edit heroSlides[0] in the script section to set your first banner.', bg:'linear-gradient(135deg,#3B1A08 0%,#5A2510 55%,#C44B1A 100%)', readHref:'#' },
-  { tag:'✨ New Release', title:'Slide 2 Title', description:'Edit heroSlides[1] in the script section.', bg:'linear-gradient(135deg,#1A0D05 0%,#4A2210 60%,#E8622A 100%)', readHref:'#' },
-  { tag:'⭐ Staff Pick', title:'Slide 3 Title', description:'Edit heroSlides[2] in the script section.', bg:'linear-gradient(135deg,#2C1206 0%,#6B3318 55%,#F5B942 100%)', readHref:'#' },
-  // { tag:'', title:'', description:'', bg:'', readHref:'#' },
-  // { tag:'', title:'', description:'', bg:'', readHref:'#' },
+  // { tag:'🔥 Featured', title:'Your Title Here', description:'Your description here.', bg:'linear-gradient(135deg,#3B1A08 0%,#5A2510 55%,#C44B1A 100%)', readHref:'#' },
 ];
 
 // Sub-tab novels — { title, emoji, bg, rating, genre, status }
@@ -776,21 +861,16 @@ const announcementsData = [];
 
 // Notifications — { msg, time, read }
 const notificationsData = [
-  { msg:'📢 Welcome to NovéLore! Start exploring novels.', time:'Just now', read:false },
-  { msg:'🔥 New chapters available — check the Updates tab.', time:'5m ago', read:false },
-  { msg:"✍️ Frenzyyy just posted a new chapter!", time:'1h ago', read:true },
-  { msg:'📚 Three new novels added to Hot Picks.', time:'3h ago', read:true },
-  { msg:'🎉 Dojo Duels section is now live!', time:'Yesterday', read:true },
+  // Add real notifications here when ready, e.g.:
+  // { msg:'📢 Welcome to NovéLore! Start exploring novels.', time:'Just now', read:false },
 ];
 
 // Bookmarks — { title, emoji, bg, genre, href }
 // href is where "Read" button will take the user (set to your novel URL or '#')
 const bookmarksData = [
-  { title:'Placeholder Novel 1', emoji:'📖', bg:'linear-gradient(160deg,#E8622A,#3B1A08)', genre:'Fantasy', href:'#' },
-  { title:'Placeholder Novel 2', emoji:'📚', bg:'linear-gradient(160deg,#C44B1A,#6B3318)', genre:'Action',  href:'#' },
-  { title:'Placeholder Novel 3', emoji:'🌸', bg:'linear-gradient(160deg,#F5B942,#6B3318)', genre:'Romance', href:'#' },
+  // Add real bookmarks here, e.g.:
+  // { title:'My Novel', emoji:'📖', bg:'linear-gradient(160deg,#E8622A,#3B1A08)', genre:'Fantasy', href:'#' },
 ];
-// ← Replace placeholder bookmarks with real data, or clear the array for an empty state
 
 'use strict';
 
@@ -835,7 +915,7 @@ function buildSlides() {
           <h1>No Featured Stories Yet</h1>
           <p>The creator is probably dreaming up something amazing... or just taking a nap. 😴 Check back soon!</p>
           <div class="slide-acts">
-            <span class="btn-out" style="cursor:default;opacity:.6;">✍️ Stay tuned</span>
+            <span class="btn-decorative">✍️ Stay tuned</span>
           </div>
         </div>
       </div>`;
@@ -860,13 +940,17 @@ function buildSlides() {
   slideTimer = setInterval(()=>goSlide(slideIdx+1), SLIDE_MS);
 }
 function goSlide(idx) {
+  // Guard: hero-track is removed when slides are empty — bail out safely
+  const track = document.getElementById('hero-track');
+  const bar   = document.getElementById('hero-progress');
+  if (!track || !bar) { isAnim = false; return; }
   if (isAnim) return; isAnim = true;
-  const total = Math.min(heroSlides.length,5);
-  slideIdx = ((idx%total)+total)%total;
-  document.getElementById('hero-track').style.transform = `translateX(-${slideIdx*100}%)`;
+  const total = Math.min(heroSlides.length, 5);
+  if (!total) { isAnim = false; return; }
+  slideIdx = ((idx % total) + total) % total;
+  track.style.transform = `translateX(-${slideIdx * 100}%)`;
   document.querySelectorAll('.hero-dot').forEach((d,i)=>d.classList.toggle('active',i===slideIdx));
   setTimeout(()=>{ isAnim=false; }, 650);
-  const bar = document.getElementById('hero-progress');
   bar.style.transition='none'; bar.style.width='0%';
   void bar.offsetWidth;
   bar.style.transition=`width ${SLIDE_MS}ms linear`; bar.style.width='100%';
@@ -876,6 +960,8 @@ function goSlide(idx) {
   const sl = document.getElementById('hero-slider');
   sl.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});
   sl.addEventListener('touchend',e=>{
+    // Only respond to swipes when real slides exist
+    if (!heroSlides.length) return;
     const dx=e.changedTouches[0].clientX-tx;
     if(Math.abs(dx)>40){clearInterval(slideTimer);goSlide(slideIdx+(dx<0?1:-1));slideTimer=setInterval(()=>goSlide(slideIdx+1),SLIDE_MS);}
   },{passive:true});
@@ -1049,6 +1135,14 @@ function showScreen(id) {
 function goHome() {
   closeSB(); closeAllPanels();
   showScreen('screen-app');
+  // Restore whichever tab the user was on before leaving
+  const savedBtn = document.querySelector(`.tab-btn[data-tab="${lastTab}"]`);
+  if (savedBtn) {
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    savedBtn.classList.add('active');
+    document.getElementById('panel-'+lastTab).classList.add('active');
+  }
   document.getElementById('main-scroll')?.scrollTo({top:0,behavior:'smooth'});
 }
 function goSettings() {
@@ -1069,7 +1163,10 @@ function closeSB() { document.getElementById('sidebar').classList.remove('open')
 /* ═══════════════════════════════════════════
    TABS
 ═══════════════════════════════════════════ */
+let lastTab = 'home';
+
 function swTab(name, btn) {
+  lastTab = name;
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   btn.classList.add('active');
@@ -1150,6 +1247,35 @@ function emH(icon,title,msg,code='') {
   return `<div class="empty"><div class="empty-i">${icon}</div><h3>${title}</h3><p>${msg}</p>${code?`<code>${esc(code)}</code>`:''}</div>`;
 }
 
+function skeletonCards(count = 4) {
+  return `<div class="sk-wrap">${Array(count).fill(null).map(()=>`
+    <div class="sk-card">
+      <div class="sk-cov"></div>
+      <div class="sk-inf"><div class="sk-line"></div><div class="sk-line short"></div></div>
+    </div>`).join('')}</div>`;
+}
+
+function handleSearch(q) {
+  const query = q.trim().toLowerCase();
+  // Only search while on the home screen
+  if (!query) {
+    document.querySelectorAll('.nc').forEach(c => c.style.display = '');
+    document.querySelectorAll('.sec-empty').forEach(e => e.style.display = '');
+    return;
+  }
+  // Dim the hero during search
+  const hero = document.getElementById('hero-slider');
+  if (hero) hero.style.opacity = query ? '.4' : '';
+  // Filter cards
+  document.querySelectorAll('.nc').forEach(c => {
+    const title = (c.querySelector('.nc-t')?.textContent || '').toLowerCase();
+    const genre = (c.querySelector('.nc-m')?.textContent || '').toLowerCase();
+    c.style.display = (title.includes(query) || genre.includes(query)) ? '' : 'none';
+  });
+  // Hide empty-state panels when searching so they don't clutter
+  document.querySelectorAll('.sec-empty').forEach(e => e.style.display = query ? 'none' : '');
+}
+
 /* ═══════════════════════════════════════════
    RENDER ALL
 ═══════════════════════════════════════════ */
@@ -1179,14 +1305,21 @@ function renderAll() {
       empty: emptySection('✍️', "Frenzyyy hasn't dropped anything here yet. The pen is loaded — just waiting for inspiration! 💭"),
     },
   ];
-  carDefs.forEach(({ id, arr, badgeFn, empty }) => {
+  carDefs.forEach(({ id, arr, badgeFn, empty }, defIdx) => {
     const el = document.getElementById(id);
     if (arr.length) {
       el.classList.remove('hidden');
       el.innerHTML = arr.map((n,i) => nCard(n, badgeFn(n,i), i===0?'hot':'new-b')).join('');
     } else {
       el.classList.add('hidden');
-      el.insertAdjacentHTML('afterend', empty);
+      // Show shimmer skeleton briefly, then fade in the empty state
+      const skId = 'sk-' + id;
+      el.insertAdjacentHTML('afterend', `<div id="${skId}">${skeletonCards(4)}</div>`);
+      const delay = 500 + defIdx * 180 + Math.random() * 300;
+      setTimeout(() => {
+        document.getElementById(skId)?.remove();
+        el.insertAdjacentHTML('afterend', empty);
+      }, delay);
     }
   });
 
@@ -1206,7 +1339,12 @@ function renderAll() {
         </div></div>`).join('');
   } else {
     carNew.classList.add('hidden');
-    newList.innerHTML = emptySection('🆕', "Nothing new just yet — the creator's workshop is still running. Fresh titles incoming soon! 🏗️");
+    const skNewId = 'sk-car-new';
+    newList.insertAdjacentHTML('beforebegin', `<div id="${skNewId}">${skeletonCards(3)}</div>`);
+    setTimeout(() => {
+      document.getElementById(skNewId)?.remove();
+      newList.innerHTML = emptySection('🆕', "Nothing new just yet — the creator's workshop is still running. Fresh titles incoming soon! 🏗️");
+    }, 700 + Math.random() * 400);
   }
 
   // Updates
@@ -1258,16 +1396,91 @@ document.addEventListener('keydown', e=>{
   if(e.key==='Escape'){closeSB();closeAllPanels();}
 });
 
-/* ==============================================
+/* ═══════════════════════════════════════════
+   LOADING BAR — driven by real browser events
+═══════════════════════════════════════════ */
+(function () {
+  const bar = document.querySelector('.ls-bar');
+  const ls  = document.getElementById('loading-screen');
+  let cur = 0;
+  let dismissed = false;
+
+  function setP(pct) {
+    if (!bar || dismissed) return;
+    cur = Math.max(cur, Math.min(pct, 100));
+    bar.style.width = cur + '%';
+  }
+
+  function dismiss() {
+    if (dismissed || !ls) return;
+    dismissed = true;
+    setP(100);
+    // Wait for the bar to finish its transition, then fade out
+    setTimeout(() => {
+      ls.classList.add('fade-out');
+      ls.addEventListener('transitionend', () => ls.remove(), { once: true });
+    }, 420);
+  }
+
+  // ── Milestone 1: script is executing (DOM likely partially built)
+  setP(10);
+
+  // ── Milestone 2: DOMContentLoaded (full HTML parsed, no resources yet)
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => setP(40));
+  } else {
+    setP(40); // already past DOMContentLoaded
+  }
+
+  // ── Milestone 3: after our own renderAll / buildSlides finish
+  //    We expose a hook that init() calls after rendering
+  window._lsAfterRender = () => setP(75);
+
+  // ── Milestone 4: fonts ready
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => setP(90));
+  }
+
+  // ── Milestone 5: window.load (all images, stylesheets, iframes done)
+  if (document.readyState === 'complete') {
+    setP(95);
+    // Small rAF delay so the bar visually reaches 95% before we dismiss
+    requestAnimationFrame(() => setTimeout(dismiss, 300));
+  } else {
+    window.addEventListener('load', () => {
+      setP(95);
+      requestAnimationFrame(() => setTimeout(dismiss, 300));
+    });
+  }
+})();
+
+/* ═══════════════════════════════════════════
    INIT
-============================================== */
-function init() {
+═══════════════════════════════════════════ */
+(function init() {
   loadTheme();
   buildSlides();
   renderAll();
   updateNotifBadge();
-}
-document.addEventListener('DOMContentLoaded', init);
+
+  // Wire search bar
+  const si = document.getElementById('search-input');
+  if (si) {
+    si.addEventListener('input', e => {
+      const q = e.target.value;
+      const hero = document.getElementById('hero-slider');
+      if (hero) hero.style.opacity = q.trim() ? '.4' : '';
+      handleSearch(q);
+    });
+    si.addEventListener('search', e => { // fires when X is cleared
+      if (!e.target.value) { handleSearch(''); const hero = document.getElementById('hero-slider'); if(hero) hero.style.opacity=''; }
+    });
+  }
+
+  // Signal the loading bar that all synchronous rendering is done
+  if (typeof window._lsAfterRender === 'function') window._lsAfterRender();
+})();
+
   </script>
 </body>
 </html>
