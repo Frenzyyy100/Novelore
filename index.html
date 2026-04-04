@@ -186,7 +186,7 @@ ul{list-style:none;}
 .bm-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .18s;text-decoration:none;}
 .bm-item:last-child{border-bottom:none;}
 .bm-item:hover{background:rgba(232,98,42,.07);}
-.bm-cover{flex-shrink:0;width:42px;height:56px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;}
+.bm-cover{flex-shrink:0;width:42px;height:56px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;overflow:hidden;}
 .bm-info{flex:1;min-width:0;}
 .bm-title{font-size:.84rem;font-weight:600;color:var(--text-main);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px;}
 .bm-meta{font-size:.71rem;color:var(--text-muted);}
@@ -328,10 +328,71 @@ ul{list-style:none;}
 .nc-s{color:var(--amber);}
 .nc.ph{opacity:.4;filter:grayscale(.65);}
 
+/* ══════════ COVER IMAGE & INITIAL LETTER ══════════ */
+/* Novel card cover */
+.nc-cov-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:1;}
+.nc-initial{
+  position:absolute;inset:0;z-index:1;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;font-size:4rem;font-weight:900;
+  color:rgba(255,240,230,.9);text-shadow:0 2px 22px rgba(0,0,0,.5);
+  letter-spacing:-2px;user-select:none;
+}
+.nc-cov .nc-b{z-index:2;}
+
+/* Hero slide book cover panel */
+.slide-cover-wrap{
+  position:absolute;right:18px;top:0;bottom:0;
+  display:flex;align-items:center;
+  z-index:3;pointer-events:none;
+}
+.slide-cover{
+  width:88px;height:132px;
+  border-radius:10px;object-fit:cover;display:block;
+  box-shadow:0 10px 40px rgba(0,0,0,.6),0 2px 8px rgba(0,0,0,.4);
+}
+.slide-initial{
+  width:88px;height:132px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.1);border:1.5px solid rgba(255,240,230,.18);
+  backdrop-filter:blur(4px);
+  font-family:'Playfair Display',serif;font-size:3.6rem;font-weight:900;
+  color:rgba(255,240,230,.9);text-shadow:0 2px 16px rgba(0,0,0,.35);
+  user-select:none;
+}
+/* Push slide text body left so it doesn't overlap the cover */
+.hero-slide .slide-body{padding-right:116px;}
+@media(max-width:360px){
+  .slide-cover-wrap{display:none;}
+  .hero-slide .slide-body{padding-right:20px;}
+}
+
+/* List-card cover image / initial */
+.lc-cov-img{width:100%;height:100%;object-fit:cover;display:block;}
+.lc-initial{
+  font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:900;
+  color:rgba(255,240,230,.9);text-shadow:0 1px 10px rgba(0,0,0,.4);
+  user-select:none;line-height:1;
+}
+
+/* Bookmark mini cover image / initial */
+.bm-cover-img{width:100%;height:100%;object-fit:cover;display:block;}
+.bm-initial{
+  font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900;
+  color:rgba(255,240,230,.9);text-shadow:0 1px 8px rgba(0,0,0,.4);user-select:none;
+}
+
+/* Bookmark drawer cover image / initial */
+.bm-drawer-cover-img{width:100%;height:100%;object-fit:cover;display:block;}
+.bm-drawer-initial{
+  font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:900;
+  color:rgba(255,240,230,.9);text-shadow:0 1px 12px rgba(0,0,0,.4);user-select:none;
+}
+
 /* ══════════ LIST CARD ══════════ */
 .lc{display:flex;gap:12px;align-items:flex-start;background:var(--bg-card);border-radius:var(--radius);padding:13px 16px;box-shadow:var(--shadow);margin:0 16px 10px;transition:transform .2s,background var(--tr);}
 .lc:active{transform:translateX(3px);}
-.lc-cov{flex:0 0 58px;height:78px;border-radius:8px;background:var(--bg-elevated);display:flex;align-items:center;justify-content:center;font-size:1.8rem;}
+.lc-cov{flex:0 0 58px;height:78px;border-radius:8px;background:var(--bg-elevated);display:flex;align-items:center;justify-content:center;font-size:1.8rem;overflow:hidden;}
 .lc-bd{flex:1;min-width:0;}
 .lc-t{font-family:'DM Serif Display',serif;font-size:.88rem;color:var(--text-main);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .lc-d{font-size:.74rem;color:var(--text-muted);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:6px;}
@@ -1082,17 +1143,22 @@ footer strong{color:var(--amber);}
 ═══════════════════════════════════════════ */
 
 // Hero slides (max 5) — leave empty to show the "coming soon" panel
+// Fields: { tag, title, description, bg, readHref, coverImg? }
+//   coverImg — URL to book cover image (https://... or relative path). Omit to show the title's first letter.
+// Example:
+// { tag:'🔥 Featured', title:'Your Title Here', description:'Your description.', bg:'linear-gradient(135deg,#3B1A08 0%,#5A2510 55%,#C44B1A 100%)', readHref:'#', coverImg:'https://example.com/cover.jpg' },
 const heroSlides = [
-  // { tag:'🔥 Featured', title:'Your Title Here', description:'Your description here.', bg:'linear-gradient(135deg,#3B1A08 0%,#5A2510 55%,#C44B1A 100%)', readHref:'#' },
+  // { tag:'🔥 Featured', title:'Your Title Here', description:'Your description here.', bg:'linear-gradient(135deg,#3B1A08 0%,#5A2510 55%,#C44B1A 100%)', readHref:'#', coverImg:'https://...' },
 ];
 
-// Sub-tab novels — { title, emoji, bg, rating, genre, status }
+// Novel cards — { title, emoji, bg, rating, genre, status, coverImg? }
+//   coverImg — URL to book cover image. Omit to show the title's first letter.
 const trendingData  = []; // 🔥 Trending tab
 const hotPicksData  = []; // ⭐ Hot Picks tab
 const dojoDuelsData = []; // ⚔️ Dojo Duels tab
 const frenzyyyData  = []; // ✍️ Frenzyyy's Work tab
 
-// What's New — { title, emoji, bg, description, genre, status, rating, isNew }
+// What's New — { title, emoji, bg, description, genre, status, rating, isNew, coverImg? }
 const novelsNew = [];
 
 // Chapter updates — { novelTitle, emoji, chapter, chapterTitle, time }
@@ -1107,11 +1173,11 @@ const notificationsData = [
   // { msg:'📢 Welcome to NovéLore! Start exploring novels.', time:'Just now', read:false },
 ];
 
-// Bookmarks — { title, emoji, bg, genre, href }
+// Bookmarks — { title, emoji, bg, genre, href, coverImg? }
 // href is where "Read" button will take the user (set to your novel URL or '#')
 const bookmarksData = [
   // Add real bookmarks here, e.g.:
-  // { title:'My Novel', emoji:'📖', bg:'linear-gradient(160deg,#E8622A,#3B1A08)', genre:'Fantasy', href:'#' },
+  // { title:'My Novel', emoji:'📖', bg:'linear-gradient(160deg,#E8622A,#3B1A08)', genre:'Fantasy', href:'#', coverImg:'https://...' },
 ];
 
 /* ═══════════════════════════════════════════
@@ -1225,9 +1291,27 @@ function buildSlides() {
       </div>`;
     return;
   }
-  document.getElementById('hero-track').innerHTML = slides.map(s=>`
+  document.getElementById('hero-track').innerHTML = slides.map(s=>{
+    const init = titleInitial(s.title);
+    let slideCover;
+    if (s.coverImg) {
+      const safe = safeUrl(s.coverImg);
+      if (safe && safe !== '#') {
+        slideCover = `<div class="slide-cover-wrap">
+          <img class="slide-cover" src="${safe}" alt="${esc(s.title)}" loading="lazy"
+            onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="slide-initial" style="display:none">${esc(init)}</div>
+        </div>`;
+      } else {
+        slideCover = `<div class="slide-cover-wrap"><div class="slide-initial">${esc(init)}</div></div>`;
+      }
+    } else {
+      slideCover = `<div class="slide-cover-wrap"><div class="slide-initial">${esc(init)}</div></div>`;
+    }
+    return `
     <div class="hero-slide" style="background:${safeCss(s.bg)}">
       <div class="slide-pat"></div><div class="slide-glow"></div>
+      ${slideCover}
       <div class="slide-body">
         <div class="slide-tag">${esc(s.tag)}</div>
         <h1>${esc(s.title)}</h1>
@@ -1237,7 +1321,8 @@ function buildSlides() {
           <a class="btn-out" href="#">+ Bookmark</a>
         </div>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
   document.getElementById('hero-dots').innerHTML = slides.map((_,i)=>
     `<button class="hero-dot${i===0?' active':''}" onclick="goSlide(${i})"></button>`).join('');
   goSlide(0);
@@ -1370,17 +1455,30 @@ function renderMiniBookmarks() {
     el.innerHTML=`<div class="bm-empty"><span class="bm-empty-icon">🔖</span><p>No bookmarks yet.<br/>Tap the bookmark button on any novel.</p></div>`;
     return;
   }
-  el.innerHTML = bookmarks.slice(0,4).map(b=>`
+  el.innerHTML = bookmarks.slice(0,4).map(b=>{
+    const init = titleInitial(b.title);
+    const bg   = safeCss(b.bg||'linear-gradient(160deg,#E8622A,#3B1A08)');
+    let bmInner;
+    if (b.coverImg) {
+      const safe = safeUrl(b.coverImg);
+      bmInner = safe && safe !== '#'
+        ? `<img class="bm-cover-img" src="${safe}" alt="${esc(b.title)}" loading="lazy"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+           <div class="bm-initial" style="display:none">${esc(init)}</div>`
+        : `<div class="bm-initial">${esc(init)}</div>`;
+    } else {
+      bmInner = `<div class="bm-initial">${esc(init)}</div>`;
+    }
+    return `
     <a class="bm-item" href="${safeUrl(b.href)}" rel="noopener noreferrer" onclick="closeBmMini()">
-      <div class="bm-cover" style="background:${safeCss(b.bg||'linear-gradient(160deg,#E8622A,#3B1A08)')}">
-        ${esc(b.emoji||'📖')}
-      </div>
+      <div class="bm-cover" style="background:${bg}">${bmInner}</div>
       <div class="bm-info">
         <div class="bm-title">${esc(b.title)}</div>
         <div class="bm-meta">${esc(b.genre||'')}</div>
       </div>
       <button class="bm-remove" onclick="removeBookmark(event,${safeNum(b.id,0)|0})">✕</button>
-    </a>`).join('');
+    </a>`;
+  }).join('');
 }
 
 function renderDrawerBookmarks() {
@@ -1391,17 +1489,30 @@ function renderDrawerBookmarks() {
     el.innerHTML=`<div class="np-empty"><span class="np-empty-icon">🔖</span><p>No bookmarks yet. Tap the bookmark button on any novel to save it here.</p></div>`;
     return;
   }
-  el.innerHTML = bookmarks.map(b=>`
+  el.innerHTML = bookmarks.map(b=>{
+    const init = titleInitial(b.title);
+    const bg   = safeCss(b.bg||'linear-gradient(160deg,#E8622A,#3B1A08)');
+    let bmInner;
+    if (b.coverImg) {
+      const safe = safeUrl(b.coverImg);
+      bmInner = safe && safe !== '#'
+        ? `<img class="bm-drawer-cover-img" src="${safe}" alt="${esc(b.title)}" loading="lazy"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+           <div class="bm-drawer-initial" style="display:none">${esc(init)}</div>`
+        : `<div class="bm-drawer-initial">${esc(init)}</div>`;
+    } else {
+      bmInner = `<div class="bm-drawer-initial">${esc(init)}</div>`;
+    }
+    return `
     <div class="bm-drawer-item" onclick="goToNovel('${esc(b.href||'#')}')">
-      <div class="bm-drawer-cover" style="background:${esc(b.bg||'linear-gradient(160deg,#E8622A,#3B1A08)')}">
-        ${esc(b.emoji||'📖')}
-      </div>
+      <div class="bm-drawer-cover" style="background:${bg}">${bmInner}</div>
       <div class="bm-drawer-info">
         <div class="bm-drawer-title">${esc(b.title)}</div>
         <div class="bm-drawer-meta">${esc(b.genre||'')}</div>
       </div>
       <button class="bm-drawer-remove" onclick="removeBookmarkDrawer(event,${b.id})">✕</button>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 function goToNovel(href) {
@@ -1553,10 +1664,32 @@ function safeChoice(val, allowed, fallback) {
    RENDER HELPERS
 ═══════════════════════════════════════════ */
 
+// Returns the first capital letter of a title, or the first char uppercased
+function titleInitial(title) {
+  const s = String(title || '').trim();
+  const cap = s.match(/[A-Z]/);
+  return cap ? cap[0] : (s[0] || '?').toUpperCase();
+}
+
+// Builds the cover HTML for a novel card (image or initial-letter fallback)
+function coverHtml(n, cls='nc') {
+  const init = titleInitial(n.title);
+  const bg   = safeCss(n.bg || 'linear-gradient(160deg,#E8622A,#3B1A08)');
+  if (n.coverImg) {
+    const safe = safeUrl(n.coverImg);
+    if (safe && safe !== '#') {
+      return `<img class="${cls}-cov-img" src="${safe}" alt="${esc(n.title)}" loading="lazy"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="${cls}-initial" style="display:none">${esc(init)}</div>`;
+    }
+  }
+  return `<div class="${cls}-initial">${esc(init)}</div>`;
+}
+
 function nCard(n, badge='', bCls='new-b') {
   return `<div class="nc">
     <div class="nc-cov" style="background:${safeCss(n.bg||'linear-gradient(160deg,#E8622A,#3B1A08)')}">
-      <div class="nc-ph">${esc(n.emoji||'📖')}</div>
+      ${coverHtml(n,'nc')}
       ${badge?`<span class="nc-b ${bCls}">${esc(badge)}</span>`:''}
     </div>
     <div class="nc-inf">
@@ -1667,13 +1800,28 @@ function renderAll() {
   if (newArr.length) {
     carNew.classList.remove('hidden');
     carNew.innerHTML = newArr.map(n => nCard(n, 'New')).join('');
-    newList.innerHTML = newArr.map(n=>`<div class="lc">
-        <div class="lc-cov">${esc(n.emoji||'📖')}</div>
+    newList.innerHTML = newArr.map(n=>{
+      const init = titleInitial(n.title);
+      const bg   = safeCss(n.bg||'linear-gradient(160deg,#E8622A,#3B1A08)');
+      let lcInner;
+      if (n.coverImg) {
+        const safe = safeUrl(n.coverImg);
+        lcInner = safe && safe !== '#'
+          ? `<img class="lc-cov-img" src="${safe}" alt="${esc(n.title)}" loading="lazy"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+             <div class="lc-initial" style="display:none">${esc(init)}</div>`
+          : `<div class="lc-initial">${esc(init)}</div>`;
+      } else {
+        lcInner = `<div class="lc-initial">${esc(init)}</div>`;
+      }
+      return `<div class="lc">
+        <div class="lc-cov" style="background:${bg}">${lcInner}</div>
         <div class="lc-bd">
           <div class="lc-t">${esc(n.title)}</div>
           <div class="lc-d">${esc(n.description||'')}</div>
           <div class="tags"><span class="tag o">${esc(n.genre||'')}</span><span class="tag">${esc(n.status||'')}</span></div>
-        </div></div>`).join('');
+        </div></div>`;
+    }).join('');
   } else {
     carNew.classList.add('hidden');
     const skNewId = 'sk-car-new';
@@ -1877,12 +2025,8 @@ document.addEventListener('click', e => {
     });
   }
 
-  // Call the loading-bar render hook now that init is done
-  if (typeof window._lsAfterRender === 'function') window._lsAfterRender();
-
-  // Set the footer year
-  const fy = document.getElementById('fy');
-  if (fy) fy.textContent = new Date().getFullYear();
+  // Call the loading-bar after-render hook
+  window._lsAfterRender && window._lsAfterRender();
 })();
 </script>
 </body>
