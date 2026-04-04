@@ -489,6 +489,20 @@ footer strong{color:var(--amber);}
   .nav-search{display:none;}
   .tab-btn{padding:0 12px;font-size:.78rem;}
 }
+/* ══════════ SECTION EMPTY STATE ══════════ */
+.sec-empty{
+  margin:4px 16px 24px;
+  padding:28px 20px;
+  background:var(--bg-card);
+  border-radius:var(--radius-lg);
+  border:1.5px dashed var(--border-mid);
+  text-align:center;
+  transition:background var(--tr);
+}
+.sec-empty-icon{font-size:2.4rem;margin-bottom:10px;line-height:1;}
+.sec-empty-msg{font-size:.82rem;color:var(--text-muted);line-height:1.65;max-width:300px;margin:0 auto;}
+.hidden{display:none!important;}
+
   </style>
 </head>
 <body>
@@ -1078,6 +1092,12 @@ function phCards(label, count=5) {
       <div class="nc-m" style="color:var(--text-faint)">— • —</div>
     </div></div>`).join('');
 }
+function emptySection(icon, msg) {
+  return `<div class="sec-empty">
+    <div class="sec-empty-icon">${icon}</div>
+    <p class="sec-empty-msg">${msg}</p>
+  </div>`;
+}
 function emH(icon,title,msg,code='') {
   return `<div class="empty"><div class="empty-i">${icon}</div><h3>${title}</h3><p>${msg}</p>${code?`<code>${esc(code)}</code>`:''}</div>`;
 }
@@ -1088,17 +1108,38 @@ function emH(icon,title,msg,code='') {
 function renderAll() {
   document.getElementById('fy').textContent = new Date().getFullYear();
 
-  // Sub-tab carousels — show placeholder cards when empty
+  // Section carousels — show friendly empty state when no content
   const carDefs = [
-    { id:'car-trending',  arr:trendingData,  ph:'Add Trending Novel',    badgeFn:(n,i)=>i===0?'🔥 Hot':'' },
-    { id:'car-hot',       arr:hotPicksData,  ph:'Add Hot Pick',           badgeFn:(n,i)=>i===0?'⭐ Pick':'' },
-    { id:'car-dojo',      arr:dojoDuelsData, ph:'Add Dojo Duel Novel',    badgeFn:()=>'' },
-    { id:'car-frenzyyy',  arr:frenzyyyData,  ph:"Frenzyyy's Novel",       badgeFn:()=>'' },
+    {
+      id:'car-trending', arr:trendingData,
+      badgeFn:(n,i)=>i===0?'🔥 Hot':'',
+      empty: emptySection('😴', "There's no content here just yet — maybe the creator is just a little lazy, or it's coming soon! 👀"),
+    },
+    {
+      id:'car-hot', arr:hotPicksData,
+      badgeFn:(n,i)=>i===0?'⭐ Pick':'',
+      empty: emptySection('🥱', "No hot picks at the moment. The creator hasn't cooked yet — check back soon! 🍳"),
+    },
+    {
+      id:'car-dojo', arr:dojoDuelsData,
+      badgeFn:()=>'',
+      empty: emptySection('🥋', "The dojo is empty... no battles have been posted yet. Maybe the sensei is napping! 😴"),
+    },
+    {
+      id:'car-frenzyyy', arr:frenzyyyData,
+      badgeFn:()=>'',
+      empty: emptySection('✍️', "Frenzyyy hasn't dropped anything here yet. The pen is loaded — just waiting for inspiration! 💭"),
+    },
   ];
-  carDefs.forEach(({ id, arr, ph, badgeFn }) => {
-    document.getElementById(id).innerHTML = arr.length
-      ? arr.map((n,i) => nCard(n, badgeFn(n,i), i===0?'hot':'new-b')).join('')
-      : phCards(ph, 5);
+  carDefs.forEach(({ id, arr, badgeFn, empty }) => {
+    const el = document.getElementById(id);
+    if (arr.length) {
+      el.classList.remove('hidden');
+      el.innerHTML = arr.map((n,i) => nCard(n, badgeFn(n,i), i===0?'hot':'new-b')).join('');
+    } else {
+      el.classList.add('hidden');
+      el.insertAdjacentHTML('afterend', empty);
+    }
   });
 
   // What's New
