@@ -382,6 +382,22 @@ ul{list-style:none;}
 .theme-opt .ol{font-size:.79rem;font-weight:600;color:var(--text-muted);}
 .theme-opt.active .ol{color:var(--carrot);}
 
+/* ══════════ SETTINGS — EXTRA ROWS ══════════ */
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--border);}
+.setting-row:last-child{border-bottom:none;padding-bottom:0;}
+.setting-row:first-child{padding-top:0;}
+.setting-row-l{display:flex;align-items:center;gap:11px;}
+.setting-icon{font-size:1.15rem;width:28px;text-align:center;}
+.setting-lbl{font-size:.88rem;font-weight:600;color:var(--text-main);}
+.setting-sub{font-size:.72rem;color:var(--text-muted);margin-top:1px;}
+.seg-ctrl{display:flex;gap:0;background:var(--bg-elevated);border-radius:10px;padding:3px;border:1px solid var(--border);}
+.seg-btn{flex:1;padding:6px 10px;border-radius:7px;font-size:.75rem;font-weight:600;color:var(--text-muted);background:none;border:none;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.seg-btn.active{background:var(--carrot);color:#fff;box-shadow:0 2px 8px rgba(232,98,42,.35);}
+.setting-action-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:10px;font-size:.78rem;font-weight:600;border:1.5px solid var(--border-mid);color:var(--text-muted);background:var(--bg-elevated);cursor:pointer;transition:all .2s;}
+.setting-action-btn:hover{border-color:var(--carrot);color:var(--carrot);background:rgba(232,98,42,.07);}
+.setting-action-btn.danger:hover{border-color:#E84242;color:#E84242;background:rgba(232,66,66,.07);}
+.setting-divider{height:1px;background:var(--border);margin:6px 0;}
+
 /* ══════════ ABOUT ══════════ */
 .about-hero{background:linear-gradient(135deg,#3B1A08 0%,#6B3318 100%);padding:44px 20px;text-align:center;position:relative;overflow:hidden;}
 .about-hero::before{content:'';position:absolute;inset:0;opacity:.06;background-image:repeating-linear-gradient(45deg,var(--amber) 0,var(--amber) 1px,transparent 0,transparent 50%);background-size:22px 22px;}
@@ -534,6 +550,15 @@ footer strong{color:var(--amber);}
 [data-theme="light"] #tabbar{background:var(--bg-elevated);border-bottom-color:var(--border-mid);}
 [data-theme="light"] .tab-btn{color:var(--text-faint);}
 [data-theme="light"] .tab-btn.active{color:var(--carrot);border-bottom-color:var(--carrot);}
+
+/* ══════════ REDUCE MOTION ══════════ */
+.reduce-motion *,.reduce-motion *::before,.reduce-motion *::after{
+  animation-duration:.01ms!important;animation-iteration-count:1!important;
+  transition-duration:.01ms!important;
+}
+/* ══════════ HIGH CONTRAST ══════════ */
+.high-contrast{--border:rgba(255,255,255,.22);--border-mid:rgba(255,255,255,.32);}
+.high-contrast[data-theme="light"]{--border:rgba(44,18,6,.3);--border-mid:rgba(44,18,6,.45);--text-muted:#5A3520;}
 
 /* ══════════ FOOTER LINK ══════════ */
 .footer-link{color:var(--amber);cursor:pointer;font-weight:600;transition:color .2s;}
@@ -772,14 +797,150 @@ footer strong{color:var(--amber);}
           </label>
         </div>
         <div class="theme-options">
-          <div class="theme-opt active" id="opt-dark" onclick="setTheme('dark')"><div class="oi">🌙</div><div class="ol">Dark</div></div>
           <div class="theme-opt" id="opt-light" onclick="setTheme('light')"><div class="oi">☀️</div><div class="ol">Light</div></div>
+          <div class="theme-opt active" id="opt-dark" onclick="setTheme('dark')"><div class="oi">🌙</div><div class="ol">Dark</div></div>
         </div>
       </div>
     </div>
+    <!-- ── Reading Preferences ── -->
+    <div class="sc">
+      <div class="sc-hdr"><span>📖</span><h2>Reading</h2></div>
+      <div class="sc-body">
+        <div class="setting-row">
+          <div class="setting-row-l">
+            <span class="setting-icon">🔤</span>
+            <div><div class="setting-lbl">Font Size</div><div class="setting-sub">Adjust the reading text size</div></div>
+          </div>
+          <div class="seg-ctrl" id="font-size-ctrl">
+            <button class="seg-btn" data-val="small" onclick="applyFontSize('small',this)">S</button>
+            <button class="seg-btn active" data-val="medium" onclick="applyFontSize('medium',this)">M</button>
+            <button class="seg-btn" data-val="large" onclick="applyFontSize('large',this)">L</button>
+          </div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-row-l">
+            <span class="setting-icon">↕️</span>
+            <div><div class="setting-lbl">Line Spacing</div><div class="setting-sub">Control paragraph breath</div></div>
+          </div>
+          <div class="seg-ctrl" id="line-space-ctrl">
+            <button class="seg-btn" data-val="compact" onclick="applyLineSpace('compact',this)">Tight</button>
+            <button class="seg-btn active" data-val="normal" onclick="applyLineSpace('normal',this)">Normal</button>
+            <button class="seg-btn" data-val="relaxed" onclick="applyLineSpace('relaxed',this)">Airy</button>
+          </div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-row-l">
+            <span class="setting-icon">📐</span>
+            <div><div class="setting-lbl">Reading Width</div><div class="setting-sub">How wide content spans</div></div>
+          </div>
+          <div class="seg-ctrl" id="read-width-ctrl">
+            <button class="seg-btn" data-val="narrow" onclick="applyReadWidth('narrow',this)">Narrow</button>
+            <button class="seg-btn active" data-val="normal" onclick="applyReadWidth('normal',this)">Normal</button>
+            <button class="seg-btn" data-val="wide" onclick="applyReadWidth('wide',this)">Wide</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Notifications Preferences ── -->
+    <div class="sc">
+      <div class="sc-hdr"><span>🔔</span><h2>Notifications</h2></div>
+      <div class="sc-body">
+        <div class="setting-row">
+          <div class="setting-row-l">
+            <span class="setting-icon">🔄</span>
+            <div><div class="setting-lbl">Chapter Updates</div><div class="setting-sub">Notify when a new chapter drops</div></div>
+          </div>
+          <label class="toggle-wrap">
+            <input type="checkbox" id="notif-chapters" checked onchange="savePref('nl_notif_chapters',this.checked)"/>
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+        <div class="setting-row">
+          <div class="setting-row-l">
+            <span class="setting-icon">📢</span>
+            <div><div class="setting-lbl">Announcements</div><div class="setting-sub">Platform news and events</div></div>
+          </div>
+          <label class="toggle-wrap">
+            <input type="checkbox" id="notif-announce" checked onchange="savePref('nl_notif_announce',this.checked)"/>
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+        <div class="setting-row">
+          <div class="setting-row-l">
+            <span class="setting-icon">🆕</span>
+            <div><div class="setting-lbl">New Novels</div><div class="setting-sub">Alert when fresh titles are added</div></div>
+          </div>
+          <label class="toggle-wrap">
+            <input type="checkbox" id="notif-new" onchange="savePref('nl_notif_new',this.checked)"/>
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Accessibility ── -->
+    <div class="sc">
+      <div class="sc-hdr"><span>♿</span><h2>Accessibility</h2></div>
+      <div class="sc-body">
+        <div class="setting-row">
+          <div class="setting-row-l">
+            <span class="setting-icon">🎞️</span>
+            <div><div class="setting-lbl">Reduce Motion</div><div class="setting-sub">Minimise animations & transitions</div></div>
+          </div>
+          <label class="toggle-wrap">
+            <input type="checkbox" id="reduce-motion" onchange="applyReduceMotion(this.checked)"/>
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+        <div class="setting-row">
+          <div class="setting-row-l">
+            <span class="setting-icon">🔆</span>
+            <div><div class="setting-lbl">High Contrast</div><div class="setting-sub">Boost border and text contrast</div></div>
+          </div>
+          <label class="toggle-wrap">
+            <input type="checkbox" id="high-contrast" onchange="applyHighContrast(this.checked)"/>
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Privacy & Data ── -->
+    <div class="sc">
+      <div class="sc-hdr"><span>🔒</span><h2>Privacy &amp; Data</h2></div>
+      <div class="sc-body">
+        <div class="setting-row">
+          <div class="setting-row-l">
+            <span class="setting-icon">📜</span>
+            <div><div class="setting-lbl">Reading History</div><div class="setting-sub">Stored locally on your device</div></div>
+          </div>
+          <button class="setting-action-btn danger" onclick="clearHistory()">🗑️ Clear</button>
+        </div>
+        <div class="setting-row">
+          <div class="setting-row-l">
+            <span class="setting-icon">⚙️</span>
+            <div><div class="setting-lbl">Reset All Settings</div><div class="setting-sub">Restore to defaults</div></div>
+          </div>
+          <button class="setting-action-btn danger" onclick="resetAllSettings()">↺ Reset</button>
+        </div>
+        <div class="setting-row">
+          <div class="setting-row-l">
+            <span class="setting-icon">🍪</span>
+            <div><div class="setting-lbl">Local Storage</div><div class="setting-sub">NovéLore stores no cookies</div></div>
+          </div>
+          <span style="font-size:.72rem;color:var(--carrot);font-weight:600;">✓ Clean</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── About ── -->
     <div class="sc">
       <div class="sc-hdr"><span>ℹ️</span><h2>About</h2></div>
-      <div class="sc-body"><p style="font-size:.82rem;color:var(--text-muted);line-height:1.8;">Version: <strong style="color:var(--text-main)">1.0.0</strong><br/>Built with ❤️ and 🥕 by Frenzyyy.<br/><span style="font-size:.74rem;">Hosted on GitHub Pages.</span></p></div>
+      <div class="sc-body"><p style="font-size:.82rem;color:var(--text-muted);line-height:1.8;">Version: <strong style="color:var(--text-main)">1.0.0</strong><br/>Built with ❤️ and 🥕 by Frenzyyy.<br/><span style="font-size:.74rem;">Hosted on GitHub Pages.</span></p>
+      <div style="margin-top:12px;">
+        <button class="setting-action-btn" onclick="goAbout()" style="width:100%;justify-content:center;">ℹ️ View Full About Page →</button>
+      </div></div>
     </div>
   </div><footer><strong>NovéLore</strong> — Read Without Limits</footer></div>
 </div>
@@ -806,7 +967,7 @@ footer strong{color:var(--amber);}
     <div class="contact-icon">📧</div>
     <div class="contact-info">
       <div class="contact-label">Business Email</div>
-      <div class="contact-text">frenzyyybusinessemail@gmail.com</div>
+      <div class="contact-text"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ddbbafb8b3a7a4a4a4bfa8aeb4b3b8aeaeb8b0bcb4b19dbab0bcb4b1f3beb2b0">[email&#160;protected]</a></div>
     </div>
   </div>
 
@@ -832,7 +993,7 @@ footer strong{color:var(--amber);}
 ════════════════════════════════════════════ -->
 
   <!-- Scripts -->
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 'use strict';
 
 /* ═══════════════════════════════════════════
@@ -895,6 +1056,70 @@ function setTheme(mode) {
 }
 function applyToggle(c) { setTheme(c ? 'dark' : 'light'); }
 function loadTheme() { setTheme(LS.get('nl_theme') || 'dark'); }
+
+/* ═══════════════════════════════════════════
+   SETTINGS — READING PREFERENCES
+═══════════════════════════════════════════ */
+const FONT_SIZES   = { small:'.82rem', medium:'.92rem', large:'1.05rem' };
+const LINE_SPACES  = { compact:'1.55', normal:'1.75', relaxed:'2.0' };
+const READ_WIDTHS  = { narrow:'480px', normal:'640px', wide:'820px' };
+
+function applyFontSize(val, btn) {
+  LS.set('nl_fontsize', val);
+  document.documentElement.style.setProperty('--reading-fs', FONT_SIZES[val] || FONT_SIZES.medium);
+  document.querySelectorAll('#font-size-ctrl .seg-btn').forEach(b=>b.classList.toggle('active', b===btn));
+}
+function applyLineSpace(val, btn) {
+  LS.set('nl_linespace', val);
+  document.documentElement.style.setProperty('--reading-lh', LINE_SPACES[val] || LINE_SPACES.normal);
+  document.querySelectorAll('#line-space-ctrl .seg-btn').forEach(b=>b.classList.toggle('active', b===btn));
+}
+function applyReadWidth(val, btn) {
+  LS.set('nl_readwidth', val);
+  document.documentElement.style.setProperty('--reading-w', READ_WIDTHS[val] || READ_WIDTHS.normal);
+  document.querySelectorAll('#read-width-ctrl .seg-btn').forEach(b=>b.classList.toggle('active', b===btn));
+}
+function applyReduceMotion(on) {
+  LS.set('nl_reducemotion', on);
+  document.documentElement.classList.toggle('reduce-motion', on);
+}
+function applyHighContrast(on) {
+  LS.set('nl_highcontrast', on);
+  document.documentElement.classList.toggle('high-contrast', on);
+}
+function savePref(key, val) { LS.set(key, val); }
+
+function clearHistory() {
+  ['nl_scroll','nl_tab'].forEach(k=>localStorage.removeItem(k));
+  toast('📜 Reading history cleared!');
+}
+function resetAllSettings() {
+  const keys = ['nl_theme','nl_fontsize','nl_linespace','nl_readwidth','nl_reducemotion','nl_highcontrast','nl_notif_chapters','nl_notif_announce','nl_notif_new'];
+  keys.forEach(k=>localStorage.removeItem(k));
+  loadTheme();
+  restoreReadingPrefs();
+  toast('↺ Settings reset to defaults!');
+}
+function restoreReadingPrefs() {
+  // Font size
+  const fs = LS.get('nl_fontsize') || 'medium';
+  document.documentElement.style.setProperty('--reading-fs', FONT_SIZES[fs] || FONT_SIZES.medium);
+  document.querySelectorAll('#font-size-ctrl .seg-btn').forEach(b=>b.classList.toggle('active', b.dataset.val===fs));
+  // Line spacing
+  const ls2 = LS.get('nl_linespace') || 'normal';
+  document.documentElement.style.setProperty('--reading-lh', LINE_SPACES[ls2] || LINE_SPACES.normal);
+  document.querySelectorAll('#line-space-ctrl .seg-btn').forEach(b=>b.classList.toggle('active', b.dataset.val===ls2));
+  // Read width
+  const rw = LS.get('nl_readwidth') || 'normal';
+  document.documentElement.style.setProperty('--reading-w', READ_WIDTHS[rw] || READ_WIDTHS.normal);
+  document.querySelectorAll('#read-width-ctrl .seg-btn').forEach(b=>b.classList.toggle('active', b.dataset.val===rw));
+  // Toggles
+  const rm = LS.get('nl_reducemotion'); if(rm!==null){const el=document.getElementById('reduce-motion');if(el)el.checked=rm;applyReduceMotion(rm);}
+  const hc = LS.get('nl_highcontrast'); if(hc!==null){const el=document.getElementById('high-contrast');if(el)el.checked=hc;applyHighContrast(hc);}
+  const nc = LS.get('nl_notif_chapters'); if(nc!==null){const el=document.getElementById('notif-chapters');if(el)el.checked=nc;}
+  const na = LS.get('nl_notif_announce'); if(na!==null){const el=document.getElementById('notif-announce');if(el)el.checked=na;}
+  const nn = LS.get('nl_notif_new'); if(nn!==null){const el=document.getElementById('notif-new');if(el)el.checked=nn;}
+}
 
 /* ═══════════════════════════════════════════
    HERO SLIDER
@@ -1150,6 +1375,7 @@ function goSettings() {
   closeSB(); showScreen('screen-settings');
   const dark = document.documentElement.getAttribute('data-theme')==='dark';
   document.getElementById('theme-toggle').checked = dark;
+  restoreReadingPrefs();
   document.querySelector('#screen-settings .page-scroll').scrollTop = 0;
 }
 function goAbout() {
@@ -1457,6 +1683,9 @@ document.addEventListener('keydown', e=>{
       requestAnimationFrame(() => setTimeout(dismiss, 300));
     });
   }
+
+  // ── Safety net: force-dismiss after 4s no matter what ──────────────
+  setTimeout(dismiss, 4000);
 })();
 
 /* ═══════════════════════════════════════════
@@ -1464,6 +1693,7 @@ document.addEventListener('keydown', e=>{
 ═══════════════════════════════════════════ */
 (function init() {
   loadTheme();
+  restoreReadingPrefs();
   buildSlides();
   renderAll();
   updateNotifBadge();
@@ -1524,8 +1754,8 @@ document.addEventListener('keydown', e=>{
     });
   }
 
-  // Signal the loading bar that rendering is done (advances bar to 75%)
-  window._lsAfterRender?.();
+  // Signal to loading bar that rendering is done
+  if (window._lsAfterRender) window._lsAfterRender();
 })();
 </script>
 </body>
