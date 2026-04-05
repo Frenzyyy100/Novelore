@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="dark" data-theme-source="system">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
@@ -315,7 +315,8 @@ ul{list-style:none;}
   box-shadow:var(--shadow);
   transition:transform .22s,box-shadow .22s,background var(--tr);
 }
-.nc:active{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+.nc:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);}
+.nc:active{transform:translateY(-2px);box-shadow:var(--shadow-lg);}
 .nc-cov{height:198px;position:relative;overflow:hidden;}
 .nc-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:2.7rem;}
 .nc-b{position:absolute;top:7px;left:7px;color:#fff;font-size:.61rem;font-weight:700;letter-spacing:.4px;text-transform:uppercase;border-radius:6px;padding:2px 7px;}
@@ -390,8 +391,9 @@ ul{list-style:none;}
 }
 
 /* ══════════ LIST CARD ══════════ */
-.lc{display:flex;gap:12px;align-items:flex-start;background:var(--bg-card);border-radius:var(--radius);padding:13px 16px;box-shadow:var(--shadow);margin:0 16px 10px;transition:transform .2s,background var(--tr);}
-.lc:active{transform:translateX(3px);}
+.lc{display:flex;gap:12px;align-items:flex-start;background:var(--bg-card);border-radius:var(--radius);padding:13px 16px;box-shadow:var(--shadow);margin:0 16px 10px;transition:transform .2s,background var(--tr),box-shadow .2s;}
+.lc:hover{transform:translateX(3px);box-shadow:var(--shadow-lg);}
+.lc:active{transform:translateX(5px);}
 .lc-cov{flex:0 0 58px;height:78px;border-radius:8px;background:var(--bg-elevated);display:flex;align-items:center;justify-content:center;font-size:1.8rem;overflow:hidden;}
 .lc-bd{flex:1;min-width:0;}
 .lc-t{font-family:'DM Serif Display',serif;font-size:.88rem;color:var(--text-main);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -401,7 +403,8 @@ ul{list-style:none;}
 .tag.o{background:rgba(232,98,42,.14);color:var(--carrot-light);border-color:rgba(232,98,42,.22);}
 
 /* ══════════ ANNOUNCEMENT ══════════ */
-.ann{background:linear-gradient(135deg,#3B1A08 0%,#6B3318 100%);border-radius:var(--radius);padding:17px 18px;margin:0 16px 10px;position:relative;overflow:hidden;box-shadow:var(--shadow);}
+.ann{background:linear-gradient(135deg,#3B1A08 0%,#6B3318 100%);border-radius:var(--radius);padding:17px 18px;margin:0 16px 10px;position:relative;overflow:hidden;box-shadow:var(--shadow);transition:box-shadow .22s,transform .22s;}
+.ann:hover{box-shadow:var(--shadow-lg);transform:translateX(3px);}
 .ann::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--amber);}
 .ann-date{font-size:.69rem;color:var(--amber);font-weight:600;letter-spacing:.4px;text-transform:uppercase;margin-bottom:5px;}
 .ann h3{font-family:'Playfair Display',serif;font-size:.95rem;color:#FFF0E6;margin-bottom:5px;}
@@ -412,8 +415,9 @@ ul{list-style:none;}
 .ann-tp.system{background:rgba(255,255,255,.1);color:rgba(255,240,230,.7);}
 
 /* ══════════ UPDATE ITEM ══════════ */
-.upd{display:flex;gap:12px;padding:13px 16px;background:var(--bg-card);border-radius:var(--radius);margin:0 16px 9px;box-shadow:var(--shadow);align-items:center;transition:transform .2s,background var(--tr);}
-.upd:active{transform:translateX(3px);}
+.upd{display:flex;gap:12px;padding:13px 16px;background:var(--bg-card);border-radius:var(--radius);margin:0 16px 9px;box-shadow:var(--shadow);align-items:center;transition:transform .2s,background var(--tr),box-shadow .2s;}
+.upd:hover{transform:translateX(3px);box-shadow:var(--shadow-lg);}
+.upd:active{transform:translateX(5px);}
 .upd-ico{flex:0 0 34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--carrot),var(--amber));color:#fff;font-weight:700;font-size:.82rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .upd-bd{flex:1;min-width:0;}
 .upd-t{font-weight:600;font-size:.86rem;color:var(--text-main);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -665,71 +669,420 @@ footer strong{color:var(--amber);}
 /* ══════════ DECORATIVE BUTTON (non-interactive) ══════════ */
 .btn-decorative{display:inline-flex;align-items:center;gap:7px;border:1px dashed rgba(255,240,230,.22);color:rgba(255,240,230,.45);padding:10px 16px;border-radius:26px;font-size:.84rem;pointer-events:none;user-select:none;}
 
+/* ══════════ END-OF-STORY SCREEN ══════════ */
+.end-screen-wrap{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:calc(100dvh - var(--nav-h));
+  padding:32px 20px 64px;
+  text-align:center;
+}
+.end-card{
+  max-width:420px;width:100%;
+  background:var(--bg-card);
+  border-radius:22px;
+  border:1.5px solid var(--border-mid);
+  padding:36px 28px 32px;
+  box-shadow:var(--shadow-lg);
+  animation:endCardIn .55s cubic-bezier(.22,1,.36,1) both;
+  position:relative;overflow:hidden;
+}
+@keyframes endCardIn{
+  from{opacity:0;transform:translateY(28px) scale(.97);}
+  to  {opacity:1;transform:none;}
+}
+.end-card::before{
+  content:'';position:absolute;inset:0;opacity:.04;
+  background-image:repeating-linear-gradient(45deg,var(--amber) 0,var(--amber) 1px,transparent 0,transparent 50%);
+  background-size:22px 22px;pointer-events:none;
+}
+.end-glow{
+  position:absolute;top:-60px;right:-60px;
+  width:260px;height:260px;border-radius:50%;
+  background:radial-gradient(circle,rgba(232,98,42,.18),transparent 68%);
+  pointer-events:none;
+}
+.end-emoji{
+  font-size:3.8rem;line-height:1;margin-bottom:16px;display:block;
+  animation:endEmoji 2.8s ease-in-out infinite;
+}
+@keyframes endEmoji{
+  0%,100%{transform:translateY(0) rotate(0deg);}
+  30%{transform:translateY(-8px) rotate(-4deg);}
+  60%{transform:translateY(-5px) rotate(3deg);}
+}
+.end-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:.68rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+  background:rgba(232,98,42,.14);color:var(--carrot);
+  border:1px solid rgba(232,98,42,.28);
+  border-radius:20px;padding:4px 12px;margin-bottom:18px;
+}
+.end-title{
+  font-family:'Playfair Display',serif;
+  font-size:1.5rem;font-weight:900;
+  color:var(--text-main);line-height:1.2;
+  margin-bottom:8px;
+}
+.end-novel-label{
+  font-size:.7rem;font-weight:700;color:var(--text-faint);
+  letter-spacing:.6px;margin-bottom:4px;text-transform:uppercase;
+}
+.end-novel-name{
+  font-family:'DM Serif Display',serif;
+  font-size:.98rem;color:var(--carrot-light);
+  margin-bottom:20px;line-height:1.3;
+}
+.end-divider{
+  width:48px;height:2px;
+  background:linear-gradient(90deg,var(--carrot),var(--amber));
+  border-radius:2px;margin:0 auto 22px;
+}
+.end-msg{
+  font-size:.87rem;color:var(--text-muted);
+  line-height:1.75;margin-bottom:26px;
+  padding:0 4px;
+}
+.end-msg strong{color:var(--text-main);}
+.end-actions{display:flex;flex-direction:column;gap:10px;}
+.end-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 20px;border-radius:26px;
+  font-size:.84rem;font-weight:700;
+  transition:all .22s;
+}
+.end-btn.pri{
+  background:var(--carrot);color:#fff;
+  box-shadow:0 4px 14px rgba(232,98,42,.38);border:none;
+}
+.end-btn.pri:hover{background:var(--carrot-deep);transform:translateY(-1px);}
+.end-btn.sec{
+  background:var(--bg-elevated);color:var(--text-muted);
+  border:1.5px solid var(--border-mid);
+}
+.end-btn.sec:hover{border-color:var(--carrot);color:var(--carrot);}
+
 /* ══════════ LOADING SCREEN ══════════ */
 #loading-screen{
   position:fixed;inset:0;z-index:9999;
-  background:var(--bg,#1A0D05);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;
-  transition:opacity .55s ease, visibility .55s ease;
+  background:#1A0D05;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:0;
   overflow:hidden;
+  transition:opacity .6s ease, visibility .6s ease;
 }
-#loading-screen::before{content:'';position:absolute;inset:0;opacity:.04;background-image:repeating-linear-gradient(45deg,var(--amber,#F5B942) 0,var(--amber,#F5B942) 1px,transparent 0,transparent 50%);background-size:22px 22px;pointer-events:none;}
-#loading-screen::after{content:'';position:absolute;top:-100px;right:-80px;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(232,98,42,.16),transparent 70%);pointer-events:none;}
-#loading-screen.fade-out{opacity:0;visibility:hidden;}
+#loading-screen.fade-out{opacity:0;visibility:hidden;pointer-events:none;}
+#loading-screen::before{
+  content:'';position:absolute;inset:0;
+  opacity:.045;
+  background-image:repeating-linear-gradient(45deg,#F5B942 0,#F5B942 1px,transparent 0,transparent 50%);
+  background-size:22px 22px;pointer-events:none;
+}
+/* Warm glow top-right */
+#loading-screen::after{
+  content:'';position:absolute;top:-120px;right:-100px;
+  width:480px;height:480px;border-radius:50%;
+  background:radial-gradient(circle,rgba(232,98,42,.22),transparent 68%);
+  pointer-events:none;
+}
+/* Second glow bottom-left */
+.ls-glow2{
+  position:absolute;bottom:-140px;left:-120px;
+  width:420px;height:420px;border-radius:50%;
+  background:radial-gradient(circle,rgba(245,185,66,.10),transparent 65%);
+  pointer-events:none;
+}
+.ls-inner{
+  position:relative;z-index:1;
+  display:flex;flex-direction:column;align-items:center;
+  gap:6px;
+  animation:lsEnter .55s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes lsEnter{
+  from{opacity:0;transform:translateY(18px);}
+  to  {opacity:1;transform:translateY(0);}
+}
+.ls-icon{font-size:2.6rem;margin-bottom:4px;animation:lsFloat 3s ease-in-out infinite;}
+@keyframes lsFloat{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-6px);}
+}
 .ls-logo{
-  font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;
-  color:#F5B942;letter-spacing:-.5px;
+  font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:900;
+  color:#F5B942;letter-spacing:-.5px;line-height:1;
 }
 .ls-logo em{color:#F4924A;font-style:normal;}
-.ls-sub{font-size:.82rem;color:rgba(255,200,150,.45);letter-spacing:.5px;}
+.ls-tagline{font-size:.76rem;color:rgba(255,200,150,.38);letter-spacing:1.8px;text-transform:uppercase;margin-top:3px;margin-bottom:28px;}
+/* Bar */
 .ls-bar-wrap{
-  width:160px;height:3px;background:rgba(255,255,255,.08);
-  border-radius:3px;overflow:hidden;margin-top:6px;
+  width:220px;height:4px;
+  background:rgba(255,255,255,.07);
+  border-radius:4px;overflow:hidden;
+  margin-bottom:16px;
 }
 .ls-bar{
-  height:100%;width:0;background:linear-gradient(90deg,var(--carrot,#E8622A),var(--amber,#F5B942));
-  border-radius:3px;
-  transition:width .4s cubic-bezier(.4,0,.2,1);
+  height:100%;width:0%;
+  background:linear-gradient(90deg,#E8622A,#F5B942);
+  border-radius:4px;
+  transition:width .45s cubic-bezier(.4,0,.2,1);
 }
-.ls-dots{display:flex;gap:6px;margin-top:4px;}
+/* Status label */
+.ls-status{
+  font-size:.78rem;color:rgba(255,200,150,.5);
+  letter-spacing:.3px;min-height:1.1em;
+  transition:opacity .25s;
+}
+/* Dots */
+.ls-dots{display:flex;gap:7px;margin-top:18px;}
 .ls-dot{
-  width:6px;height:6px;border-radius:50%;
-  background:rgba(232,98,42,.5);
-  animation:lsDot 1.2s ease-in-out infinite;
+  width:5px;height:5px;border-radius:50%;
+  background:rgba(232,98,42,.45);
+  animation:lsDot 1.4s ease-in-out infinite;
 }
-.ls-dot:nth-child(2){animation-delay:.2s;}
-.ls-dot:nth-child(3){animation-delay:.4s;}
+.ls-dot:nth-child(2){animation-delay:.22s;}
+.ls-dot:nth-child(3){animation-delay:.44s;}
 @keyframes lsDot{
-  0%,80%,100%{transform:scale(.6);opacity:.35;}
-  40%{transform:scale(1);opacity:1;}
+  0%,80%,100%{transform:scale(.55);opacity:.3;}
+  40%{transform:scale(1.1);opacity:1;}
 }
 
 
 /* ══════════ LOADING SCREEN — LIGHT MODE ══════════ */
-[data-theme="light"] #loading-screen {
-  background: #FFF8F0;
+[data-theme="light"] #loading-screen { background: #FFF8F0; }
+[data-theme="light"] #loading-screen::before { opacity:.04; background-image:repeating-linear-gradient(45deg,#E8622A 0,#E8622A 1px,transparent 0,transparent 50%); }
+[data-theme="light"] #loading-screen::after { background:radial-gradient(circle,rgba(232,98,42,.12),transparent 68%); }
+[data-theme="light"] .ls-glow2 { background:radial-gradient(circle,rgba(232,98,42,.07),transparent 65%); }
+[data-theme="light"] .ls-logo { color:var(--carrot); }
+[data-theme="light"] .ls-logo em { color:var(--carrot-deep); }
+[data-theme="light"] .ls-tagline { color:rgba(107,51,24,.38); }
+[data-theme="light"] .ls-bar-wrap { background:rgba(44,18,6,.09); }
+[data-theme="light"] .ls-status { color:rgba(107,51,24,.5); }
+[data-theme="light"] .ls-dot { background:rgba(232,98,42,.35); }
+
+
+/* ══════════ NOVEL PAGE ══════════ */
+#screen-novel,#screen-chapter{flex-direction:column;}
+.novel-hero-band{
+  background:var(--bg-elevated);
+  padding:20px 18px 24px;
+  position:relative;overflow:hidden;
 }
-[data-theme="light"] #loading-screen::before {
-  opacity: .05;
+.novel-hero-band::before{content:'';position:absolute;inset:0;opacity:.05;
+  background-image:repeating-linear-gradient(45deg,var(--amber) 0,var(--amber) 1px,transparent 0,transparent 50%);
+  background-size:22px 22px;pointer-events:none;}
+.novel-hero-inner{display:flex;gap:18px;align-items:flex-start;position:relative;z-index:1;}
+.novel-cover-block{flex-shrink:0;width:110px;height:160px;border-radius:12px;
+  overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;}
+.novel-cover-img{width:100%;height:100%;object-fit:cover;display:block;}
+.novel-cover-init{width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;font-size:3.8rem;font-weight:900;
+  color:rgba(255,240,230,.9);text-shadow:0 2px 18px rgba(0,0,0,.5);user-select:none;}
+.novel-text-block{flex:1;min-width:0;padding-top:4px;}
+.novel-page-title{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:900;
+  color:var(--text-main);line-height:1.2;margin-bottom:6px;}
+.novel-author-line{font-size:.8rem;color:var(--text-muted);margin-bottom:10px;}
+.novel-author-line strong{color:var(--carrot-light);}
+.novel-meta-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;}
+.novel-meta-chip{font-size:.67rem;font-weight:700;border-radius:20px;padding:3px 10px;
+  white-space:nowrap;border:1px solid;}
+.chip-status-ongoing{background:rgba(80,200,80,.12);color:#80e880;border-color:rgba(80,200,80,.25);}
+.chip-status-completed{background:rgba(100,180,255,.12);color:#80c0ff;border-color:rgba(100,180,255,.25);}
+.chip-genre{background:rgba(232,98,42,.13);color:var(--carrot-light);border-color:rgba(232,98,42,.25);}
+.chip-date{background:rgba(245,185,66,.1);color:var(--amber);border-color:rgba(245,185,66,.2);}
+.chip-rating{background:rgba(245,185,66,.13);color:var(--amber);border-color:rgba(245,185,66,.25);}
+.novel-action-row{display:flex;gap:8px;margin-top:4px;}
+.novel-action-btn{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  padding:9px 10px;border-radius:24px;font-size:.78rem;font-weight:700;
+  transition:all .22s;white-space:nowrap;}
+.novel-action-btn.pri{background:var(--carrot);color:#fff;border:none;box-shadow:0 4px 14px rgba(232,98,42,.4);}
+.novel-action-btn.pri:hover{background:var(--carrot-deep);}
+.novel-action-btn.sec{background:var(--bg-elevated);color:var(--text-muted);border:1.5px solid var(--border-mid);}
+.novel-action-btn.sec:hover{border-color:var(--carrot);color:var(--carrot);}
+.novel-action-btn.sec.bm-active{background:rgba(232,98,42,.14);color:var(--carrot);border-color:var(--carrot);}
+
+/* Synopsis */
+.synopsis-section{padding:18px 18px 4px;}
+.synopsis-label{font-size:.7rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--text-faint);margin-bottom:8px;}
+.synopsis-text{font-size:.88rem;color:var(--text-muted);line-height:1.75;
+  overflow:hidden;transition:max-height .4s ease;max-height:88px;}
+.synopsis-text.expanded{max-height:600px;}
+.synopsis-toggle{display:inline-block;margin-top:7px;font-size:.78rem;font-weight:700;
+  color:var(--carrot);cursor:pointer;}
+.synopsis-toggle:hover{color:var(--carrot-light);}
+
+/* Reading progress */
+.novel-progress-section{padding:14px 18px 0;}
+.novel-progress-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
+.novel-progress-lbl{font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-faint);}
+.novel-progress-pct{font-size:.78rem;font-weight:700;color:var(--carrot);}
+.novel-progress-bar{height:6px;background:var(--bg-elevated);border-radius:6px;overflow:hidden;
+  border:1px solid var(--border);}
+.novel-progress-fill{height:100%;background:linear-gradient(90deg,var(--carrot),var(--amber));
+  border-radius:6px;transition:width .5s cubic-bezier(.4,0,.2,1);}
+
+/* Volumes & Chapters */
+.volumes-section{padding:18px 0 80px;}
+.volumes-section-lbl{font-size:.7rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--text-faint);padding:0 18px;margin-bottom:10px;}
+.volume-block{margin-bottom:4px;}
+.vol-hdr{display:flex;align-items:center;gap:10px;padding:12px 18px;
+  background:var(--bg-elevated);cursor:pointer;transition:background .2s;
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.vol-hdr:hover{background:rgba(232,98,42,.08);}
+.vol-badge{font-size:.67rem;font-weight:700;background:var(--carrot);color:#fff;
+  border-radius:20px;padding:2px 9px;white-space:nowrap;flex-shrink:0;}
+.vol-title-text{font-family:'DM Serif Display',serif;font-size:.9rem;color:var(--text-main);flex:1;}
+.vol-arrow{font-size:.75rem;color:var(--text-faint);transition:transform .25s;flex-shrink:0;}
+.vol-hdr.collapsed .vol-arrow{transform:rotate(-90deg);}
+.vol-chapters{overflow:hidden;transition:max-height .35s ease;}
+.vol-chapters.collapsed{max-height:0!important;}
+.ch-row{display:flex;align-items:center;gap:12px;padding:12px 18px;
+  border-bottom:1px solid var(--border);cursor:pointer;transition:background .18s;
+  text-decoration:none;}
+.ch-row:last-child{border-bottom:none;}
+.ch-row:hover{background:rgba(232,98,42,.07);}
+.ch-row.read{opacity:.72;}
+.ch-num-badge{
+  flex-shrink:0;width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--bg-elevated);border:1.5px solid var(--border-mid);
+  font-size:.7rem;font-weight:700;color:var(--text-muted);transition:all .2s;
 }
-[data-theme="light"] #loading-screen::after {
-  background: radial-gradient(circle, rgba(232,98,42,.10), transparent 70%);
+.ch-row.read .ch-num-badge{
+  background:rgba(232,98,42,.15);border-color:var(--carrot);color:var(--carrot);
 }
-[data-theme="light"] .ls-logo {
-  color: var(--carrot);
+
+.ch-body{flex:1;min-width:0;}
+.ch-title-text{font-size:.86rem;font-weight:600;color:var(--text-main);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px;}
+.ch-date-text{font-size:.7rem;color:var(--text-faint);}
+.ch-check{flex-shrink:0;font-size:.85rem;color:transparent;}
+.ch-row.read .ch-check{color:var(--carrot);}
+.ch-new-badge{font-size:.6rem;font-weight:700;background:var(--carrot);color:#fff;
+  border-radius:20px;padding:1px 7px;margin-left:6px;vertical-align:middle;white-space:nowrap;}
+
+/* ── Per-chapter progress bar ── */
+.ch-prog-wrap{margin-top:5px;margin-bottom:2px;}
+.ch-prog-bar{height:3px;background:var(--border);border-radius:3px;overflow:hidden;}
+.ch-prog-fill{height:100%;background:linear-gradient(90deg,var(--carrot),var(--amber));border-radius:3px;transition:width .4s ease;}
+.ch-prog-pct{font-size:.61rem;font-weight:600;color:var(--carrot);margin-top:3px;}
+
+/* ══════════ CHAPTER READER ══════════ */
+.reader-nav{position:sticky;top:0;z-index:80;height:var(--nav-h);
+  background:var(--nav-bg);display:flex;align-items:center;
+  padding:0 14px;gap:10px;box-shadow:0 2px 16px rgba(10,4,0,.35);flex-shrink:0;}
+.reader-nav-info{flex:1;min-width:0;text-align:center;}
+.reader-nav-vol{font-size:.65rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+  color:rgba(255,255,255,.55);margin-bottom:1px;}
+.reader-nav-ch{font-size:.84rem;font-weight:700;color:rgba(255,255,255,.92);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.reading-progress-bar{height:3px;background:rgba(255,255,255,.06);flex-shrink:0;
+  position:sticky;top:var(--nav-h);z-index:79;}
+.reading-progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--carrot),var(--amber));
+  transition:width .1s linear;}
+.chapter-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.chapter-body-wrap{max-width:680px;margin:0 auto;padding:28px 20px 32px;}
+.ch-hdr-block{margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--border);}
+.ch-hdr-vol-label{font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:var(--carrot);margin-bottom:6px;}
+.ch-hdr-title{font-family:'Playfair Display',serif;font-size:clamp(1.4rem,5vw,2rem);
+  font-weight:900;color:var(--text-main);line-height:1.15;margin-bottom:10px;}
+.ch-hdr-meta{font-size:.75rem;color:var(--text-faint);display:flex;gap:14px;flex-wrap:wrap;}
+.ch-prose{font-size:var(--reading-fs,1rem);line-height:var(--reading-lh,1.85);
+  color:var(--text-main);max-width:var(--reading-w,660px);}
+.ch-prose p{margin-bottom:1.3em;}
+.ch-prose p:last-child{margin-bottom:0;}
+.ch-scene-break{text-align:center;color:var(--text-faint);font-size:1.2rem;
+  letter-spacing:8px;margin:2em 0;user-select:none;}
+.ch-end-mark{text-align:center;margin-top:36px;padding-top:20px;border-top:1px solid var(--border);}
+.ch-end-mark span{font-size:.75rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--text-faint);}
+.ch-nav-strip{display:flex;gap:10px;padding:20px;border-top:2px solid var(--border);
+  background:var(--bg-card);flex-shrink:0;}
+.ch-nav-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
+  padding:12px 14px;border-radius:12px;font-size:.82rem;font-weight:700;transition:all .2s;
+  background:var(--bg-elevated);border:1.5px solid var(--border-mid);color:var(--text-muted);}
+.ch-nav-btn:hover{border-color:var(--carrot);color:var(--carrot);background:rgba(232,98,42,.08);}
+.ch-nav-btn.disabled{opacity:.32;pointer-events:none;}
+.ch-nav-btn.pri{background:var(--carrot);color:#fff;border-color:var(--carrot);
+  box-shadow:0 4px 14px rgba(232,98,42,.35);}
+.ch-nav-btn.pri:hover{background:var(--carrot-deep);}
+
+/* ══════════ LIGHT MODE — READER ══════════ */
+[data-theme="light"] .reading-progress-bar{background:rgba(0,0,0,.09);}
+[data-theme="light"] .ch-nav-strip{background:var(--bg-elevated);}
+[data-theme="light"] .ch-hdr-vol-label{color:var(--carrot-deep);}
+[data-theme="light"] .ch-scene-break{color:var(--text-faint);}
+[data-theme="light"] .ch-end-mark span{color:var(--text-faint);}
+[data-theme="light"] .ch-prose{color:var(--text-main);}
+
+/* ══════════ LIGHT MODE — STATUS & GENRE CHIPS ══════════ */
+[data-theme="light"] .chip-status-ongoing{background:rgba(30,140,30,.1);color:#1a7a1a;border-color:rgba(30,140,30,.22);}
+[data-theme="light"] .chip-status-completed{background:rgba(20,90,180,.1);color:#1455a0;border-color:rgba(20,90,180,.2);}
+[data-theme="light"] .chip-genre{background:rgba(232,98,42,.1);color:var(--carrot-deep);border-color:rgba(232,98,42,.2);}
+[data-theme="light"] .chip-date,[data-theme="light"] .chip-rating{background:rgba(180,120,0,.09);color:#8a5e00;border-color:rgba(180,120,0,.18);}
+
+/* ══════════ LIGHT MODE — NOVEL HERO BAND ══════════ */
+[data-theme="light"] .novel-hero-band{background:linear-gradient(160deg,#FFE8D0 0%,#FFF4E8 100%);}
+[data-theme="light"] .novel-hero-band::before{opacity:.04;}
+[data-theme="light"] .novel-author-line strong{color:var(--carrot-deep);}
+[data-theme="light"] .novel-action-btn.sec{background:#fff;color:var(--text-muted);border-color:var(--border-mid);}
+
+/* ══════════ LIGHT MODE — ANNOUNCEMENT CARDS ══════════ */
+[data-theme="light"] .ann{background:linear-gradient(135deg,#FFF0E0 0%,#FFE4C8 100%);border:1px solid rgba(232,98,42,.15);box-shadow:0 4px 16px rgba(232,98,42,.08);}
+[data-theme="light"] .ann h3{color:var(--text-main);}
+[data-theme="light"] .ann p{color:var(--text-muted);}
+[data-theme="light"] .ann-date{color:var(--carrot-deep);}
+[data-theme="light"] .ann-tp.new{background:rgba(232,98,42,.15);color:var(--carrot-deep);}
+[data-theme="light"] .ann-tp.event{background:rgba(160,100,0,.12);color:#8a5c00;}
+[data-theme="light"] .ann-tp.system{background:rgba(44,18,6,.08);color:var(--text-muted);}
+
+/* ══════════ LIGHT MODE — ABOUT HERO ══════════ */
+[data-theme="light"] .about-hero{background:linear-gradient(135deg,#C44B1A 0%,#E8622A 60%,#F5B942 100%);}
+
+/* ══════════ LIGHT MODE — UPDATE & NOTIFICATION ITEMS ══════════ */
+[data-theme="light"] .upd{background:var(--bg-card);box-shadow:0 2px 10px rgba(44,18,6,.07);}
+[data-theme="light"] .upd-t{color:var(--text-main);}
+[data-theme="light"] .upd-s,[data-theme="light"] .upd-tm{color:var(--text-muted);}
+[data-theme="light"] .mini-title{color:var(--text-main);}
+[data-theme="light"] .np-msg{color:var(--text-main);}
+[data-theme="light"] .np-time,[data-theme="light"] .mini-time{color:var(--text-muted);}
+[data-theme="light"] .np-item.unread,[data-theme="light"] .mini-item.unread{background:rgba(232,98,42,.05);}
+[data-theme="light"] #notif-mini,[data-theme="light"] #bm-mini{background:var(--panel-bg);border-color:var(--border-mid);}
+
+/* ══════════ LIGHT MODE — SKELETON SHIMMER ══════════ */
+[data-theme="light"] .sk-cov::after,[data-theme="light"] .sk-line::after{
+  background:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.05) 50%,transparent 100%);
 }
-[data-theme="light"] .ls-logo em {
-  color: var(--carrot-deep);
-}
-[data-theme="light"] .ls-sub {
-  color: rgba(107,51,24,.5);
-}
-[data-theme="light"] .ls-bar-wrap {
-  background: rgba(44,18,6,.1);
-}
-[data-theme="light"] .ls-dot {
-  background: rgba(232,98,42,.35);
-}
+
+/* ══════════ LIGHT MODE — VOLUMES & CHAPTER ROWS ══════════ */
+[data-theme="light"] .vol-hdr{background:var(--bg-elevated);}
+[data-theme="light"] .vol-title-text{color:var(--text-main);}
+[data-theme="light"] .ch-row:hover{background:rgba(232,98,42,.05);}
+[data-theme="light"] .ch-prog-bar{background:rgba(44,18,6,.1);}
+[data-theme="light"] .ch-prog-pct{color:var(--carrot-deep);}
+[data-theme="light"] .ch-num-badge{background:var(--bg-elevated);border-color:var(--border-mid);}
+[data-theme="light"] .ch-row.read .ch-num-badge{background:rgba(196,75,26,.12);border-color:var(--carrot-deep);color:var(--carrot-deep);}
+
+/* ══════════ LIGHT MODE — SETTINGS / ABOUT BODY ══════════ */
+[data-theme="light"] .page-title{color:var(--text-main);}
+[data-theme="light"] .page-sub{color:var(--text-muted);}
+[data-theme="light"] .sc{background:var(--bg-card);}
+[data-theme="light"] .sc-hdr h2{color:var(--text-main);}
+[data-theme="light"] .setting-lbl{color:var(--text-main);}
+[data-theme="light"] .setting-sub{color:var(--text-muted);}
+[data-theme="light"] .setting-row{border-bottom-color:var(--border);}
+[data-theme="light"] .seg-ctrl{background:var(--bg-elevated);border-color:var(--border);}
+[data-theme="light"] .seg-btn{color:var(--text-muted);}
+[data-theme="light"] .theme-opt{background:var(--bg-elevated);border-color:var(--border);}
+[data-theme="light"] .theme-opt .ol{color:var(--text-muted);}
+[data-theme="light"] .toggle-track{background:var(--toggle-bg);border-color:var(--border-mid);}
+[data-theme="light"] .setting-action-btn{background:var(--bg-elevated);border-color:var(--border-mid);color:var(--text-muted);}
+[data-theme="light"] .ab-sec h2{color:var(--text-main);}
+[data-theme="light"] .ab-sec p{color:var(--text-muted);}
+[data-theme="light"] .vc h3{color:var(--text-main);}
+[data-theme="light"] .vc p{color:var(--text-muted);}
+[data-theme="light"] .vc{background:var(--bg-card);}
 
   </style>
 
@@ -740,6 +1093,11 @@ footer strong{color:var(--amber);}
       var t = JSON.parse(localStorage.getItem('nl_theme'));
       if (t === 'light' || t === 'dark') {
         document.documentElement.setAttribute('data-theme', t);
+        document.documentElement.setAttribute('data-theme-source', 'manual');
+      } else {
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme-source', 'system');
       }
     } catch(e) {}
   })();
@@ -748,13 +1106,18 @@ footer strong{color:var(--amber);}
 <body>
 <!-- ── LOADING SCREEN ── -->
 <div id="loading-screen">
-  <div class="ls-logo">📖 Novél<em>ore</em></div>
-  <div class="ls-sub">Read Without Limits</div>
-  <div class="ls-bar-wrap"><div class="ls-bar"></div></div>
-  <div class="ls-dots">
-    <div class="ls-dot"></div>
-    <div class="ls-dot"></div>
-    <div class="ls-dot"></div>
+  <div class="ls-glow2"></div>
+  <div class="ls-inner">
+    <div class="ls-icon">📖</div>
+    <div class="ls-logo">Novél<em>ore</em></div>
+    <div class="ls-tagline">Read Without Limits</div>
+    <div class="ls-bar-wrap"><div class="ls-bar" id="ls-bar"></div></div>
+    <div class="ls-status" id="ls-status">Initializing…</div>
+    <div class="ls-dots">
+      <div class="ls-dot"></div>
+      <div class="ls-dot"></div>
+      <div class="ls-dot"></div>
+    </div>
   </div>
 </div>
 
@@ -793,6 +1156,7 @@ footer strong{color:var(--amber);}
       <span class="drawer-count" id="notif-drawer-count"></span>
     </div>
     <div class="drawer-hdr-r">
+      <button class="drawer-action danger" onclick="clearAllNotifications()">Clear all</button>
       <button class="drawer-action" onclick="markAllReadDrawer()">Mark all read</button>
       <button class="drawer-close" onclick="closeDrawer('notif-drawer')">✕</button>
     </div>
@@ -942,7 +1306,11 @@ footer strong{color:var(--amber);}
         <div class="theme-options">
           <div class="theme-opt" id="opt-light" onclick="setTheme('light')"><div class="oi">☀️</div><div class="ol">Light</div></div>
           <div class="theme-opt active" id="opt-dark" onclick="setTheme('dark')"><div class="oi">🌙</div><div class="ol">Dark</div></div>
+          <div class="theme-opt" id="opt-system" onclick="setTheme('system')"><div class="oi">🖥️</div><div class="ol">System</div></div>
         </div>
+        <p style="font-size:.71rem;color:var(--text-faint);margin-top:10px;line-height:1.6;padding:0 2px;">
+          <strong style="color:var(--text-muted)">System</strong> automatically follows your device's light/dark setting and updates live.
+        </p>
       </div>
     </div>
     <!-- ── Reading Preferences ── -->
@@ -982,6 +1350,45 @@ footer strong{color:var(--amber);}
             <button class="seg-btn" data-val="wide" onclick="applyReadWidth('wide',this)">Wide</button>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- ── Novel Experience ── -->
+    <div class="sc">
+      <div class="sc-hdr"><span>⚔️</span><h2>Novel Experience</h2></div>
+      <div class="sc-body">
+        <div class="setting-row">
+          <div class="setting-row-l">
+            <span class="setting-icon">▶️</span>
+            <div><div class="setting-lbl">Continue Where You Left Off</div><div class="setting-sub">Novel page opens at your last chapter</div></div>
+          </div>
+          <label class="toggle-wrap">
+            <input type="checkbox" id="autocontinue" checked onchange="savePref('nl_autocontinue',this.checked)"/>
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+        <div class="setting-row">
+          <div class="setting-row-l">
+            <span class="setting-icon">📊</span>
+            <div><div class="setting-lbl">Show Reading Progress</div><div class="setting-sub">Display progress bar on novel page</div></div>
+          </div>
+          <label class="toggle-wrap">
+            <input type="checkbox" id="showprogress" checked onchange="savePref('nl_showprogress',this.checked)"/>
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+        <div class="setting-row">
+          <div class="setting-row-l">
+            <span class="setting-icon">✓</span>
+            <div><div class="setting-lbl">Auto-Mark on Finish</div><div class="setting-sub">Chapter marked read automatically when you reach the end</div></div>
+          </div>
+          <label class="toggle-wrap">
+            <input type="checkbox" id="automark80" checked onchange="savePref('nl_automark80',this.checked)"/>
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+        <div class="setting-divider"></div>
+        <div id="settings-novel-list"></div>
       </div>
     </div>
 
@@ -1110,7 +1517,7 @@ footer strong{color:var(--amber);}
     <div class="contact-icon">📧</div>
     <div class="contact-info">
       <div class="contact-label">Business Email</div>
-      <div class="contact-text"><a href="mailto:frenzyyybusinessemail@gmail.com" class="contact-link">frenzyyybusinessemail@gmail.com</a></div>
+      <div class="contact-text"><a href="/cdn-cgi/l/email-protection#47213522293d3e3e3e2532342e29223434222a262e2b07202a262e2b6924282a"><span class="__cf_email__" data-cfemail="d0b6a2b5beaaa9a9a9b2a5a3b9beb5a3a3b5bdb1b9bc90b7bdb1b9bcfeb3bfbd">[email&#160;protected]</span></a></div>
     </div>
   </div>
 
@@ -1128,6 +1535,69 @@ footer strong{color:var(--amber);}
   </div>
 </div>
 
+
+<!-- ════ NOVEL PAGE SCREEN ════ -->
+<div id="screen-novel" class="screen">
+  <nav class="page-nav reader-nav" style="position:sticky;">
+    <button class="back-btn" onclick="novelGoBack()">← Back</button>
+    <div class="reader-nav-info">
+      <div class="reader-nav-ch" id="novel-nav-title" style="font-size:.9rem;"></div>
+    </div>
+    <button class="back-btn" onclick="goHome()" style="font-size:.78rem;color:var(--carrot);white-space:nowrap;">🏠 Home</button>
+  </nav>
+  <div class="page-scroll" id="novel-scroll">
+    <!-- Hero band (cover + info) -->
+    <div class="novel-hero-band" id="novel-hero-band"></div>
+    <!-- Synopsis -->
+    <div class="synopsis-section" id="novel-synopsis-section"></div>
+    <!-- Progress -->
+    <div class="novel-progress-section" id="novel-progress-section"></div>
+    <!-- Volumes + chapters -->
+    <div class="volumes-section" id="novel-volumes-section"></div>
+  </div>
+</div>
+
+<!-- ════ CHAPTER READER SCREEN ════ -->
+<div id="screen-chapter" class="screen">
+  <nav class="reader-nav">
+    <button class="back-btn" onclick="closeChapter()">← Novel</button>
+    <div class="reader-nav-info">
+      <div class="reader-nav-vol" id="reader-vol-label"></div>
+      <div class="reader-nav-ch" id="reader-ch-title"></div>
+    </div>
+    <button class="back-btn" onclick="goHome()" style="font-size:.78rem;color:var(--carrot);white-space:nowrap;flex-shrink:0;">🏠</button>
+  </nav>
+  <div class="reading-progress-bar"><div class="reading-progress-fill" id="reading-progress-fill"></div></div>
+  <div class="chapter-scroll" id="chapter-scroll">
+    <div class="chapter-body-wrap">
+      <div class="ch-hdr-block" id="ch-hdr-block"></div>
+      <div class="ch-prose" id="ch-prose"></div>
+      <div class="ch-end-mark"><span>— End of Chapter —</span></div>
+    </div>
+    <div class="ch-nav-strip" id="ch-nav-strip"></div>
+  </div>
+</div>
+
+<!-- ════ END-OF-STORY SCREEN ════ -->
+<div id="screen-end" class="screen">
+  <nav class="reader-nav">
+    <button class="back-btn" id="end-back-btn" onclick="closeChapter()">← Novel</button>
+    <div class="reader-nav-info">
+      <div class="reader-nav-ch" style="font-size:.88rem;">📖 NovéLore</div>
+    </div>
+    <button class="back-btn" onclick="goHome()" style="font-size:.78rem;color:var(--carrot);white-space:nowrap;flex-shrink:0;">🏠</button>
+  </nav>
+  <div class="page-scroll" id="end-scroll">
+    <div class="end-screen-wrap">
+      <div class="end-card" id="end-card">
+        <div class="end-glow"></div>
+        <!-- content injected by showEndScreen() -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <button id="scrolltop" onclick="stTop()">↑</button>
 <div id="toast"></div>
 
@@ -1135,7 +1605,7 @@ footer strong{color:var(--amber);}
      SCRIPT
 ════════════════════════════════════════════ -->
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 'use strict';
 
 /* ═══════════════════════════════════════════
@@ -1148,37 +1618,59 @@ footer strong{color:var(--amber);}
 // Example:
 // { tag:'🔥 Featured', title:'Your Title Here', description:'Your description.', bg:'linear-gradient(135deg,#3B1A08 0%,#5A2510 55%,#C44B1A 100%)', readHref:'#', coverImg:'https://example.com/cover.jpg' },
 const heroSlides = [
-  // { tag:'🔥 Featured', title:'Your Title Here', description:'Your description here.', bg:'linear-gradient(135deg,#3B1A08 0%,#5A2510 55%,#C44B1A 100%)', readHref:'#', coverImg:'https://...' },
+  {
+    tag:         '🔥 Featured',
+    title:       'The Lantern Pact: Prologue',
+    description: 'Three mismatched members of the Kaihon Light Pact navigate missions, secrets, and something far bigger moving in the shadows.',
+    bg:          'linear-gradient(135deg,#2C1206 0%,#5A1A08 55%,#C44B1A 100%)',
+    readHref:    '#',
+    novelId:     'lantern',
+  },
 ];
 
-// Novel cards — { title, emoji, bg, rating, genre, status, coverImg? }
-//   coverImg — URL to book cover image. Omit to show the title's first letter.
-const trendingData  = []; // 🔥 Trending tab
+// Novel cards — { title, novelId, emoji, bg, rating, genre, status, coverImg? }
+const trendingData  = [
+  { title:'The Lantern Pact: Prologue', novelId:'lantern', emoji:'🐰', bg:'linear-gradient(160deg,#C44B1A 0%,#3B1A08 100%)', rating:3.9, genre:'Dark Fantasy', status:'Ongoing' },
+]; // 🔥 Trending tab
 const hotPicksData  = []; // ⭐ Hot Picks tab
 const dojoDuelsData = []; // ⚔️ Dojo Duels tab
-const frenzyyyData  = []; // ✍️ Frenzyyy's Work tab
+const frenzyyyData  = [
+  { title:'The Lantern Pact: Prologue', novelId:'lantern', emoji:'🐰', bg:'linear-gradient(160deg,#C44B1A 0%,#3B1A08 100%)', rating:3.9, genre:'Dark Fantasy', status:'Ongoing' },
+]; // ✍️ Frenzyyy's Work tab
 
-// What's New — { title, emoji, bg, description, genre, status, rating, isNew, coverImg? }
-const novelsNew = [];
+// What's New — { title, novelId, emoji, bg, description, genre, status, rating, isNew, coverImg? }
+const novelsNew = [
+  { title:'The Lantern Pact: Prologue', novelId:'lantern', emoji:'🐰', bg:'linear-gradient(160deg,#C44B1A 0%,#3B1A08 100%)', description:'Three unlikely teammates navigate missions, secrets, and something far bigger moving behind the scenes. Volume 1: False Summer Arc — ongoing.', genre:'Dark Fantasy', status:'Ongoing', rating:3.9, isNew:true },
+];
 
-// Chapter updates — { novelTitle, emoji, chapter, chapterTitle, time }
-const updatesData = [];
+// Chapter updates — { novelId, novelTitle, emoji, chapter, chapterTitle, time }
+const updatesData = [
+  { novelId:'lantern', novelTitle:'The Lantern Pact: Prologue', emoji:'🐰', chapter:5, chapterTitle:'Vol. 1 Ch. 5 — Reminisce',           time:'Jan 24, 2026'  },
+  { novelId:'lantern', novelTitle:'The Lantern Pact: Prologue', emoji:'🐰', chapter:4, chapterTitle:'Vol. 1 Ch. 4 — Our Separate Ways',   time:'Jan 20, 2026'  },
+  { novelId:'lantern', novelTitle:'The Lantern Pact: Prologue', emoji:'🐰', chapter:3, chapterTitle:'Vol. 1 Ch. 3 — Chaotic Result',      time:'Jan 18, 2026'  },
+  { novelId:'lantern', novelTitle:'The Lantern Pact: Prologue', emoji:'🐰', chapter:2, chapterTitle:'Vol. 1 Ch. 2 — Compromise',          time:'Jan 17, 2026'  },
+  { novelId:'lantern', novelTitle:'The Lantern Pact: Prologue', emoji:'🐰', chapter:1, chapterTitle:'Vol. 1 Ch. 1 — Rescue Mission',      time:'Jan 17, 2026'  },
+];
 
-// Announcements — { title, body, type, date }  type: new | event | system
-const announcementsData = [];
+// Announcements — { title, body, type, date, novelId? }  type: new | event | system
+const announcementsData = [
+  { title:'🐰 Ch. 5 is Live — Reminisce',        body:'Chapter 5 of The Lantern Pact: Prologue is now available. False Summer Arc continues.',   type:'new',   date:'January 24, 2026', novelId:'lantern' },
+  { title:'📖 Vol. 1 Has Begun — False Summer Arc', body:'The Lantern Pact: Prologue is officially live. New chapters dropping regularly — free to read.', type:'event', date:'January 17, 2026', novelId:'lantern' },
+];
 
 // Notifications — { msg, time, read }
 const notificationsData = [
-  // Add real notifications here when ready, e.g.:
-  // { msg:'📢 Welcome to NovéLore! Start exploring novels.', time:'Just now', read:false },
+  { msg:'🐰 Ch. 5 is live — "Reminisce"! Sean sits alone as memories surface.',           time:'Jan 24, 2026',   read:false },
+  { msg:'🐰 Ch. 4 dropped — "Our Separate Ways". Things are shifting between the team.',  time:'Jan 20, 2026',   read:true  },
+  { msg:'🐰 Ch. 3 is out — "Chaotic Result". The mission takes an unexpected turn.',      time:'Jan 18, 2026',   read:true  },
+  { msg:'📢 Welcome to NovéLore! Tap any novel card to start reading.',                    time:'Jan 17, 2026',   read:true  },
 ];
 
-// Bookmarks — { title, emoji, bg, genre, href, coverImg? }
-// href is where "Read" button will take the user (set to your novel URL or '#')
+// Bookmarks — { title, novelId, emoji, bg, genre, href, coverImg? }
 const bookmarksData = [
-  // Add real bookmarks here, e.g.:
-  // { title:'My Novel', emoji:'📖', bg:'linear-gradient(160deg,#E8622A,#3B1A08)', genre:'Fantasy', href:'#', coverImg:'https://...' },
+  { title:'The Lantern Pact: Prologue', novelId:'lantern', emoji:'🐰', bg:'linear-gradient(160deg,#C44B1A 0%,#3B1A08 100%)', genre:'Dark Fantasy', href:'#' },
 ];
+
 
 /* ═══════════════════════════════════════════
    STORAGE & THEME
@@ -1188,19 +1680,48 @@ const LS = {
   set: (k,v) => localStorage.setItem(k, JSON.stringify(v)),
 };
 function setTheme(mode) {
-  document.documentElement.setAttribute('data-theme', mode);
-  LS.set('nl_theme', mode);
-  const dark = mode === 'dark';
+  const isSystem = mode === 'system';
+  let resolved = mode;
+  if (isSystem) {
+    localStorage.removeItem('nl_theme');
+    resolved = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme-source', 'system');
+  } else {
+    LS.set('nl_theme', mode);
+    document.documentElement.setAttribute('data-theme-source', 'manual');
+  }
+  document.documentElement.setAttribute('data-theme', resolved);
+  const dark = resolved === 'dark';
   const tog = document.getElementById('theme-toggle');
   if (tog) tog.checked = dark;
-  document.getElementById('theme-icon').textContent = dark ? '🌙' : '☀️';
-  document.getElementById('theme-lbl').textContent  = dark ? 'Dark Mode' : 'Light Mode';
-  document.getElementById('theme-sub').textContent  = dark ? 'Easy on the eyes at night' : 'Bright and clean';
-  document.getElementById('opt-dark').classList.toggle('active', dark);
-  document.getElementById('opt-light').classList.toggle('active', !dark);
+  const iconEl = document.getElementById('theme-icon');
+  const lblEl  = document.getElementById('theme-lbl');
+  const subEl  = document.getElementById('theme-sub');
+  if (iconEl) iconEl.textContent = isSystem ? '🖥️' : (dark ? '🌙' : '☀️');
+  if (lblEl)  lblEl.textContent  = isSystem ? 'System Default' : (dark ? 'Dark Mode' : 'Light Mode');
+  if (subEl)  subEl.textContent  = isSystem ? 'Follows your OS light/dark setting' : (dark ? 'Easy on the eyes at night' : 'Bright and clean');
+  const optDark   = document.getElementById('opt-dark');
+  const optLight  = document.getElementById('opt-light');
+  const optSystem = document.getElementById('opt-system');
+  if (optDark)   optDark.classList.toggle('active',   !isSystem && dark);
+  if (optLight)  optLight.classList.toggle('active',  !isSystem && !dark);
+  if (optSystem) optSystem.classList.toggle('active', isSystem);
 }
-function applyToggle(c) { setTheme(c ? 'dark' : 'light'); }
-function loadTheme() { setTheme(LS.get('nl_theme') || 'dark'); }
+function applyToggle(checked) { setTheme(checked ? 'dark' : 'light'); }
+function loadTheme() {
+  const saved = LS.get('nl_theme');
+  if (saved === 'light' || saved === 'dark') { setTheme(saved); }
+  else { setTheme('system'); }
+}
+if (window.matchMedia) {
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+    if (document.documentElement.getAttribute('data-theme-source') === 'system') {
+      document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+      const tog = document.getElementById('theme-toggle');
+      if (tog) tog.checked = e.matches;
+    }
+  });
+}
 
 /* ═══════════════════════════════════════════
    SETTINGS — READING PREFERENCES
@@ -1239,7 +1760,7 @@ function clearHistory() {
   toast('📜 Reading history cleared!');
 }
 function resetAllSettings() {
-  const keys = ['nl_theme','nl_fontsize','nl_linespace','nl_readwidth','nl_reducemotion','nl_highcontrast','nl_notif_chapters','nl_notif_announce','nl_notif_new'];
+  const keys = ['nl_theme','nl_fontsize','nl_linespace','nl_readwidth','nl_reducemotion','nl_highcontrast','nl_notif_chapters','nl_notif_announce','nl_notif_new','nl_autocontinue','nl_showprogress','nl_automark80'];
   keys.forEach(k=>localStorage.removeItem(k));
   loadTheme();
   restoreReadingPrefs();
@@ -1264,6 +1785,10 @@ function restoreReadingPrefs() {
   const nc = LS.get('nl_notif_chapters'); if(nc!==null){const el=document.getElementById('notif-chapters');if(el)el.checked=nc;}
   const na = LS.get('nl_notif_announce'); if(na!==null){const el=document.getElementById('notif-announce');if(el)el.checked=na;}
   const nn = LS.get('nl_notif_new'); if(nn!==null){const el=document.getElementById('notif-new');if(el)el.checked=nn;}
+  // Novel experience settings
+  const ac = LS.get('nl_autocontinue');  const acEl = document.getElementById('autocontinue');  if(acEl) acEl.checked = ac !== null ? ac : true;
+  const sp = LS.get('nl_showprogress');  const spEl = document.getElementById('showprogress');  if(spEl) spEl.checked = sp !== null ? sp : true;
+  const am = LS.get('nl_automark80');    const amEl = document.getElementById('automark80');    if(amEl) amEl.checked = am !== null ? am : true;
 }
 
 /* ═══════════════════════════════════════════
@@ -1317,8 +1842,8 @@ function buildSlides() {
         <h1>${esc(s.title)}</h1>
         <p>${esc(s.description)}</p>
         <div class="slide-acts">
-          <a class="btn-pri" href="${safeUrl(s.readHref)}" rel="noopener noreferrer">▶ Read Now</a>
-          <a class="btn-out" href="#">+ Bookmark</a>
+          ${s.novelId ? `<button class="btn-pri" onclick="openNovel('${s.novelId}')">▶ Read Now</button>` : `<a class="btn-pri" href="${safeUrl(s.readHref)}" rel="noopener noreferrer">▶ Read Now</a>`}
+          ${s.novelId ? `<button class="btn-out slide-bm-btn" id="slide-bm-${s.novelId}" onclick="toggleSlideBookmark('${s.novelId}',this)">${bookmarks.some(b=>b.novelId===s.novelId)?'🔖 Saved':'🔖 Bookmark'}</button>` : ''}
         </div>
       </div>
     </div>`;
@@ -1440,13 +1965,16 @@ function clearAllBookmarks() {
   bookmarks = [];
   renderDrawerBookmarks();
   renderMiniBookmarks();
+  _refreshNovelBmBtn();
   toast('All bookmarks cleared');
 }
 
 /* ═══════════════════════════════════════════
    BOOKMARKS
 ═══════════════════════════════════════════ */
-let bookmarks = bookmarksData.map((b,i)=>({...b,id:i}));
+let bookmarks = bookmarksData.map((b,i)=>({...b,id:String(i)}));
+let _bmIdCtr = bookmarksData.length;
+function _nextBmId() { return String(_bmIdCtr++); }
 let bmMiniOpen = false;
 
 function renderMiniBookmarks() {
@@ -1469,15 +1997,16 @@ function renderMiniBookmarks() {
     } else {
       bmInner = `<div class="bm-initial">${esc(init)}</div>`;
     }
+    const bid = String(b.id);
     return `
-    <a class="bm-item" href="${safeUrl(b.href)}" rel="noopener noreferrer" onclick="closeBmMini()">
+    <div class="bm-item" style="cursor:pointer" onclick="if(!event._bmRemove){${b.novelId?`closeAllMinis();openNovel('${b.novelId}')`:'closeBmMini()'}}">
       <div class="bm-cover" style="background:${bg}">${bmInner}</div>
       <div class="bm-info">
         <div class="bm-title">${esc(b.title)}</div>
         <div class="bm-meta">${esc(b.genre||'')}</div>
       </div>
-      <button class="bm-remove" onclick="removeBookmark(event,${safeNum(b.id,0)|0})">✕</button>
-    </a>`;
+      <button class="bm-remove" onclick="event._bmRemove=true;event.stopPropagation();removeBookmark(event,'${bid}')">✕</button>
+    </div>`;
   }).join('');
 }
 
@@ -1510,7 +2039,7 @@ function renderDrawerBookmarks() {
         <div class="bm-drawer-title">${esc(b.title)}</div>
         <div class="bm-drawer-meta">${esc(b.genre||'')}</div>
       </div>
-      <button class="bm-drawer-remove" onclick="removeBookmarkDrawer(event,${b.id})">✕</button>
+      <button class="bm-drawer-remove" onclick="event.stopPropagation();removeBookmarkDrawer(event,'${String(b.id)}')">✕</button>
     </div>`;
   }).join('');
 }
@@ -1523,14 +2052,18 @@ function goToNovel(href) {
 
 function removeBookmark(e, id) {
   e.preventDefault(); e.stopPropagation();
-  bookmarks = bookmarks.filter(b=>b.id!==id);
+  bookmarks = bookmarks.filter(b=>String(b.id)!==String(id));
   renderMiniBookmarks();
+  renderDrawerBookmarks();
+  _refreshNovelBmBtn();
   toast('Bookmark removed');
 }
 function removeBookmarkDrawer(e, id) {
   e.stopPropagation();
-  bookmarks = bookmarks.filter(b=>b.id!==id);
+  bookmarks = bookmarks.filter(b=>String(b.id)!==String(id));
   renderDrawerBookmarks();
+  renderMiniBookmarks();
+  _refreshNovelBmBtn();
   toast('Bookmark removed');
 }
 
@@ -1554,6 +2087,48 @@ function openBmDrawer() {
 
 function closeNotifMini() { notifMiniOpen=false; document.getElementById('notif-mini').classList.remove('show'); }
 function closeBmMini()    { bmMiniOpen=false;    document.getElementById('bm-mini').classList.remove('show'); }
+
+/* Refresh the novel-page bookmark button and any visible slide bookmark buttons */
+function _refreshNovelBmBtn() {
+  // Novel page button
+  const btn = document.getElementById('novel-bm-btn');
+  if (btn && currentNovelId) {
+    const active = bookmarks.some(b=>b.novelId===currentNovelId);
+    btn.classList.toggle('bm-active', active);
+    btn.textContent = active ? '🔖 Saved' : '🔖 Save';
+  }
+  // Slide bookmark buttons (hero slider)
+  document.querySelectorAll('.slide-bm-btn').forEach(b=>{
+    const nid = b.id.replace('slide-bm-','');
+    const active = bookmarks.some(bm=>bm.novelId===nid);
+    b.textContent = active ? '🔖 Saved' : '🔖 Bookmark';
+    b.style.opacity = active ? '.8' : '';
+  });
+}
+
+/* Toggle bookmark directly from the hero slide */
+function toggleSlideBookmark(novelId, btn) {
+  const nd = novelDetails[novelId];
+  if (!nd) return;
+  const idx = bookmarks.findIndex(b=>b.novelId===novelId);
+  if (idx >= 0) {
+    bookmarks.splice(idx,1);
+    toast('Bookmark removed');
+  } else {
+    bookmarks.push({ id:_nextBmId(), novelId:nd.id, title:nd.title, emoji:nd.emoji, bg:nd.bg, genre:(nd.genres||[nd.genre||''])[0], href:'#', coverImg:nd.coverImg||'' });
+    toast('📖 Bookmarked!');
+  }
+  renderMiniBookmarks(); renderDrawerBookmarks(); _refreshNovelBmBtn();
+}
+
+/* Clear all notifications */
+function clearAllNotifications() {
+  notifs = [];
+  updateNotifBadge();
+  renderMiniNotifs();
+  renderDrawerNotifs();
+  toast('🔔 Notifications cleared');
+}
 function closeDrawer(id) {
   document.getElementById(id).classList.remove('open');
   const ov = document.getElementById('panel-overlay');
@@ -1596,6 +2171,29 @@ function goSettings() {
   const dark = document.documentElement.getAttribute('data-theme')==='dark';
   document.getElementById('theme-toggle').checked = dark;
   restoreReadingPrefs();
+  // Populate novel progress for every novel dynamically
+  try {
+    const novelListEl = document.getElementById('settings-novel-list');
+    if (novelListEl && novelDetails) {
+      novelListEl.innerHTML = Object.values(novelDetails).map(nd => {
+        const prog  = _getNovelProgress(nd.id);
+        const total = nd.volumes.reduce((s,v) => s + v.chapters.length, 0);
+        const label = prog.read.length === 0
+          ? 'Not started yet — tap Open to begin'
+          : prog.read.length + ' / ' + total + ' chapters read · Last: Ch.' + prog.last;
+        return `<div class="setting-row">
+          <div class="setting-row-l">
+            <span class="setting-icon">${esc(nd.emoji||'📖')}</span>
+            <div>
+              <div class="setting-lbl">${esc(nd.title)}</div>
+              <div class="setting-sub">${label}</div>
+            </div>
+          </div>
+          <button class="setting-action-btn" onclick="openNovel('${nd.id}');goHome();">Open →</button>
+        </div>`;
+      }).join('');
+    }
+  } catch(e) {}
   document.querySelector('#screen-settings .page-scroll').scrollTop = 0;
 }
 function goAbout() {
@@ -1687,14 +2285,15 @@ function coverHtml(n, cls='nc') {
 }
 
 function nCard(n, badge='', bCls='new-b') {
-  return `<div class="nc">
+  const cl = n.novelId ? ` onclick="openNovel('${n.novelId}')" style="cursor:pointer"` : '';
+  return `<div class="nc"${cl}>
     <div class="nc-cov" style="background:${safeCss(n.bg||'linear-gradient(160deg,#E8622A,#3B1A08)')}">
       ${coverHtml(n,'nc')}
       ${badge?`<span class="nc-b ${bCls}">${esc(badge)}</span>`:''}
     </div>
     <div class="nc-inf">
       <div class="nc-t">${esc(n.title)}</div>
-      <div class="nc-m"><span class="nc-s">★</span> ${safeNum(n.rating).toFixed(1)} <span style="color:var(--carrot-pale)">•</span> ${esc(n.genre||'')}</div>
+      <div class="nc-m">${esc(n.genre||'')}</div>
     </div></div>`;
 }
 function phCards(label, count=5) {
@@ -1814,7 +2413,8 @@ function renderAll() {
       } else {
         lcInner = `<div class="lc-initial">${esc(init)}</div>`;
       }
-      return `<div class="lc">
+      const lcClick = n.novelId ? ` onclick="openNovel('${n.novelId}')" style="cursor:pointer"` : '';
+      return `<div class="lc"${lcClick}>
         <div class="lc-cov" style="background:${bg}">${lcInner}</div>
         <div class="lc-bd">
           <div class="lc-t">${esc(n.title)}</div>
@@ -1835,13 +2435,19 @@ function renderAll() {
   // Updates
   const updList = document.getElementById('upd-list');
   if (updatesData.length) {
-    updList.innerHTML = updatesData.map((u,i)=>`<div class="upd">
+    updList.innerHTML = updatesData.map((u,i)=>{
+      const chNum = safeNum(u.chapter, 0)|0;
+      const clickAttr = u.novelId
+        ? ` onclick="openChapter('${esc(u.novelId)}',${chNum})" style="cursor:pointer"`
+        : '';
+      return `<div class="upd"${clickAttr}>
         <div class="upd-ico">${esc(u.emoji||'📖')}</div>
         <div class="upd-bd">
           <div class="upd-t">${esc(u.novelTitle)}${i<3?'<span class="np-pill">NEW</span>':''}</div>
-          <div class="upd-s">Chapter ${safeNum(u.chapter,0)|0} — ${esc(u.chapterTitle||'')}</div>
+          <div class="upd-s">Chapter ${chNum} — ${esc(u.chapterTitle||'')}</div>
         </div>
-        <div class="upd-tm">${esc(u.time||'')}</div></div>`).join('');
+        <div class="upd-tm">${esc(u.time||'')}</div></div>`;
+    }).join('');
   } else {
     updList.innerHTML = emptySection('🔄', "No chapter updates yet — looks like the authors are still typing away. The chapters will appear here once they drop! ✍️");
   }
@@ -1853,7 +2459,10 @@ function renderAll() {
     const lbl = { new:'✨ New', event:'🎉 Event', system:'⚙️ System' };
     annEl.innerHTML = announcementsData.map(a => {
       const type = safeChoice(a.type, ALLOWED_TYPES, 'new');
-      return `<div class="ann">
+      const clickAttr = a.novelId
+        ? ` onclick="openNovel('${esc(a.novelId)}')" style="cursor:pointer"`
+        : '';
+      return `<div class="ann"${clickAttr}>
         <span class="ann-tp ${type}">${lbl[type]}</span>
         <div class="ann-date">${esc(a.date||'')}</div>
         <h3>${esc(a.title)}</h3><p>${esc(a.body)}</p></div>`;
@@ -1898,83 +2507,1872 @@ document.addEventListener('click', e => {
   }
 }, true);
 
-/* ═══════════════════════════════════════════
-   LOADING BAR — driven by real browser events
-═══════════════════════════════════════════ */
-(function () {
-  const bar = document.querySelector('.ls-bar');
-  const ls  = document.getElementById('loading-screen');
-  let cur = 0;
-  let dismissed = false;
 
-  function setP(pct) {
-    if (!bar || dismissed) return;
+/* ═══════════════════════════════════════════
+   NOVEL DETAILS (chapters, volumes, metadata)
+═══════════════════════════════════════════ */
+const novelDetails = {
+  'lantern': {
+    id: 'lantern',
+    title: 'The Lantern Pact: Prologue',
+    author: 'Frenzyyy',
+    bg: 'linear-gradient(160deg,#C44B1A 0%,#3B1A08 100%)',
+    emoji: '🐰',
+    genres: ['Dark Fantasy', 'Action', 'Adventure'],
+    status: 'Ongoing',
+    rating: 3.9,
+    datePublished: 'January 17, 2026',
+    synopsis: `In Kaihon, most people live their lives unaware of the dangers around them. When things go wrong, the Kaihon Light Pact handles it quietly.
+    
+Moon 'Sean' Mochizuki, Takeshi Kurotsuki, and Olivia Violetshade weren’t supposed to end up on the same team. Sean is reckless and hard to control. Takeshi tries to keep everything in order. Olivia, despite being their leader, keeps more to herself than either of them can figure out.
+
+Their missions start simple enough—rescue operations, protection jobs, dealing with threats before they get out of hand. But as they spend more time working together, the cracks start to show. Mistakes happen. Secrets surface. And not everything can be solved by strength alone.
+
+Something bigger is moving behind the scenes. And whether they’re ready or not, it’s already starting to involve them.`,
+    volumes: [
+      {
+        number: 1,
+        title: 'False Summer Arc',
+        chapters: [
+          {
+            number: 1,
+            title: 'Rescue Mission',
+            date: 'Jan 17, 2026',
+            volTitle: 'False Summer Arc',
+            content: `Somewhere in Kaihon, Year 760 AC, 4:30AM. 
+
+
+A group of armed men with a ski-mask patrol around the forest with their guns ready and loaded, keeping a lookout to their surroundings as they were guarding a place. They weren't just any armed men—they were kidnappers, guarding the hostages they kept in one place. This group has a connection with the Tundra Dragon, associating with a dangerous organization that has been existing for over a hundred years, but they tend to act independently as their own because they aren't part of Tundra Dragon organization but rather an affiliated group.
+
+
+Kidnapping and human trafficking. That's their work.
+
+
+An armed man patrols into the woods while his other colleagues are busy guarding behind. He grabs his cigarette and inhales before gradually taking his time blowing the smoke out. After patrolling further more in the woods, he stops and looks around, eyes peeling sharp and alert.
+
+
+There was nothing unusual he detected… not yet it seems.
+
+
+He put his hand on the cigarette in his mouth and was about to smoke when suddenly a bush fluttered in his right, causing him to get alerted and point his gun into that direction. He cocks his gun and turns on his flashlight, investigating the disturbance, slowly taking his step.
+
+
+Whoosh!
+
+
+A dart flew from behind and struck the man in the back of his neck. He winced and reached out behind, but before he could make a sound, a hand shot out from the foliage and dragged him in.
+
+
+Crack. His neck snapped.
+
+
+A few seconds later, after the silence, a young man with a black fox ear emerges from the shadow, holding a blow dart. He looks awkward and concerned rather than being mysterious and vigilant, his red eyes looking at the bush in front while mouth slacking.
+
+
+“Was that really necessary?” He muttered.
+
+
+The bush rustles. Moments later, a figure steps into view.
+
+
+A pale-skinned young woman emerges, her sharp, snake-yellow eyes scanning the areas. Long, messy white hair spills down her back, contrasting with the magenta staff strapped behind her—its tip adorned with softly clinking golden rings.
+
+
+Her name is Sarelia Bai, a 16-year-old hybrid born with the blood and power of a serpent. She is one of the members of the Kaihon Light Pact.
+
+
+“Just making sure he's fast asleep, Takeshi,” she said in monotone.
+
+
+‘I don't think he's waking up soon… Also, what's the point of this blowdart…’ the fox man thought.
+
+
+Takeshi Kurotsuki, also sixteen, is a fox man from the Kurotsuki Clan, a linear known for its mastery of artifacts and scroll magic. Like Sarelia, he is a member of the Kaihon Light Pact.
+
+
+Sarelia crouches low and peers into the distance, her snake familiar slithering silently ahead, its tongue flicking as it relayed what it senses. Her perception swept the area—every shadow, every unnatural stillness.
+
+
+“East,” she whispered, pointing. “We should be able to infiltrate their base without being detected.”
+
+
+Takeshi gave a deliberate nod and followed her lead, both of them sneaking into the shadows as they moved.
+
+
+This was the place.
+
+
+For over a decade, the armed group operating here had abducted innocent people—women and children—selling them into enslavement. Disappearances had risen steadily over the years, yet no force had been able to put an end to it.
+
+
+The Kaihon Light Pact had tried.
+
+
+Eight months of planning, scouting, and failed attempts had drained their resources. Too few members. Too many obstacles. The mission was almost abandoned—until new recruits joined the pact.
+
+
+After completing smaller operations, they were finally entrusted with this one.
+
+
+Infiltrate the enemy base. Eliminate the threat. Rescue the hostages.
+
+
+For Sarelia and Takeshi, this was their first true field mission—and there would be no room for failure this time, for sure.
+
+
+Sarelia and Takeshi halted and hid into the forest’s shadows, holding their breath as an enemy guard walked past them, unaware of their presence. Footsteps faded into the distance.
+
+
+The moment the guard was far enough, both dashed forward, swift and silent, until they reached the structure ahead.
+
+
+It was an old Japanese-style building, meticulously maintained by the armed men occupying it. Wide terraces lined its exterior, and a large open field lay at the center, surrounding a spacious lobby.
+
+
+Sarelia tilted her head upward and spotted an open window on the fourth floor. She glances at Takeshi and subtly signals.
+
+
+He nodded.
+
+
+Reaching for a talisman at his waist, Takeshi activated it. Blue light flared softly as a grappling hook formed in his hand. He aimed upward and hurled it towards the window. The hook firmly caught perfectly.
+
+
+He signaled.
+
+
+Sarelia grabbed the rope and climbed swiftly. Takeshi followed moments later, vanishing into the darkness above.
+
+
+Sarelia peered through the window, scanning the room for any sign of movement. Silence. No presence. Satisfied, she pulled herself up and stepped onto the wooden floor, landing lightly without a sound.
+
+
+It was a quarter room.
+
+
+She moves forward at a slow, measured pace. Moments later, Takeshi followed, placing his foot onto the floor—
+
+
+Creak.
+
+
+Sarelia pauses and glances back.
+
+
+Takeshi clenched his teeth, his breath caught in his throat. The tension in his posture betrayed his panic.
+
+
+Seconds passed.
+
+
+No voices. No footsteps.
+
+
+The creak went unnoticed. Takeshi let out a silent sigh of relief, Sarelia smiled faintly, as if she had expected the mistake all along.
+
+
+She moved again, soundless, and soon noticed a door left slightly ajar. A thin line of light slipped through the narrow gap. Sarelia approached and peered through it.
+
+
+On the other side, armed men patrol the lobby, standing watch like sentinels. The place was guarded like a fortress. The opening was too narrow to give her a clear count, but she could tell there were many.
+
+
+Sarelia places her right hand on her shoulder. And then, a small white snake emerges from her hair, its body coiling gently around her fingers.
+
+
+She lowered her hand to the floor and released it. The snake slipped through the narrow gap beneath the door and slithered into the lobby.
+
+
+It glided between the guards’ boots, unnoticed by most. A few glances down, briefly acknowledging its presence—then dismissed it as nothing more than a harmless little creature.
+
+
+None of them realized it was a familiar, silently mapping their defenses.
+
+
+Meanwhile, Takeshi scanned the quarter room and noticed a framed map hanging on the wall. He approaches it and studies the markings. It was a printed layout of the base—rooms, hallways, and corridors carefully outlined.
+
+
+His eyes narrowed.
+
+
+One room on the map was marked with a red circle, roughly scribbled over the layout. When he traced its position, his gaze shifted around the room.
+
+
+It matched their location.
+
+
+Takeshi follows the mark’s position and stops in front of a cabinet. At first glance, nothing seemed unusual. But then he noticed the dust on the floor—disturbed, uneven, as if the cabinet had been moved recently.
+
+
+He tapped the floor lightly.
+
+
+Hollow.
+
+
+Carefully, Takeshi pushed the cabinet aside. Beneath it lay a concealed trapdoor, its outline barely visible against the floorboards.
+
+
+He turned and softly called Sarelia. She lifts her head and looks toward him.
+
+
+Takeshi signals quietly.
+
+
+He had found a way.
+
+`,
+          },
+          {
+            number: 2,
+            title: 'Compromise',
+            date: 'Jan 17, 2026',
+            volTitle: 'False Summer Arc',
+            content: `***
+
+
+Sarelia was already inside the tunnel when Takeshi dropped through the trapdoor and pulled it shut above him.
+
+
+They stood in a dimly lit, narrow hallway hidden beneath the structure.
+
+
+The enemy base was built with secret tunnels spread throughout the compound. The trapdoor beneath the cabinet was just one of many, used for escape or to hide things meant to remain unseen. All of them were connected to an underground chamber buried beneath the building.
+
+
+Sarelia gave Takeshi a small thumbs-up. “You've got a good perception, Takeshi.”
+
+
+Takeshi scratches the back of his head. “I was just lucky to discover this.”
+
+
+The two of them moved slowly through the tunnel, careful with each step. The walls were made of thin wood, and even the slightest noise could give them away. Muffled voices echoed from the other side of the walls—enemy guards speaking in low tones.
+
+
+“Where is this heading?” Sarelia whispers to her back.
+
+
+“If I remember correctly, it leads underground,” Takeshi replied.
+
+
+Sarelia nodded. “My snakes already scouted the outside. It looks like the hostages are being kept somewhere hidden. There's only one room we haven't explored yet.”
+
+
+Takeshi frowned. “But what if it's a trap? If they're keeping the hostages underground, they'd expect us to look there.”
+
+
+Sarelia pauses for a moment. “Hmm. We'll see.”
+
+
+After walking for some time, they reached the end of the tunnel, where a ladder descended into darkness. Sarelia went down first, with Takeshi following soon after.
+
+
+Sarelia moved ahead while Takeshi paused, carefully observing their surroundings. Chains and metal collars lay scattered along the walls and floor. His stomach twisted at the sight. Disgust crossed his face, and he clenched his fist.
+
+
+‘We’ll save them,’ he told himself, shaking his head before catching up to Sarelia.
+
+
+Sarelia scanned the area and noticed a narrow gap in the wall to her left. Light spilled through it, shadows shifting beyond. She leaned closer and peered through.
+
+
+Inside was a room resembling an office.
+
+
+A man sat back in a chair, drinking liquor, while a woman stood nearby, collecting used glasses and placing them on a tray. He lit a cigarette, took another drink—
+
+
+Crash.
+
+
+A glass slipped from the tray and shattered on the floor.
+
+
+The man rose abruptly, shouting at her as if he was going to smack her. He ordered her to clean it up immediately, threatening her with a cigarette burn if she didn't. The woman froze in fear, then hurried to obey.
+
+
+Sarelia watched the scene unfold, her expression unreadable.
+
+
+Takeshi saw it too.
+
+
+Fury burned through him as he leaned against the wall beside the gap, teeth clenched.
+
+
+“Those bastards…” he muttered.
+
+
+Sarelia turned towards him, eyes sharp. She understood the anger—she felt it too—but this was a mission. Emotion could get them to compromise.
+
+
+“Let's keep going, Tak—”
+
+
+Suddenly—
+
+
+The wall panel Takeshi was leaning against flipped inward, dragging him through before he could react.
+
+
+‘Shi—!’
+
+
+Sarelia immediately tries to catch him, but it is too late to react.
+
+
+Thud.
+
+
+Takeshi hit the floor hard. He pushed himself up quickly and looked around.
+
+
+He was inside of the office.
+
+
+A sharp click sounded to his right.
+
+
+Takeshi turned his head slowly. The man from earlier stood there now, pistol raised, smoke drifting from his lips as he stared coldly at Takeshi.
+
+
+The woman ducked down and covered her head as soon as she heard the gun click.
+
+
+“Who are you?” he said, pointing his gun.
+
+
+‘Crap… I messed up. I never thought that wall was a secret entrance either. I didn't notice until it was already too late. I'm sorry, Sarelia. I compromised our mission by my own idiocy.’ Takeshi frustratingly thought.
+
+
+The man studied Takeshi closely, his gaze stopping at a silver, slim bracelet on Takeshi’s wrist—etched with gray patterns. Recognition flashed across his face. He knew exactly what it meant.
+
+
+“You're from the Pact, huh?” the man said with a sneer. “You've got some nerve invading my base.”
+
+
+Takeshi clenched his teeth and scoffed. “Yeah. I'm here for something pretty obvious. I'm here to rescue the hostages you Tundras have been kidnapping for years.”
+
+
+Slowly, Takeshi reached behind his waist and grasped a talisman. Blue light flared as a sword materializing in his hand. He draws it and fixes his gaze on the man, steady and defiant.
+
+
+“You've got some guts saying that, you Pact scum!” the man shouted. He raised his pistol, finger tightening on the trigger—
+
+
+Crash!
+
+
+The wall to his left exploded inward, wood splintering across the room.
+
+
+Sarelia burst through the opening, kicking off the broken panel. She rolled across the floor, spun her staff in a swift arc, and struck the man's arm. The pistol flew from his grip and skidded across the floor.
+
+
+In one motion, Sarelia seized the woman and pulled her out of reach from the man, moving quickly to Takeshi's side.
+
+
+“Takeshi,” she said firmly, “protect the woman. I'll take care of this. I will also scold you later after this.”
+
+
+‘I-I’m sorry…’ Takeshi thought awkwardly.
+
+
+The man clutches his arm, pain flaring where the staff had struck him. He glared at Sarelia, teeth clenching in seething rage.
+
+
+“You b*tch,” he sneered. “I'll make you pay for this!”
+
+
+Sarelia and Takeshi readied themselves to confront him—when suddenly, an alarm blared throughout the building.
+
+
+The man glanced at the alarm panel on the wall and broke into a confident grin. He knew reinforcements were already on the way.
+
+
+“Perfect timing,” he said mockingly. “You Pacts are finished!”
+
+
+“Crap—they already found us!” Takeshi said, panic creeping into his voice.
+
+
+Sarelia paused, thinking. “Hmm… I guess they found the guy in the bushes?”
+
+
+‘Is that really the best reason you can come up with?!’ Takeshi screamed internally.
+
+
+The man grabbed a sword resting beside the table and drew it forward, a confident smile spreading across his face.
+
+
+“It's all over for the two of you,” he sneered.
+
+
+The tension in the room thickened.
+
+
+Suddenly, the door behind them burst open. A guard stumbled into the doorway, hunched over and gasping for breath.
+
+
+Takeshi spun around immediately, stepping forward to guard their flank as he raised his sword.
+
+
+“Huff… huff… B-Bernard! Intruder—!” the guard gasped.
+
+
+“I know!” the man whose name is Bernard snapped. “They're right here, you idiot! Now get them!”
+
+
+The guard hesitated and looked past him.
+
+
+He saw Sarelia facing Bernard head-on, staff ready, Takeshi stood between him and the woman, sword drawn, shielding her with his body.
+
+
+Confusion crossed the guard's face.
+
+
+“W-What the-?!” he shouted. “Bernard—there’s another intruder outside! I repeat—there’s a rabbit intruder!”
+
+
+The room fell silent.
+
+
+Sarelia and Takeshi froze for a split second.
+
+
+Rabbit.
+
+
+They both knew exactly who that meant—another member of the Kaihon Light Pact, and one of the strongest new recruits in its history.
+
+
+But what is he doing here? He's not part of this mission.
+
+
+Sarelia’s snake familiar reacted instantly, sending a sharp warning through her senses.
+
+
+“Take cover!” she shouted.
+
+
+WHAM! CRASH! BOOM!
+
+
+Something smashed through the roof.
+
+
+A body came crashing down into the room—it was one of the guards from outside, all beaten up. The structure groaned as cracks spread along the ceiling.
+
+
+Crack.
+
+
+Sarelia didn't wait for a moment.
+
+
+She charges forward, spinning her staff in a swift arc and striking at Bernard. He blocked with his sword, but the impact locked their weapons together.
+
+
+Meanwhile, Takeshi seized the opening.
+
+
+He dashed toward the guard in the doorway, slashing diagonally and sending him flying aside. Without slowing, Takeshi grabbed the woman's hand.
+
+
+“Let's go!”
+
+
+They ran from the room as the structure began collapsing around them, wood splintering and debris falling bit by bit.
+
+
+Takeshi ran down the hallway with the woman close behind him. At the far end, two armed men appeared, already alerted by the chaos.
+
+
+Takeshi clenched his teeth. “Out of our way!”
+
+
+He ripped a talisman from his waist and hurled it forward. An invisible barrier formed around him and the woman, moving with them as they advanced.
+
+
+The armed men raised their rifles and opened fire.
+
+
+Bullets struck the barrier and dropped harmlessly to the floor. The barrier blocked projectiles—but not people.
+
+
+Takeshi saw the flaw and took advantage.
+
+
+He drew his sword and dashed forward, slicing through the two men in swift, precise strikes before they could react.
+
+
+More armed men poured in from both sides of the hallway, guns raised.
+
+
+Too many.
+
+
+Without hesitation, Takeshi scooped the woman into his arms and turned left. A large window stood wide open, overlooking the lobby below.
+
+
+He leapt.
+
+
+The fall should have been brutal—but it wasn't.
+
+
+A strange force caught them midair. Takeshi felt his body slow, suspended by an unseen gravity. He descended gently and landed safely, the woman still clinging to him.
+
+
+‘This power…’ Takeshi knew exactly where it came from.
+
+
+Suddenly, bodies were flying.
+
+
+Armed men were hurled into the walls and slammed onto the ground one after another. Takeshi looked up and saw chaos rippling through the lobby—guards trying desperately to retaliate against a single figure standing calmly and lazily at the center.
+
+
+Rabbit.
+
+
+A pale young man with rabbit ears stood among the fallen, wearing a black shade and a black scarf fastened with a swirling silver pin. His eyes glowed in faint purple, shaped like crescent moons.
+
+
+One guard rushed him head-on.
+
+
+In an instant, the guard was blasted backward, crashing into a distant wall.
+
+
+Another tried to flank him—only to be intercepted mid-strike. The rabbit seized him, yanked him forward, and kicked him aside.
+
+
+Gunfire erupted.
+
+
+The bullets stopped midair, halted by an invisible barrier surrounding him.
+
+
+The rabbit grinned.
+
+
+He dropped the barrier. The bullets fell harmlessly to the ground, stripped of their force.
+
+
+Raising both hands, faint blue light shimmered around his palms.
+
+
+Two guards on either side were suddenly dragged towards him by an unseen force.
+
+
+He flicked his wrist inward.
+
+
+WHAM!
+
+
+They collided face-first in front of him.
+
+
+In the next instant, he vanished—leaving behind a purple afterimage—and reappeared in front of another foe, delivering a single punch that sent the man skidding across the floor toward Takeshi.
+
+
+Takeshi stood frozen for a moment, watching.
+
+
+“Seriously? This is it?” the rabbit laughed. “You guys talk big, but that's all you've got? Wow… I almost thought this might be fun, but it looks like this is just full of bullsh*t. So weak and kinda embarrassing!”
+
+
+He mockingly said, fixing his shade in a lazy posture.
+
+
+Moon Mochizuki—also known as Sean— is a member of the Kaihon Light Pact. Sixteen years old. A new recruit, and one of the strongest the Pact had ever seen. He was born from a clan infamous for its moon-based legacy power.`,
+          },
+          {
+            number: 3,
+            title: 'Chaotic Result',
+            date: 'Jan 18, 2026',
+            volTitle: 'False Summer Arc',
+            content: `Sun rising in the distance horizon, orange sky shading gradually. It's sunrise now, 5:15AM.
+
+
+“Hey, Sean! Don’t destroy their base!” Takeshi shouted. “The hostages are still somewhere inside—we have to get them out without any harm!”
+
+
+“Huh!?” Sean replied, turning his head slowly. His mouth hung open in an exaggerated, almost offended expression.
+
+
+“Do I even care about your frickin’ hostages? I’m here to have fun with these scumbags, not to play hero on some rescue trip.”
+
+
+Takeshi froze. “…W–What???” His eyes twitched. “You idiot, this is a mission! Aren’t you our backup?!”
+
+
+Before Sean could answer, a guard rushed in from his flank.
+
+
+Thwack!
+
+
+Sean lazily flicked the back of his hand without even looking. The guard crumpled to the floor instantly.
+
+
+Sean didn’t move from his spot. He just slowly turned back to Takeshi, staring at him with the straightest, dumbest expression imaginable.
+
+
+“…There’s a mission?”
+
+
+‘ARE YOU FOR REAL?!’ Takeshi screamed internally.
+
+
+Sean was immediately surrounded by armed men, weapons raised—guns aimed, blades gleaming under the lights. He slowly scanned the circle around him, mouth slightly open, eyes half-lidded like he was bored out of his mind.
+
+
+“…Well,” he said at last, shrugging. “Guess it doesn’t matter that I didn’t know about your precious mission.” His grin widened. “All that matters is beating up these stupid monkeys.”
+
+
+He cracked his neck and glanced over at Takeshi.
+
+
+“And if you’re just gonna stand there gawking while holding a woman in your arms, I suggest you move already and do your job.”
+
+
+Takeshi grit his teeth. “I will do my job, alright?! Just—don’t wreck havoc anymore!”
+
+
+“Tch. No promises,” Sean replied lazily.
+
+
+Without waiting, Takeshi dashed off to a safer area, carefully setting the woman down before turning back toward the chaos—Sean already standing in the middle of it, surrounded, smiling like he was right where he wanted to be.
+
+
+The building rumbled violently as deep cracks echoed through the structure. Wooden pillars groaned under the strain, splintering inch by inch, while roof tiles broke loose and crashed down from above. Any more destruction, and the entire place would collapse into rubble.
+
+
+Takeshi’s fox ears twitched sharply at the sound.
+
+
+‘I should go help Sarelia and get the hostages out—now,’ he thought. ‘But I can’t do that if I’m still protecting someone.’
+
+
+He glanced back at the woman, trembling where he left her.
+
+
+‘And if Sean keeps yanking bodies around inside this building… it’ll only speed things up.’
+
+
+Another violent tremor shook the floor beneath his feet.
+
+
+‘Tch. Damn it… This is bad. Too many risks. Too many things to think about. If I make the wrong move here, people are going to die.’
+
+
+His grip on his sword tightened.
+
+
+‘Tch… What should I do…?!’
+
+
+Suddenly—CRASH!
+
+
+A body came flying from behind and slammed across the floor, skidding violently past Takeshi before stopping right at Sean’s feet. The man lay there unmoving, battered beyond recognition.
+
+
+Bernard.
+
+
+Metal clinked from the shattered wall as golden rings glinted faintly in the dim light. From the opening stepped Sarelia, her staff split into segmented parts like a retractable weapon. With a smooth motion, she retracted it back into a single straight staff, then swung it behind her and secured it against her back—calm, composed, victorious.
+
+
+“Sarelia…!” Takeshi shouted.
+
+
+Sarelia heard him, dusting off her left shoulder. “Don't worry, Takeshi, I'm fine. That creep was nothing but a bug.”
+
+
+Sean didn’t hesitate.
+
+
+He stomped down on Bernard’s face, the impact echoing through the hall. A triumphant grin spread across his face, arrogance practically pouring off him. The armed men surrounding him froze, hesitation rippling through their ranks as they watched their leader get crushed so effortlessly.
+
+
+“B-Bernard is defeated! This is not good!” one of them said.
+
+
+“Quick! We have to seize them and call Tundra for reinforcement!” one of them added.
+
+
+The group was immensely pressured by the chaotic results, hesitation and tension amongst them.
+
+
+Sarelia walked over and stopped beside Takeshi.
+
+
+“The hostages are in the basement,” she said coolly. “Just like you predicted.”
+
+
+“Then let’s move,” Takeshi replied immediately.
+
+
+“Not yet.” Sarelia stopped him with a hand and continued, “We have to eliminate the threat first before heading to the next course of action.”
+
+
+Then raised her voice toward the chaos ahead.
+
+
+“Sean. Handle the enemies for us. Once you’re done, we’ll proceed with the rescue. Don't overdo it.”
+
+
+Sean tilted his head, adjusting his shades as his grin widened—dangerous, eager.
+
+
+“Heh. You don’t need to tell me twice,” he said, cracking his knuckles.
+
+
+“I’m gonna beat the crap out of them so bad they won’t even remember what just happened to them.”
+
+
+His crescent-shaped eyes glowed faint purple beneath his shades.
+
+
+Sean extended his right hand. Blue light gathered in his palm, humming with pressure—and then the world tilted.
+
+
+“Calling the First: Azure Moon… Attraction!”
+
+
+Gravity shifted.
+
+
+The guards on his right suddenly skidded backward, boots screeching against the floor as an unseen force dragged them toward him. Shock flashed across their faces as they fought to stay upright.
+
+
+Sean flicked his wrist to the left.
+
+
+The pulled guards were violently dragged across the ground, slamming into others who were rushing in. Before they could react, the attraction intensified—snaring everyone around him. Sean rotated in place, arm outstretched.
+
+
+The air warped.
+
+
+Enemies were ripped off their feet, dragged in a wide arc around him before being hurled outward. Bodies crashed into walls, trees, pillars—some even blasted back through shattered openings into the building itself.
+
+
+The fight was over before it truly began.
+
+
+Every single guard lay defeated, broken by a single overwhelming display of power.
+
+
+Sean relaxed, letting the glow fade as his eyes returned to normal. He rolled his shoulders and grinned.
+
+
+“Oh yeah,” he said smugly. “Too easy!”
+
+
+Takeshi watches him in the distance, astonished by Sean's power. There's nothing else he can say other than being intrigued and astounded.
+
+
+“And he did that with a single flick…” Takeshi muttered.
+
+
+Sarelia stepped over the scattered unconscious bodies, moving casually through the mess as she approached Sean. Takeshi followed close behind, the woman staying near his side.
+
+
+“Good work, Sean,” Sarelia said calmly. “You handled it.”
+
+
+Sean nudged his nose with a finger, grinning.
+
+
+“Piece of cake.”
+
+
+“But—”
+
+
+She stopped directly in front of him and placed her palm on his shoulder, gripping it firmly.
+
+
+Sean stiffened slightly, confusion flickering across his face as he looked at her.
+
+
+Sarelia smiled—sweet on the surface, sharp underneath.
+
+
+“What did I tell you about not overdoing it?”
+
+
+Right on cue, the building behind them let out a deep, groaning crack.
+
+
+Wooden beams snapped. Walls buckled and the building began collapsing piece by piece, debris raining down in a deafening tone.
+
+
+Takeshi flinched at the sound and spun around, eyes wide. The woman hurried closer, half-hiding behind him as the dust rose into the air.
+
+
+“I-It collapsed…” Takeshi muttered.
+
+
+Sean blinked once, watching the destruction unfold.
+
+
+Then he adjusted his shades and smiled back at Sarelia.
+
+
+“Relax,” he said lightly. “Everything’s fine.”`,
+          },
+          {
+            number: 4,
+            title: 'Our Separate Ways',
+            date: 'Jan 20, 2026',
+            volTitle: 'False Summer Arc',
+            content: `***
+
+
+“Everything's not fine.” A voice of an adult man said.
+
+
+It's 3:40PM in the afternoon after the mission. Back on the Kaihon Light Pact base somewhere west of the Kaihon region.
+
+
+Sarelia, Sean, and Takeshi stand firm inside the room as they were called in front of a senior member.
+
+
+A tall man with black fox ears stood behind the desk, arms crossed as he regarded his junior members with a deliberate, unreadable gaze. He stood at six-foot-two, his presence imposing, crimson eyes sharp beneath a calm exterior.
+
+
+He belonged to the same clan as Takeshi—so much so that many mistook him for an older version of the young fox at first glance.
+
+
+His name was Yoruma Kurotsuki, twenty-six years old, a senior operative of the Kaihon Light Pact.
+
+
+“Who's responsible for the destruction and compromising the confidentiality of the mission?” The adult fox man, Yoruma, asked.
+
+
+Sarelia and Takeshi did not waste a moment and immediately pointed their fingers on Sean as he is in the middle.
+
+
+“Him.” Both of them said.
+
+
+Sean raised his right hand and replied, “In my defense, I didn't even know there's a mission in the first place!”
+
+
+“So it was you, Sean…” Yoruma grabs a long wooden stick and—
+
+
+SMACK!
+
+
+Smacks it to Sean's head, comically giving him a bump on the head.
+
+
+Sean grimaced with exaggerated expression, holding his head as he slouched on the floor.
+
+
+“It hurts! I wanna cry!” Sean shouted.
+
+
+‘Serves you right, jackass,’ Takeshi silently thought while smiling in satisfaction.
+
+
+“The mission was about rescue, not making a showdown in front of the enemy. Because of your action, the procedure is compromised and the mission is practically unsuccessful,” Yoruma said, smacking his ruler on his palm.
+
+
+He looks at Takeshi and continues. “For you, Takeshi, you let your guard down and your emotion betrayed your awareness. Because of that, the first step on the mission—infiltrating the enemy's base in stealth—has failed.”
+
+
+Takeshi looks down in frustration, knowing that fact Yoruma said to him.
+
+
+He looks at Sarelia and continues. “For you, Sarelia, you knew Sean's capabilities and temperament were volatile, yet you chose to let him do it anyway. That wasn't a strategy—that was a gamble. Because of that, the base has collapsed and the hostages are at high risk.”
+
+
+“I’m sorry, Mr. Yoruma,” Sarelia apologizes and bows down politely.
+
+
+Yoruma observes the three, seeing their different reaction from getting called out on their mistakes. He sighs and smacks the ruler once on his palm.
+
+
+“Well, either way, the mission was already a failure in the first place,” he said. “The hostages were already moved from another place before you three arrived. Only one left and that was the woman Takeshi saved earlier. Our intel said that they were moving towards the north-northwest with carriages and horses. To be frank, this mission was planned poorly due to lack of credibility and we only trusted on estimation.”
+
+
+The three paused for a moment, realizing Yoruma’s statement.
+
+
+Sean immediately stands up and acts normally again.
+
+
+“So, so, the mission was already puffed out! The Pact really didn't do a good job this time, huh?” Sean casually said.
+
+
+“This is not entirely the Pact's fault! I will remind you that you're also part of this!” Takeshi shouted.
+
+
+“Huh? Did you really say I'm the fault here? Look at yourself. You already jeopardize your mission in the first place because you let your emotions out like a baby. Bleh!” Sean replied arrogantly.
+
+
+“What did you just say…!” Takashi clenched his teeth, annoyed.
+
+
+“Can't hear ya, sucker! If you're picking up a fight, maybe we should already do this outside right now.” Sean provoked.
+
+
+Takeshi turns towards Sean, same for the rabbit, and looks at each other with confrontation.
+
+
+“Then let's—”
+
+
+Fortunately—
+
+
+SMACK!
+
+
+SMACK!
+
+
+Both the rabbit and the fox got smacked by Yoruma with the ruler.
+
+
+“Quit fighting, you two.” Yoruma calmly said.
+
+
+“It hurts…!” Sean muttered in pain, holding his head.
+
+
+Takeshi grimaced silently, also holding his head.
+
+
+Yoruma continues, “There's no one at fault for this. This is just a big mistake from the faction itself, not individually, so there's no consequences you will face. I'm not angry, I'm disappointed—and that's worse. The Kaihon Police Force has already conducted their investigation on the site, so there should be no problem. However, the Force didn't like us Pacts to vigilantly move on our mission as they deemed us as “communists”. So from now on, let's move more discreetly with our mission.”
+
+
+Takeshi raises his head, still holding it with pain.
+
+
+“Is this how they treat us after doing many good deeds?” he muttered.
+
+
+“Heh. They all talked like ignorants,” Sean replied, slicking his ears up. “This is why I hate babysitting a bunch of weaklings. They can't even stand up to themselves. And when we are doing our jobs to protect them, they complain because of how we operate? Such a bunch of hypocrites. I even feel pity for the MRCI for doing their extreme jobs—let alone us.”
+
+
+Takeshi looks at Sean, bothered by his comment.
+
+
+“Not all of them are essentially useless…” Takeshi said. “It's true that they are weak, but that doesn't mean every single one of them is useless. The Kaihon Light Pact was made to bat—”
+
+
+“Yeah, yeah, I know. To battle the evil essence of this country. To resist tyranny and protect the people. Altruism ideology, blah-blah-blah. I've been hearing that all day from here and there—it’s getting boring!” Sean rolled up his eyes, both hands inserted in his pocket.
+
+
+“...Why are you being so difficult?” Takeshi muttered, still bothered by Sean's statement.
+
+
+Yoruma crosses his arms and looks at them deliberately.
+
+
+“Stop this nonsense and let's already move on to our next discussion.”
+
+
+Sean and Takeshi briefly look at each other before turning away. Takeshi stood straight while Sean lazily rested his hands in his pocket.
+
+
+“Now, for our next discussion of this last moment of meeting…” Yoruma pauses for a moment.
+
+
+“Come on, what's the hold-up, Mr. Yoruma? It's getting late, y'know,” Sean said nonchalantly.
+
+
+“Just let Senior Yoruma talk, you loudmouth rabbit,” Takeshi commented.
+
+
+Yoruma looks at Sarelia, locking eyes with her as she meets his gaze. Sarelia closes her eyes and crosses her arms, nodding at her senior.
+
+
+“You can announce it here, Mr. Yoruma. It's okay,“ she said.
+
+
+Yoruma nods and reaches to his waist, grabbing a meticulous folded paper with a brown seal of the Pact. He opens the paper and reads the content with his eyes, closing his eyes after reading it and looks at his juniors with seriousness.
+
+
+“Today, I'm going to announce that Sarelia's resignation letter has been approved by the leader of Kaihon Light Pact and she will be effectively dismissed this afternoon. Your service was a great contribution to our faction and we are grateful for your effort. Sarelia Bai is now officially withdrawn.”
+
+
+Takeshi and Sean froze in their position, shocked to hear the announcement Yoruma stated recently. Takeshi twitched his eyes in complete disbelief, and couldn't believe what he just heard.
+
+
+But sadly, it was all real.
+
+
+“No way…” Takeshi muttered.
+
+
+Sean didn't laugh.
+
+
+For once, he didn't say anything at all.
+
+
+He looked at Sean and saw his reaction. This is the first time Takeshi sees the rabbit's expression more frustrated than being a cocky person.
+
+
+Sarelia was silent at the moment, still crossing her arms and looking straightforward. But she can already tell the disbelief of both her teammates on her side, and she had already anticipated this.
+
+
+Especially for Sean.
+
+
+***
+
+
+5:00PM in the afternoon, hallway of the Pact base.
+
+
+The sun was setting behind the Pact base, washing the stone halls in the bright sunset. Long shadows stretched across the floor, bending around pillars and doors that Sarelia had passed through countless times in the past six months.
+
+
+She walked alone.
+
+
+A single black bag hung from her left hand. Her staff rested against her shoulder, lighter than it used to feel. Each step echoed softly, steady, unhurried—like she had already made peace with this moment.
+
+
+Footsteps suddenly rang out behind her.
+
+
+“Sarelia—wait!”
+
+
+Sean’s voice cut through the hall, sharper than usual.
+
+
+She stopped.
+
+
+For a brief second, she didn’t turn. Then she slowly looked over her shoulder, pale hair shifting as she met his gaze.
+
+
+“What is it, Sean?” she asked calmly. “You look upset.”
+
+
+Sean clenched his jaw. His rabbit ears twitched above his head.
+
+
+“What is this supposed to be?” he demanded. “You’re just leaving? Like that?”
+
+
+“I told you,” Sarelia replied. “I have something I need to do about my origin.”
+
+
+“That’s not an answer.” His voice cracked with irritation—and something else underneath it. “You said we’d stay. You said we’d get through this together.”
+
+
+She was quiet for a moment.
+
+
+“I meant it,” she said softly. “At the time.”
+
+
+Sean scoffed, stepping closer. “You can look for your ‘origin’ here. You don’t need to run off like you’re following Shen’s footsteps or something.”
+
+
+“I’m not running,” Sarelia said.
+
+
+Her voice was calm—but firm.
+
+
+“If I stay,” she continued, “this power will decide who I become. I won’t let that happen.”
+
+
+Sean’s hands curled into fists.
+
+
+“So that’s it?” he snapped. “You just walk away and leave everything behind?”
+
+Sarelia met his eyes fully now.
+
+
+“No,” she said. “I’m taking responsibility—for myself.”
+
+
+She turned her body toward the exit.
+
+
+“If you want to stop me,” she added, “you can try.”
+
+
+Sean froze.
+
+
+She paused, then spoke one last time—quiet, sincere.
+
+
+“Goodbye, Moon Mochizuki. I hope we meet again someday as the wind guide us through this world.”
+
+
+And then she walked away.
+
+
+Her footsteps faded down the left corridor, each one softer than the last.
+
+
+Sean didn’t move.
+
+
+He stood there, staring at the empty hallway. His usual grin never came back. Slowly, his shoulders dropped. His ears lowered. The shade hid his eyes—but not the way his hands trembled before he shoved them into his pockets.
+
+
+Somewhere behind him, Takeshi watched. He wanted to say something.
+
+
+But there was nothing he could say.
+
+So he stayed silent—just like Sean—as Sarelia disappeared from sight.`,
+          },
+          {
+            number: 5,
+            title: 'Reminisce',
+            date: 'Jan 24, 2026',
+            volTitle: 'False Summer Arc',
+            content: `***
+
+
+7:14PM in the night. A town somewhere in Kaihon.
+
+
+Lanterns glowing along the roadside as vendors advertise their skewers, sweets, and drinks to the crowd. Dancers moved through the streets, their colorful sleeves fluttering as families and people gathered to spectate. The town was preparing for the fireworks show later that night.
+
+ 
+
+A small ramen stall sat at the edge of the road. The owner cooks in the kitchen while his assistant is serving their customers at the table. The aroma of the ramen has attracted customers from around.
+
+
+Sean sat alone at one of the wooden tables.
+
+
+His head resting on his arm, cheek pressing against the cool surface. His mouth slacks slightly, brows furrowed. His rabbit ears drooped low—far from his usual self. In front of him, a bowl of ramen sat untouched, thin wisps of steam slowly fading as the broth lost its heat.
+
+
+He barely noticed.
+
+
+He couldn't stop pondering about it earlier. Her words still echo in his head. Her calm expression. The way she had walked away without looking back.
+
+
+The flavor of the ramen was already gone.
+
+
+A customer came into the stall, calling the owner to serve him a ramen, and sat on the table where Sean is.
+
+
+It was Takeshi Kurotsuki.
+
+
+“Why didn't you stop her, Sean?” Takeshi said quietly.
+
+
+Sean let out a slow breath through his nose, his palm covering his mouth as his eyes shut.
+
+
+“Is that really the first thing you ask?” he muttered.
+
+
+Silence stretches between them, filled only by distant noise and the clink of bowls.
+
+
+Takeshi lowered his head. “I’m sorry. I shouldn't ask you that.”
+
+
+Another pause.
+
+
+Sean slightly raises his head, looking at Takeshi.
+
+
+“What do you think our duty is as Pact members, Takeshi?” Sean asked.
+
+
+Takeshi pauses for a moment before answering.
+
+
+“To help, save, and protect people from evil. That's what made us Pact members.”
+
+
+Sean shifts his posture as he leans to the side and rests his head against his hand.
+
+
+“I was abandoned as a kid,” he said. “Left in Raitera Valley, living in the slum. It wasn't a safe place.”
+
+
+His tone was flat.
+
+
+A faint scoff escaped him. “I was a troubled kid back then. I thought I was stronger than everyone else at that place.”
+
+
+“It didn't matter to me—people, missions, ideals. None of it did.”
+
+
+Sean's voice lowered.
+
+
+“Then I met Sarelia. And Shen.”
+
+
+He fell silent.
+
+
+“...I see.” Takeshi muttered.
+
+
+The festival lights flickered across the rabbit's face, but the usual arrogance was gone—replaced by something raw and unresolved.
+
+
+A ramen was served and set down in front of Takeshi. Steam curls upward as the rich aroma fills the space between them.
+
+
+Takeshi picks up his chopsticks on the table, splits them apart, and lifts a few strands of noodles. He took a bite, then nodded softly.
+
+
+“It's good,” he said. After a brief pause, he glances at Sean.
+
+
+“You should eat yours too. It's getting cold.”
+
+
+Sean looked at him, then let out a soft scoff, a faint smile forming beneath his shade.
+
+
+“You’re awfully blunt,” Sean said.
+
+
+Takeshi slurped the noodles and swallowed, then met Sean’s gaze with a straight face.
+
+
+“I don’t really know what to say,” he admitted. “So I figured I’d at least tell you the ramen’s good.”
+
+
+Takeshi stares at his ramen bowl, then looks at Sean again.
+
+
+“Why did you join the Pact?” Takeshi asked.
+
+
+Sean looks up while his head resting on his hand, pondering for a moment.
+
+
+“It was just for fun,” Sean said. “I didn't really want to join so that I can use my power to help the weak. But, Sarelia insisted that I join because she also wanted to join the Pact.”
+
+
+Takeshi’s mouth slacks a bit. “You really are a selfish guy, you know that?”
+
+
+Sean scoffs. “Not that I care about it. I was born to be stronger. Babysitting the weak is not my style. People that are born weak are below my expectations to those who are equal to me.”
+
+
+“And yet, you chose to stay here regardless of your point of view. You're ambiguous, Sean,” Takeshi replied, lifting a strand of noodles and eating it.
+
+
+“Takeshi, I'm going to smack you,” Sean muttered, gesturing a flick on his left hand.
+
+
+They both paused for a moment.
+
+
+Sean finally fixed his posture, fixing his shade and looking at Takeshi.
+
+
+“How about you, Takeshi? Why did you join the Pact?” Sean asked.
+
+
+Takeshi puts down his chopsticks on the bowl, thinking about what to answer.
+
+
+“Hmm… Senior Yoruma was really popular in my clan. He's the best version of every Kurotsuki could ask for—having to inherit the Shikigami Call and Shadow Inventory. I joined because I wanted to learn the techniques my clan has passed through generations from Senior Yoruma.”
+
+
+“Oh? Is he really that strong?” Sean wonders.
+
+
+Takeshi continues. “He's not just strong—he’s everything that I don't have. He joined the Pact because he wants to use his power to help people, so I follow his path because I also want to help people.”
+
+
+“Does it bother you?” Sean asked. “Mr. Yoruma can use the infamous techniques of Kurotsuki Clan while you can only use basic talismans.”
+
+
+Takeshi exhales, smiling slightly in content.
+
+
+“Not much,” he replied. “Not every Kurotsuki can wield basic talismans and shikigamis, so I'm one of the specials.”
+
+
+“Step up, man,” Sean said with a sly smile.
+
+
+Sean continues. “Well, you don't need to worry about it. I'm the strongest teammate that you'll ever have.”
+
+
+Takeshi sighs in slight exasperation.
+
+
+“Huh? What's wrong?” Sean noticed.
+
+
+“It's just…” Takeshi muttered, rubbing his eyes before looking at Sean. “I don't think you understand what it means to be the strongest.”
+
+
+“Huh?!” Sean loudly reacts.
+
+
+“Being the strongest isn't about overwhelming everyone,” Takeshi said. “It’s being the one who stays standing when things go wrong and doesn't lose control when it matters most. The one people can trust—not fear.”
+
+
+Sean scoffs. “I don't want that.”
+
+
+“Come on, dude, at least be humble for once. What if the other seniors will see you like that? They would dislike you very much,” Takeshi tries to convince.
+
+
+Sean scoffs again, giving a sly smile.
+
+
+“Heh. Let them have problems with it. It's such a boring day if I don't even let my confidence out for once!”
+
+
+‘You mean arrogance?’ Takeshi thought to himself.
+
+
+Takeshi sighs. “Why am I stuck with you…”
+
+
+“Huh? What are you whining about?”
+
+
+“Nothing.”
+
+
+Sean reaches to the bowl of ramen in his front, sips the broth slightly. He tastes the ramen flat and cold, making a dissatisfied expression.
+
+
+“Flat.” Sean bluntly said.
+
+
+Takeshi put his hand to the table as he rested his head.
+
+
+“You left it cold. Blaming you for that,” he said.
+
+
+Sean raises his right hand along with his ears perking up, calling the owner of the stall.
+
+
+“Old man, give me another bowl! Takeshi will pay my tab, he said,” Sean said.
+
+
+“WHAT!?” Takeshi reacts.
+
+
+Sean’s hand was still raised when a distant boom echoed through the night.
+
+
+Both of them paused.
+
+
+Above the rooftops, the first firework bloomed—light spilling across the sky in streaks of red and gold. The crowd down the road erupted into cheers, laughter rising with the smoke.
+
+
+The colors reflected briefly in Takeshi’s bowl… then in Sean’s half-lidded eyes.
+
+
+Another firework followed. Then another.
+
+
+For a moment, neither of them spoke.
+
+
+The festival had begun.`,
+          },
+        ]
+      }
+    ]
+  }
+};
+
+/* ═══════════════════════════════════════════
+   NOVEL PAGE
+═══════════════════════════════════════════ */
+let currentNovelId   = null;
+let currentChapterNum = null;
+let novelOriginScreen = 'screen-app'; // where to go back to
+
+function openNovel(novelId) {
+  const nd = novelDetails[novelId];
+  if (!nd) { toast('Novel not found'); return; }
+  currentNovelId = novelId;
+  // Only record a new origin when arriving from a real page (home/settings/about).
+  // When coming from screen-chapter (closeChapter → openNovel), preserve the
+  // existing novelOriginScreen so the back button still leads home, not back to the chapter.
+  const currentScreen = document.querySelector('.screen.active')?.id || 'screen-app';
+  if (currentScreen !== 'screen-chapter' && currentScreen !== 'screen-novel') {
+    novelOriginScreen = currentScreen;
+  }
+  _renderNovelPage(nd);
+  showScreen('screen-novel');
+  document.getElementById('novel-scroll').scrollTo({top:0,behavior:'instant'});
+}
+
+function novelGoBack() {
+  // Safety net: if origin somehow ended up inside the reader, go home instead of looping.
+  const safeOrigin = (novelOriginScreen === 'screen-novel' || novelOriginScreen === 'screen-chapter')
+    ? 'screen-app'
+    : (novelOriginScreen || 'screen-app');
+  showScreen(safeOrigin);
+  if (safeOrigin === 'screen-app') {
+    const savedBtn = document.querySelector(`.tab-btn[data-tab="${lastTab}"]`);
+    if (savedBtn) {
+      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+      savedBtn.classList.add('active');
+      document.getElementById('panel-'+lastTab)?.classList.add('active');
+    }
+  }
+}
+
+function _renderNovelPage(nd) {
+  // Nav title
+  document.getElementById('novel-nav-title').textContent = nd.title;
+
+  // ── Hero band
+  const prog = _getNovelProgress(nd);
+  const totalCh = nd.volumes.reduce((s,v)=>s+v.chapters.length,0);
+  const bm = bookmarks.find(b=>b.novelId===nd.id);
+  const bmActive = bm ? 'bm-active' : '';
+  const init = titleInitial(nd.title);
+  let coverHtmlStr;
+  if (nd.coverImg) {
+    const safe = safeUrl(nd.coverImg);
+    coverHtmlStr = safe && safe !== '#'
+      ? `<img class="novel-cover-img" src="${safe}" alt="${esc(nd.title)}" loading="lazy"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+         <div class="novel-cover-init" style="display:none">${esc(init)}</div>`
+      : `<div class="novel-cover-init">${esc(init)}</div>`;
+  } else {
+    coverHtmlStr = `<div class="novel-cover-init">${esc(init)}</div>`;
+  }
+  const statusCls = nd.status==='Ongoing' ? 'chip-status-ongoing' : 'chip-status-completed';
+  const genreChips = (nd.genres||[nd.genre||'']).map(g=>`<span class="novel-meta-chip chip-genre">${esc(g)}</span>`).join('');
+
+  // Which chapter to continue from
+  const lastRead = prog.last || 0;
+  let continueLabel = '▶ Start Reading';
+  let continueChNum = 1;
+  if (lastRead > 0) {
+    continueLabel = lastRead >= totalCh ? '↺ Read Again' : `▶ Continue Ch.${lastRead+1}`;
+    continueChNum = lastRead >= totalCh ? 1 : lastRead + 1;
+  }
+
+  document.getElementById('novel-hero-band').innerHTML = `
+    <div class="novel-hero-inner">
+      <div class="novel-cover-block" style="background:${safeCss(nd.bg)}">${coverHtmlStr}</div>
+      <div class="novel-text-block">
+        <div class="novel-page-title">${esc(nd.title)}</div>
+        <div class="novel-author-line">by <strong>${esc(nd.author||'Unknown')}</strong></div>
+        <div class="novel-meta-chips">
+          <span class="novel-meta-chip ${statusCls}">${esc(nd.status)}</span>
+          ${genreChips}
+          <span class="novel-meta-chip chip-date">📅 ${esc(nd.datePublished||'')}</span>
+        </div>
+        <div class="novel-action-row">
+          <button class="novel-action-btn pri" onclick="openChapter('${esc(nd.id)}',${continueChNum})">${continueLabel}</button>
+          <button class="novel-action-btn sec ${bmActive}" id="novel-bm-btn" onclick="toggleNovelBookmark('${esc(nd.id)}')">${bm?'🔖 Saved':'🔖 Save'}</button>
+        </div>
+      </div>
+    </div>`;
+
+  // ── Synopsis
+  document.getElementById('novel-synopsis-section').innerHTML = `
+    <div class="synopsis-label">Synopsis</div>
+    <div class="synopsis-text" id="synopsis-inner">${esc(nd.synopsis||'No synopsis available.').replace(/\n/g,'<br>')}</div>
+    <span class="synopsis-toggle" id="synopsis-toggle-btn" onclick="toggleSynopsis()">Read more ↓</span>`;
+
+  // ── Progress (weighted: fully-read = 1.0, partial = chPct/100, unread = 0)
+  let credits = 0;
+  nd.volumes.forEach(v => v.chapters.forEach(ch => {
+    if (prog.read.includes(ch.number)) { credits += 1; }
+    else { credits += _getChapterPct(nd.id, ch.number) / 100; }
+  }));
+  const pct = totalCh > 0 ? Math.round((credits / totalCh) * 100) : 0;
+  const inProgress = nd.volumes.reduce((s,v) =>
+    s + v.chapters.filter(ch => !prog.read.includes(ch.number) && _getChapterPct(nd.id, ch.number) > 0).length, 0);
+  const progressDetail = inProgress > 0 ? ` · ${inProgress} in progress` : '';
+  document.getElementById('novel-progress-section').innerHTML = `
+    <div class="novel-progress-hdr">
+      <span class="novel-progress-lbl">📖 Reading Progress</span>
+      <span class="novel-progress-pct">${prog.read.length}/${totalCh} chapters · ${pct}%${progressDetail}</span>
+    </div>
+    <div class="novel-progress-bar">
+      <div class="novel-progress-fill" id="novel-prog-fill" style="width:${pct}%"></div>
+    </div>`;
+
+  // ── Volumes & Chapters
+  let volsHtml = '<div class="volumes-section-lbl">Volumes &amp; Chapters</div>';
+  nd.volumes.forEach((vol, vi) => {
+    const chHtml = vol.chapters.map(ch => {
+      const isRead   = prog.read.includes(ch.number);
+      const chPct    = isRead ? 100 : _getChapterPct(nd.id, ch.number);
+      const isNew    = ch.number > totalCh - 3;
+      const showBar  = !isRead && chPct > 0;
+      const numDisplay = isRead ? '✓' : (showBar ? Math.round(chPct)+'%' : ch.number);
+      const progBar  = showBar ? `
+        <div class="ch-prog-wrap">
+          <div class="ch-prog-bar"><div class="ch-prog-fill" style="width:${chPct}%"></div></div>
+          <div class="ch-prog-pct">${Math.round(chPct)}% read</div>
+        </div>` : '';
+      return `<div class="ch-row${isRead?' read':''}" onclick="openChapter('${esc(nd.id)}',${ch.number})">
+        <div class="ch-num-badge">${numDisplay}</div>
+        <div class="ch-body">
+          <div class="ch-title-text">${esc(ch.title)}${isNew?'<span class="ch-new-badge">NEW</span>':''}</div>
+          <div class="ch-date-text">${esc(ch.date||'')}</div>
+          ${progBar}
+        </div>
+        <div class="ch-check">✓</div>
+      </div>`;
+    }).join('');
+    volsHtml += `
+      <div class="volume-block">
+        <div class="vol-hdr" id="vol-hdr-${vi}" onclick="toggleVol(${vi})">
+          <span class="vol-badge">Vol. ${vol.number}</span>
+          <span class="vol-title-text">${esc(vol.title)}</span>
+          <span class="vol-arrow">▾</span>
+        </div>
+        <div class="vol-chapters" id="vol-chs-${vi}" style="max-height:${vol.chapters.length*61}px">${chHtml}</div>
+      </div>`;
+  });
+  document.getElementById('novel-volumes-section').innerHTML = volsHtml;
+}
+
+function toggleVol(vi) {
+  const hdr = document.getElementById('vol-hdr-'+vi);
+  const chs = document.getElementById('vol-chs-'+vi);
+  const collapsed = hdr.classList.toggle('collapsed');
+  chs.classList.toggle('collapsed', collapsed);
+}
+
+function toggleSynopsis() {
+  const inner = document.getElementById('synopsis-inner');
+  const btn   = document.getElementById('synopsis-toggle-btn');
+  if (!inner) return;
+  const exp = inner.classList.toggle('expanded');
+  btn.textContent = exp ? 'Show less ↑' : 'Read more ↓';
+}
+
+function toggleNovelBookmark(novelId) {
+  const nd = novelDetails[novelId];
+  if (!nd) return;
+  const idx = bookmarks.findIndex(b=>b.novelId===novelId);
+  if (idx >= 0) {
+    bookmarks.splice(idx, 1);
+    toast('Bookmark removed');
+  } else {
+    bookmarks.push({ id: _nextBmId(), novelId: nd.id, title: nd.title, emoji: nd.emoji, bg: nd.bg, genre: (nd.genres||[nd.genre||''])[0], href:'#', coverImg: nd.coverImg||'' });
+    toast('📖 Bookmarked!');
+  }
+  renderMiniBookmarks(); renderDrawerBookmarks(); updateNotifBadge(); _refreshNovelBmBtn();
+  // Refresh bm button
+  const btn = document.getElementById('novel-bm-btn');
+  if (btn) {
+    const active = bookmarks.some(b=>b.novelId===novelId);
+    btn.classList.toggle('bm-active', active);
+    btn.textContent = active ? '🔖 Saved' : '🔖 Save';
+  }
+}
+
+/* ═══════════════════════════════════════════
+   CHAPTER READER
+═══════════════════════════════════════════ */
+function openChapter(novelId, chapterNum) {
+  const nd = novelDetails[novelId];
+  if (!nd) { toast('Novel not found'); return; }
+  // Find the chapter across volumes
+  let ch = null, vol = null;
+  for (const v of nd.volumes) {
+    const found = v.chapters.find(c=>c.number===chapterNum);
+    if (found) { ch = found; vol = v; break; }
+  }
+  if (!ch) { toast('Chapter not found'); return; }
+
+  currentNovelId    = novelId;
+  currentChapterNum = chapterNum;
+
+  // Header
+  document.getElementById('reader-vol-label').textContent = `Volume ${vol.number}: ${vol.title}`;
+  document.getElementById('reader-ch-title').textContent  = `Chapter ${ch.number}: ${ch.title}`;
+
+  // Chapter header block
+  document.getElementById('ch-hdr-block').innerHTML = `
+    <div class="ch-hdr-vol-label">Volume ${vol.number} — ${esc(vol.title)}</div>
+    <div class="ch-hdr-title">Chapter ${ch.number}: ${esc(ch.title)}</div>
+    <div class="ch-hdr-meta">
+      <span>📅 ${esc(ch.date||'')}</span>
+      <span>📖 ${esc(nd.title)}</span>
+    </div>`;
+
+  // Chapter prose — split on double newlines → <p> tags
+  const paras = (ch.content||'').split(/\n\n+/).filter(p=>p.trim());
+  document.getElementById('ch-prose').innerHTML = paras.map(p => {
+    const txt = p.trim();
+    if (txt === '---') return '<div class="ch-scene-break">· · ·</div>';
+    // Italics: *text* → <em>text</em>
+    const html = esc(txt).replace(/\*([^*]+)\*/g, '<em>$1</em>');
+    return `<p>${html}</p>`;
+  }).join('');
+
+  // Bottom navigation — use flat chapter list so numbering gaps don't break prev/next
+  const allChapters = nd.volumes.flatMap(v => v.chapters);
+  const curIdx  = allChapters.findIndex(c => c.number === chapterNum);
+  const prevCh  = allChapters[curIdx - 1];
+  const nextCh  = allChapters[curIdx + 1];
+  const isLast  = !nextCh;
+
+  document.getElementById('ch-nav-strip').innerHTML = `
+    <button class="ch-nav-btn${prevCh ? '' : ' disabled'}" onclick="openChapter('${esc(novelId)}',${prevCh ? prevCh.number : chapterNum})">← Prev</button>
+    <button class="ch-nav-btn" onclick="closeChapter()">📚 Novel</button>
+    <button class="ch-nav-btn pri" onclick="${isLast ? `showEndScreen('${esc(novelId)}',${chapterNum})` : `markReadAndNext('${esc(novelId)}',${chapterNum},${nextCh.number})`}">
+      ${isLast ? '🏁 The End' : 'Next →'}
+    </button>`;
+
+  // Mark in progress
+  _setChapterProgress(novelId, chapterNum, false); // mark last-read position
+
+  showScreen('screen-chapter');
+  const scroll = document.getElementById('chapter-scroll');
+  scroll.scrollTo({top:0,behavior:'instant'});
+  _watchReadingProgress(scroll);
+}
+
+function closeChapter() {
+  // Mark current position when leaving
+  if (currentNovelId && currentChapterNum) {
+    _setChapterProgress(currentNovelId, currentChapterNum, false);
+  }
+  openNovel(currentNovelId);
+}
+
+// Auto-mark current chapter as read then navigate to the next
+function markReadAndNext(novelId, currentNum, nextNum) {
+  const prog = _getNovelProgress(novelId);
+  if (!prog.read.includes(currentNum)) {
+    prog.read.push(currentNum);
+    prog.last = currentNum;
+    _saveNovelProgress(novelId, prog);
+    _saveChapterPct(novelId, currentNum, 100);
+  }
+  openChapter(novelId, nextNum);
+}
+
+/* ── End-of-story screen ── */
+const _ONGOING_MSGS = [
+  `You've officially caught up — faster than the author can type! The next chapter is out there, somewhere between a cup of tea and a moment of inspiration. <strong>Check back soon.</strong> ☕`,
+  `You've reached the frontier. The story continues... just not yet. The author is probably staring at a blinking cursor right now. <strong>You're all caught up!</strong> 🌙`,
+  `All caught up! The next chapter is still being dreamed up. Go touch some grass while the author cooks. <strong>We'll hold your spot.</strong> 🌿`,
+  `The ink hasn't dried on the next chapter yet. You read faster than the author writes — take that as a compliment. <strong>More is coming.</strong> ✍️`,
+  `You've hit the edge of what exists so far. Beyond here? Just the author, their imagination, and probably a snack. <strong>Stay tuned.</strong> 🐇`,
+];
+const _COMPLETE_MSGS = [
+  `Every word, every chapter, every secret — you've seen it all. This story has been told in full. <strong>A journey worth taking.</strong> 🌟`,
+  `The final page has been turned. This is a completed work — every thread tied, every question answered (or intentionally left open). <strong>Savor it.</strong> 🎋`,
+  `You've finished a complete story from start to finish. That's rare dedication. The author wrote it all for a reader exactly like you. <strong>Well done.</strong> 🏆`,
+];
+
+function showEndScreen(novelId, lastChapterNum) {
+  const nd = novelDetails[novelId];
+  if (!nd) return;
+
+  // Mark the last chapter as fully read
+  const prog = _getNovelProgress(novelId);
+  if (!prog.read.includes(lastChapterNum)) {
+    prog.read.push(lastChapterNum);
+    prog.last = lastChapterNum;
+    _saveNovelProgress(novelId, prog);
+    _saveChapterPct(novelId, lastChapterNum, 100);
+  }
+  currentNovelId    = novelId;
+  currentChapterNum = lastChapterNum;
+
+  const isCompleted = (nd.status || '').toLowerCase() === 'completed';
+  const pool  = isCompleted ? _COMPLETE_MSGS : _ONGOING_MSGS;
+  const msg   = pool[Math.floor(Math.random() * pool.length)];
+  const emoji = isCompleted ? '🎉' : '🐇';
+  const badge = isCompleted ? '✅ Story Complete' : '⏳ Ongoing';
+  const headingText = isCompleted ? 'Story Complete!' : "You're All Caught Up!";
+  const totalCh = nd.volumes.flatMap(v => v.chapters).length;
+
+  document.getElementById('end-card').innerHTML = `
+    <div class="end-glow"></div>
+    <span class="end-emoji">${emoji}</span>
+    <div class="end-badge">${badge}</div>
+    <div class="end-title">${headingText}</div>
+    <div class="end-novel-label">You just finished</div>
+    <div class="end-novel-name">${esc(nd.title)}</div>
+    <div class="end-divider"></div>
+    <div class="end-msg">${msg}</div>
+    <div class="end-actions">
+      <button class="end-btn pri" onclick="openNovel('${esc(novelId)}')">📚 Back to Novel</button>
+      <button class="end-btn sec" onclick="goHome()">🏠 Go Home</button>
+    </div>`;
+
+  showScreen('screen-end');
+  document.getElementById('end-scroll')?.scrollTo({ top: 0, behavior: 'instant' });
+}
+
+function _watchReadingProgress(scrollEl) {
+  const fill = document.getElementById('reading-progress-fill');
+  let lastSavedPct = -1;
+  function onScroll() {
+    const max  = scrollEl.scrollHeight - scrollEl.clientHeight;
+    const pct  = max > 0 ? (scrollEl.scrollTop / max) * 100 : 0;
+    if (fill) fill.style.width = pct + '%';
+
+    // Save per-chapter scroll progress (throttle: only when changed ≥2%)
+    if (currentNovelId && currentChapterNum && Math.abs(pct - lastSavedPct) >= 2) {
+      lastSavedPct = pct;
+      _saveChapterPct(currentNovelId, currentChapterNum, pct);
+    }
+
+    // Auto-mark as read when chapter is finished (≥95% = end of chapter)
+    const autoMark = LS.get('nl_automark80'); 
+    const atBottom = (scrollEl.scrollHeight - scrollEl.scrollTop - scrollEl.clientHeight) < 8;
+    if ((pct >= 95 || atBottom) && currentNovelId && currentChapterNum && (autoMark === null || autoMark === true)) {
+      const prog = _getNovelProgress(currentNovelId);
+      if (!prog.read.includes(currentChapterNum)) {
+        prog.read.push(currentChapterNum);
+        prog.last = currentChapterNum;
+        _saveNovelProgress(currentNovelId, prog);
+        // Mark the full arc visually (save 100% so ring fills on next novel-page visit)
+        _saveChapterPct(currentNovelId, currentChapterNum, 100);
+        toast('✓ Chapter ' + currentChapterNum + ' marked as read!', 2400);
+      }
+    }
+  }
+  scrollEl.removeEventListener('scroll', scrollEl._readProg);
+  scrollEl._readProg = onScroll;
+  scrollEl.addEventListener('scroll', onScroll, {passive:true});
+}
+
+/* ── Progress helpers ── */
+function _getNovelProgress(novelId) {
+  const id = typeof novelId === 'string' ? novelId : (novelId.id||novelId);
+  try {
+    const raw = JSON.parse(localStorage.getItem('nl_prog_'+id));
+    if (raw && Array.isArray(raw.read)) return raw;
+  } catch {}
+  return { read: [], last: 0 };
+}
+function _saveNovelProgress(novelId, prog) {
+  try { localStorage.setItem('nl_prog_'+novelId, JSON.stringify(prog)); } catch {}
+}
+function _getChapterPct(novelId, chNum) {
+  try {
+    const v = JSON.parse(localStorage.getItem('nl_chprog_'+novelId+'_'+chNum));
+    return (typeof v === 'number' && v >= 0 && v <= 100) ? v : 0;
+  } catch { return 0; }
+}
+function _saveChapterPct(novelId, chNum, pct) {
+  try { localStorage.setItem('nl_chprog_'+novelId+'_'+chNum, JSON.stringify(Math.round(pct))); } catch {}
+}
+function _setChapterProgress(novelId, chapterNum, markRead) {
+  const prog = _getNovelProgress(novelId);
+  if (markRead && !prog.read.includes(chapterNum)) prog.read.push(chapterNum);
+  prog.last = chapterNum;
+  _saveNovelProgress(novelId, prog);
+}
+
+/* ═══════════════════════════════════════════
+   LOADING SCREEN CONTROLLER
+═══════════════════════════════════════════ */
+const Loader = (() => {
+  const bar  = () => document.getElementById('ls-bar');
+  const lbl  = () => document.getElementById('ls-status');
+  const scr  = () => document.getElementById('loading-screen');
+  let cur = 0;
+
+  function setP(pct, label) {
     cur = Math.max(cur, Math.min(pct, 100));
-    bar.style.width = cur + '%';
+    const b = bar(); if (b) b.style.width = cur + '%';
+    const l = lbl(); if (l && label) l.textContent = label;
   }
 
   function dismiss() {
-    if (dismissed || !ls) return;
-    dismissed = true;
-    setP(100);
-    // Wait for the bar to finish its transition, then fade out
-    setTimeout(() => {
-      ls.classList.add('fade-out');
-      ls.addEventListener('transitionend', () => ls.remove(), { once: true });
-    }, 420);
-  }
-
-  // ── Milestone 1: script is executing (DOM likely partially built)
-  setP(10);
-
-  // ── Milestone 2: DOMContentLoaded (full HTML parsed, no resources yet)
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => setP(40));
-  } else {
-    setP(40); // already past DOMContentLoaded
-  }
-
-  // ── Milestone 3: after our own renderAll / buildSlides finish
-  //    We expose a hook that init() calls after rendering
-  window._lsAfterRender = () => setP(75);
-
-  // ── Milestone 4: fonts ready
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(() => setP(90));
-  }
-
-  // ── Milestone 5: window.load (all images, stylesheets, iframes done)
-  if (document.readyState === 'complete') {
-    setP(95);
-    // Small rAF delay so the bar visually reaches 95% before we dismiss
-    requestAnimationFrame(() => setTimeout(dismiss, 300));
-  } else {
-    window.addEventListener('load', () => {
-      setP(95);
-      requestAnimationFrame(() => setTimeout(dismiss, 300));
+    return new Promise(resolve => {
+      setP(100, 'Welcome!');
+      setTimeout(() => {
+        const el = scr();
+        if (!el) { resolve(); return; }
+        el.classList.add('fade-out');
+        const cleanup = () => { try { el.remove(); } catch(e) {} resolve(); };
+        el.addEventListener('transitionend', cleanup, { once: true });
+        setTimeout(cleanup, 800);
+      }, 350);
     });
   }
 
-  // ── Safety net: force-dismiss after 4s no matter what ──────────────
-  setTimeout(dismiss, 4000);
+  // Small async pause helper
+  function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  return { setP, dismiss, wait };
 })();
 
 /* ═══════════════════════════════════════════
-   INIT
+   INIT — staged async loader
 ═══════════════════════════════════════════ */
-(function init() {
-  loadTheme();
-  restoreReadingPrefs();
-  buildSlides();
-  renderAll();
-  updateNotifBadge();
+(async function init() {
 
-  // ── Restore last position after refresh ──────────────────────────────
+  Loader.setP(8, 'Starting up…');
+  await Loader.wait(120);
+
+  // ── Step 1: theme
+  Loader.setP(18, 'Applying theme…');
+  try { loadTheme(); } catch(e) { console.error(e); }
+  await Loader.wait(140);
+
+  // ── Step 2: reading prefs
+  Loader.setP(30, 'Restoring your preferences…');
+  try { restoreReadingPrefs(); } catch(e) { console.error(e); }
+  await Loader.wait(160);
+
+  // ── Step 3: hero slider
+  Loader.setP(46, 'Loading featured stories…');
+  try { buildSlides(); } catch(e) { console.error(e); }
+  await Loader.wait(200);
+
+  // ── Step 4: render content
+  Loader.setP(64, 'Building your library…');
+  try { renderAll(); } catch(e) { console.error(e); }
+  await Loader.wait(180);
+
+  // ── Step 5: notifications & bookmarks
+  Loader.setP(78, 'Loading bookmarks & notifications…');
+  try { updateNotifBadge(); } catch(e) { console.error(e); }
+  await Loader.wait(160);
+
+  // ── Step 6: restore session state
+  Loader.setP(90, 'Restoring your session…');
+  await Loader.wait(120);
+
   const savedScreen = LS.get('nl_screen');
   const savedTab    = LS.get('nl_tab');
   const savedScroll = LS.get('nl_scroll');
 
-  // Restore screen (settings / about / app)
   if (savedScreen && savedScreen !== 'screen-app' && document.getElementById(savedScreen)) {
     showScreen(savedScreen);
     if (savedScreen === 'screen-settings') {
@@ -1985,7 +4383,6 @@ document.addEventListener('click', e => {
     }
   }
 
-  // Restore active tab
   if (savedTab) {
     lastTab = savedTab;
     const savedBtn = document.querySelector(`.tab-btn[data-tab="${savedTab}"]`);
@@ -1997,7 +4394,6 @@ document.addEventListener('click', e => {
     }
   }
 
-  // Restore scroll position (after paint so layout is ready)
   if (savedScroll) {
     requestAnimationFrame(() => {
       setTimeout(() => {
@@ -2005,28 +4401,32 @@ document.addEventListener('click', e => {
       }, 80);
     });
   }
-  // ─────────────────────────────────────────────────────────────────────
 
-  // Wire search bar
+  // ── Step 7: wire search
+  Loader.setP(96, 'Almost ready…');
   const si = document.getElementById('search-input');
   if (si) {
     si.addEventListener('input', e => {
-      const q = e.target.value;
+      const q = e.target.value.trim().toLowerCase();
       const hero = document.getElementById('hero-slider');
-      if (hero) hero.style.opacity = q.trim() ? '.4' : '';
-      handleSearch(q);
-    });
-    si.addEventListener('search', e => { // fires when X is cleared
-      if (!e.target.value) {
-        handleSearch('');
-        const hero= document.getElementById('hero-slider');
-        if (hero) hero.style.opacity = '';
-      }
+      if (hero) hero.style.display = q ? 'none' : '';
+      document.querySelectorAll('.nc').forEach(card => {
+        const title = (card.querySelector('.nc-t')?.textContent || '').toLowerCase();
+        card.style.display = (!q || title.includes(q)) ? '' : 'none';
+      });
+      document.querySelectorAll('.cw').forEach(cw => {
+        if (!q) { cw.style.display = ''; return; }
+        const hasVisible = [...cw.querySelectorAll('.nc')].some(c => c.style.display !== 'none');
+        cw.style.display = hasVisible ? '' : 'none';
+      });
     });
   }
 
-  // Call the loading-bar after-render hook
-  window._lsAfterRender && window._lsAfterRender();
+  await Loader.wait(180);
+
+  // ── Done: fade out loading screen
+  await Loader.dismiss();
+
 })();
 </script>
 </body>
