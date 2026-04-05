@@ -1632,7 +1632,9 @@ const heroSlides = [
 const trendingData  = [
   { title:'The Lantern Pact: Prologue', novelId:'lantern', emoji:'🐰', bg:'linear-gradient(160deg,#C44B1A 0%,#3B1A08 100%)', rating:3.9, genre:'Dark Fantasy', status:'Ongoing' },
 ]; // 🔥 Trending tab
-const hotPicksData  = []; // ⭐ Hot Picks tab
+const hotPicksData  = [
+  { title:'The Lantern Pact: Prologue', novelId:'lantern', emoji:'🐰', bg:'linear-gradient(160deg,#C44B1A 0%,#3B1A08 100%)', rating:3.9, genre:'Dark Fantasy', status:'Ongoing' },
+]; // ⭐ Hot Picks tab
 const dojoDuelsData = []; // ⚔️ Dojo Duels tab
 const frenzyyyData  = [
   { title:'The Lantern Pact: Prologue', novelId:'lantern', emoji:'🐰', bg:'linear-gradient(160deg,#C44B1A 0%,#3B1A08 100%)', rating:3.9, genre:'Dark Fantasy', status:'Ongoing' },
@@ -2355,7 +2357,7 @@ function renderAll() {
   const carDefs = [
     {
       id:'car-trending', arr:trendingData,
-      badgeFn:(n,i)=>i===0?'🔥 Trending now':'',
+      badgeFn:(n,i)=>i===0?'🔥 Hot':'',
       empty: emptySection('😴', "There's no content here just yet — maybe the creator is just a little lazy, or it's coming soon! 👀"),
     },
     {
@@ -2365,12 +2367,12 @@ function renderAll() {
     },
     {
       id:'car-dojo', arr:dojoDuelsData,
-      badgeFn:()=>'',
+      badgeFn:(n,i)=>i===0?'⚔️ Duels':'',
       empty: emptySection('🥋', "The dojo is empty... no battles have been posted yet. Maybe the sensei is napping! 😴"),
     },
     {
       id:'car-frenzyyy', arr:frenzyyyData,
-      badgeFn:()=>'',
+      badgeFn:(n,i)=>i===0?'🐰 Exclusive':'',
       empty: emptySection('✍️', "Frenzyyy hasn't dropped anything here yet. The pen is loaded — just waiting for inspiration! 💭"),
     },
   ];
@@ -3923,7 +3925,7 @@ function openNovel(novelId) {
   // When coming from screen-chapter (closeChapter → openNovel), preserve the
   // existing novelOriginScreen so the back button still leads home, not back to the chapter.
   const currentScreen = document.querySelector('.screen.active')?.id || 'screen-app';
-  if (currentScreen !== 'screen-chapter' && currentScreen !== 'screen-novel') {
+  if (currentScreen !== 'screen-chapter' && currentScreen !== 'screen-novel' && currentScreen !== 'screen-end') {
     novelOriginScreen = currentScreen;
   }
   _renderNovelPage(nd);
