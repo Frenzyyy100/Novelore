@@ -560,6 +560,17 @@ ul{list-style:none;}
   color:var(--text-main);
 }
 
+/* ══════════ CHANGELOG ══════════ */
+.changelog-version-meta{font-size:.72rem;color:var(--carrot);font-weight:600;margin-bottom:12px;letter-spacing:.3px;}
+.changelog-list{display:flex;flex-direction:column;gap:8px;}
+.changelog-item{font-size:.82rem;line-height:1.55;padding:10px 13px;border-radius:10px;color:var(--text-main);}
+.changelog-item.new{background:rgba(232,98,42,.1);border-left:3px solid var(--carrot);}
+.changelog-item.fix{background:rgba(232,66,66,.08);border-left:3px solid #E84242;}
+.changelog-item.tweak{background:rgba(245,185,66,.08);border-left:3px solid var(--amber);}
+[data-theme="light"] .changelog-item.new{background:rgba(232,98,42,.08);}
+[data-theme="light"] .changelog-item.fix{background:rgba(232,66,66,.06);}
+[data-theme="light"] .changelog-item.tweak{background:rgba(245,185,66,.07);}
+
 /* ══════════ FOOTER ══════════ */
 footer{background:#22100A;color:rgba(255,240,230,.38);padding:24px 16px;text-align:center;font-size:.74rem;line-height:1.8;}
 footer strong{color:var(--amber);}
@@ -1188,6 +1199,7 @@ footer strong{color:var(--amber);}
   <div class="sb-nav">
     <div class="sb-lbl">Navigate</div>
     <button class="sb-link active" onclick="goHome()"><span class="sb-ico">🏠</span> Home</button>
+    <button class="sb-link" onclick="goChangelog()"><span class="sb-ico">📋</span> Changelog</button>
     <button class="sb-link" onclick="goSettings()"><span class="sb-ico">⚙️</span> Settings</button>
     <button class="sb-link" onclick="goAbout()"><span class="sb-ico">ℹ️</span> About Us</button>
   </div>
@@ -1517,7 +1529,7 @@ footer strong{color:var(--amber);}
     <div class="contact-icon">📧</div>
     <div class="contact-info">
       <div class="contact-label">Business Email</div>
-      <div class="contact-text">frenzyyybusinessemail@gmail.com</div>
+      <div class="contact-text"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c9afbbaca7b3b0b0b0abbcbaa0a7acbabaaca4a8a0a589aea4a8a0a5e7aaa6a4">[email&#160;protected]</a></div>
     </div>
   </div>
 
@@ -1535,6 +1547,103 @@ footer strong{color:var(--amber);}
   </div>
 </div>
 
+
+<!-- ════ CHANGELOG SCREEN ════ -->
+<div id="screen-changelog" class="screen">
+  <nav class="page-nav">
+    <button class="back-btn" onclick="goHome()">← Back</button>
+    <span class="page-nav-t">📋 Changelog</span>
+  </nav>
+  <div class="page-scroll">
+    <div class="about-hero" style="background:linear-gradient(135deg,#1A0D05 0%,#3B1A08 60%,#6B3318 100%);">
+      <h1 style="font-size:clamp(1.5rem,5vw,2.2rem);">What's Changed</h1>
+      <p>Every fix, feature, and update to NovéLore — tracked and documented.</p>
+    </div>
+    <div class="page-body">
+
+      <div class="ab-sec">
+        <h2>v0.6.5 <span>— Current</span></h2>
+        <div class="changelog-version-meta">🗓 April 2026 · Beta</div>
+        <div class="changelog-list">
+          <div class="changelog-item fix">🐛 Fixed end screen looping back when clicking the back button after finishing a chapter</div>
+          <div class="changelog-item fix">🐛 Fixed NEW tag showing on last 3 chapters — now only shows on the latest chapter</div>
+          <div class="changelog-item fix">🐛 Fixed chapter scroll not resetting to top when clicking Prev / Next</div>
+          <div class="changelog-item fix">🐛 Fixed nav strip causing scroll anchor issues — moved outside scroll container</div>
+          <div class="changelog-item fix">🐛 Fixed duplicate coverImg syntax error in bookmark logic</div>
+          <div class="changelog-item new">✨ Added cover image for The Lantern Pact: Prologue across all views</div>
+          <div class="changelog-item new">✨ Added The Lantern Pact to Hot Picks tab</div>
+          <div class="changelog-item new">✨ Added Changelog page (you're reading it!)</div>
+          <div class="changelog-item tweak">⚙️ All tab and panel switches now snap instantly to top</div>
+          <div class="changelog-item tweak">⚙️ Cleared default bookmark data</div>
+        </div>
+      </div>
+
+      <div class="ab-sec">
+        <h2>v0.5.0 <span>— Reading Experience</span></h2>
+        <div class="changelog-version-meta">🗓 March 2026 · Beta</div>
+        <div class="changelog-list">
+          <div class="changelog-item new">✨ Chapter reader with per-chapter scroll progress tracking</div>
+          <div class="changelog-item new">✨ Auto-mark chapter as read at 95% scroll</div>
+          <div class="changelog-item new">✨ End-of-story screen with random messages</div>
+          <div class="changelog-item new">✨ Reading progress bar at top of chapter</div>
+          <div class="changelog-item new">✨ Prev / Next chapter navigation strip</div>
+          <div class="changelog-item tweak">⚙️ Continue Where You Left Off feature added to settings</div>
+        </div>
+      </div>
+
+      <div class="ab-sec">
+        <h2>v0.4.0 <span>— Library & Discovery</span></h2>
+        <div class="changelog-version-meta">🗓 February 2026 · Alpha</div>
+        <div class="changelog-list">
+          <div class="changelog-item new">✨ Trending, Hot Picks, Dojo Duels, Frenzyyy's Work tabs</div>
+          <div class="changelog-item new">✨ What's New section with novel cards</div>
+          <div class="changelog-item new">✨ Chapter updates feed</div>
+          <div class="changelog-item new">✨ Announcements panel</div>
+          <div class="changelog-item new">✨ Hero slider with featured novels</div>
+          <div class="changelog-item new">✨ Novel detail page with synopsis, genres, and volume list</div>
+        </div>
+      </div>
+
+      <div class="ab-sec">
+        <h2>v0.3.0 <span>— Bookmarks & Notifications</span></h2>
+        <div class="changelog-version-meta">🗓 January 2026 · Alpha</div>
+        <div class="changelog-list">
+          <div class="changelog-item new">✨ Bookmark system with mini popup and full drawer</div>
+          <div class="changelog-item new">✨ Notification system with unread badges</div>
+          <div class="changelog-item new">✨ Mark all as read / clear all notifications</div>
+          <div class="changelog-item tweak">⚙️ Sidebar navigation added (burger menu)</div>
+        </div>
+      </div>
+
+      <div class="ab-sec">
+        <h2>v0.2.0 <span>— Settings & Themes</span></h2>
+        <div class="changelog-version-meta">🗓 January 2026 · Alpha</div>
+        <div class="changelog-list">
+          <div class="changelog-item new">✨ Dark / Light / System theme support</div>
+          <div class="changelog-item new">✨ Font size, line spacing, reading width controls</div>
+          <div class="changelog-item new">✨ Reduce motion and high contrast toggles</div>
+          <div class="changelog-item new">✨ Settings screen with reading preferences</div>
+          <div class="changelog-item new">✨ About page</div>
+        </div>
+      </div>
+
+      <div class="ab-sec">
+        <h2>v0.1.0 <span>— Foundation</span></h2>
+        <div class="changelog-version-meta">🗓 January 2026 · Alpha</div>
+        <div class="changelog-list">
+          <div class="changelog-item new">✨ Initial build of NovéLore</div>
+          <div class="changelog-item new">✨ Single-file HTML app architecture</div>
+          <div class="changelog-item new">✨ Screen system (home, settings, about, novel, chapter)</div>
+          <div class="changelog-item new">✨ Dark theme with carrot/amber color palette</div>
+          <div class="changelog-item new">✨ Staged loading screen</div>
+          <div class="changelog-item new">✨ The Lantern Pact: Prologue added as first novel</div>
+        </div>
+      </div>
+
+    </div>
+    <footer><strong>NovéLore</strong> — Read Without Limits · © <span id="fy3"></span></footer>
+  </div>
+</div>
 
 <!-- ════ NOVEL PAGE SCREEN ════ -->
 <div id="screen-novel" class="screen">
@@ -1605,7 +1714,7 @@ footer strong{color:var(--amber);}
      SCRIPT
 ════════════════════════════════════════════ -->
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 'use strict';
 
 /* ═══════════════════════════════════════════
@@ -2200,6 +2309,12 @@ function goAbout() {
   document.getElementById('fy2').textContent = new Date().getFullYear();
   showScreen('screen-about');
   document.querySelector('#screen-about .page-scroll').scrollTop = 0;
+}
+function goChangelog() {
+  closeSB();
+  document.getElementById('fy3').textContent = new Date().getFullYear();
+  showScreen('screen-changelog');
+  document.querySelector('#screen-changelog .page-scroll').scrollTop = 0;
 }
 function openSB()  { document.getElementById('sidebar').classList.add('open');    document.getElementById('overlay').classList.add('on'); }
 function closeSB() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('overlay').classList.remove('on'); }
