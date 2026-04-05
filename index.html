@@ -4030,7 +4030,7 @@ function _renderNovelPage(nd) {
     const chHtml = vol.chapters.map(ch => {
       const isRead   = prog.read.includes(ch.number);
       const chPct    = isRead ? 100 : _getChapterPct(nd.id, ch.number);
-      const isNew    = ch.number > totalCh - 3;
+      const isNew    = ch.number === totalCh;
       const showBar  = !isRead && chPct > 0;
       const numDisplay = isRead ? '✓' : (showBar ? Math.round(chPct)+'%' : ch.number);
       const progBar  = showBar ? `
