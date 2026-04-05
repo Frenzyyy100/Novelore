@@ -1487,7 +1487,7 @@ footer strong{color:var(--amber);}
     <!-- ── About ── -->
     <div class="sc">
       <div class="sc-hdr"><span>ℹ️</span><h2>About</h2></div>
-      <div class="sc-body"><p style="font-size:.82rem;color:var(--text-muted);line-height:1.8;">Version: <strong style="color:var(--text-main)">Alpha 1.0.0</strong><br/>Built with ❤️ and 🥕 by Frenzyyy.<br/><span style="font-size:.74rem;">Hosted on GitHub Pages.</span></p>
+      <div class="sc-body"><p style="font-size:.82rem;color:var(--text-muted);line-height:1.8;">Version: <strong style="color:var(--text-main)">Beta v0.6.5</strong><br/>Built with ❤️ and 🥕 by Frenzyyy.<br/><span style="font-size:.74rem;">Hosted on GitHub Pages.</span></p>
       <div style="margin-top:12px;">
         <button class="setting-action-btn" onclick="goAbout()" style="width:100%;justify-content:center;">ℹ️ View Full About Page →</button>
       </div></div>
@@ -1625,24 +1625,25 @@ const heroSlides = [
     bg:          'linear-gradient(135deg,#2C1206 0%,#5A1A08 55%,#C44B1A 100%)',
     readHref:    '#',
     novelId:     'lantern',
+    coverImg: 'https://i.imgur.com/iQMtLH9.png',
   },
 ];
 
 // Novel cards — { title, novelId, emoji, bg, rating, genre, status, coverImg? }
 const trendingData  = [
-  { title:'The Lantern Pact: Prologue', novelId:'lantern', emoji:'🐰', bg:'linear-gradient(160deg,#C44B1A 0%,#3B1A08 100%)', rating:3.9, genre:'Dark Fantasy', status:'Ongoing' },
+  { title:'The Lantern Pact: Prologue', novelId:'lantern', emoji:'🐰', bg:'linear-gradient(160deg,#C44B1A 0%,#3B1A08 100%)', rating:3.9, genre:'Dark Fantasy', status:'Ongoing', coverImg:'https://i.imgur.com/iQMtLH9.png' },
 ]; // 🔥 Trending tab
 const hotPicksData  = [
-  { title:'The Lantern Pact: Prologue', novelId:'lantern', emoji:'🐰', bg:'linear-gradient(160deg,#C44B1A 0%,#3B1A08 100%)', rating:3.9, genre:'Dark Fantasy', status:'Ongoing' },
+  { title:'The Lantern Pact: Prologue', novelId:'lantern', emoji:'🐰', bg:'linear-gradient(160deg,#C44B1A 0%,#3B1A08 100%)', rating:3.9, genre:'Dark Fantasy', status:'Ongoing', coverImg:'https://i.imgur.com/iQMtLH9.png' },
 ]; // ⭐ Hot Picks tab
 const dojoDuelsData = []; // ⚔️ Dojo Duels tab
 const frenzyyyData  = [
-  { title:'The Lantern Pact: Prologue', novelId:'lantern', emoji:'🐰', bg:'linear-gradient(160deg,#C44B1A 0%,#3B1A08 100%)', rating:3.9, genre:'Dark Fantasy', status:'Ongoing' },
+  { title:'The Lantern Pact: Prologue', novelId:'lantern', emoji:'🐰', bg:'linear-gradient(160deg,#C44B1A 0%,#3B1A08 100%)', rating:3.9, genre:'Dark Fantasy', status:'Ongoing', coverImg:'https://i.imgur.com/iQMtLH9.png' },
 ]; // ✍️ Frenzyyy's Work tab
 
 // What's New — { title, novelId, emoji, bg, description, genre, status, rating, isNew, coverImg? }
 const novelsNew = [
-  { title:'The Lantern Pact: Prologue', novelId:'lantern', emoji:'🐰', bg:'linear-gradient(160deg,#C44B1A 0%,#3B1A08 100%)', description:'Three unlikely teammates navigate missions, secrets, and something far bigger moving behind the scenes. Volume 1: False Summer Arc — ongoing.', genre:'Dark Fantasy', status:'Ongoing', rating:3.9, isNew:true },
+  { title:'The Lantern Pact: Prologue', novelId:'lantern', emoji:'🐰', bg:'linear-gradient(160deg,#C44B1A 0%,#3B1A08 100%)', description:'Three unlikely teammates navigate missions, secrets, and something far bigger moving behind the scenes. Volume 1: False Summer Arc — ongoing.', genre:'Dark Fantasy', status:'Ongoing', rating:5.0, isNew:true, coverImg:'https://i.imgur.com/iQMtLH9.png' },
 ];
 
 // Chapter updates — { novelId, novelTitle, emoji, chapter, chapterTitle, time }
@@ -2517,6 +2518,7 @@ const novelDetails = {
     author: 'Frenzyyy & Botaks',
     bg: 'linear-gradient(160deg,#C44B1A 0%,#3B1A08 100%)',
     emoji: '🐰',
+    coverImg: 'https://i.imgur.com/iQMtLH9.png',
     genres: ['Dark Fantasy', 'Action', 'Adventure'],
     status: 'Ongoing',
     rating: 3.9,
