@@ -1499,7 +1499,7 @@ footer strong{color:var(--amber);}
     <!-- ── About ── -->
     <div class="sc">
       <div class="sc-hdr"><span>ℹ️</span><h2>About</h2></div>
-      <div class="sc-body"><p style="font-size:.82rem;color:var(--text-muted);line-height:1.8;">Version: <strong style="color:var(--text-main)">Beta v0.6.5</strong><br/>Built with ❤️ and 🥕 by Frenzyyy.<br/><span style="font-size:.74rem;">Hosted on GitHub Pages.</span></p>
+      <div class="sc-body"><p style="font-size:.82rem;color:var(--text-muted);line-height:1.8;">Version: <strong style="color:var(--text-main)">Beta v0.6.6</strong><br/>Built with ❤️ and 🥕 by Frenzyyy.<br/><span style="font-size:.74rem;">Hosted on GitHub Pages.</span></p>
       <div style="margin-top:12px;">
         <button class="setting-action-btn" onclick="goAbout()" style="width:100%;justify-content:center;">ℹ️ View Full About Page →</button>
       </div></div>
@@ -1562,9 +1562,10 @@ footer strong{color:var(--amber);}
     <div class="page-body">
 
       <div class="ab-sec">
-        <h2>v0.6.5 <span>— Current</span></h2>
+        <h2>v0.6.6 <span>— Current</span></h2>
         <div class="changelog-version-meta">🗓 April 2026 · Beta</div>
         <div class="changelog-list">
+            <div class="changelog-item new">✨ Notifications now persist — read/cleared state saved and restored across visits</div>
           <div class="changelog-item fix">🐛 Fixed end screen looping back when clicking the back button after finishing a chapter</div>
           <div class="changelog-item fix">🐛 Fixed NEW tag showing on last 3 chapters — now only shows on the latest chapter</div>
           <div class="changelog-item fix">🐛 Fixed chapter scroll not resetting to top when clicking Prev / Next</div>
@@ -1993,6 +1994,22 @@ function goSlide(idx) {
    NOTIFICATIONS
 ═══════════════════════════════════════════ */
 let notifs = notificationsData.map((n,i)=>({...n,id:i}));
+(function _loadNotifState(){
+  try {
+    const saved = LS.get('nl_notif_state');
+    if (!saved) return;
+    if (saved.cleared) { notifs = []; return; }
+    if (Array.isArray(saved.readIds)) {
+      notifs.forEach(n => { if (saved.readIds.includes(n.id)) n.read = true; });
+    }
+  } catch(e) {}
+})();
+function _saveNotifState() {
+  try {
+    if (notifs.length === 0) { LS.set('nl_notif_state', {cleared:true, readIds:[]}); return; }
+    LS.set('nl_notif_state', { cleared:false, readIds: notifs.filter(n=>n.read).map(n=>n.id) });
+  } catch(e) {}
+}
 let notifMiniOpen = false;
 
 function unreadCount() { return notifs.filter(n=>!n.read).length; }
@@ -2059,11 +2076,11 @@ function openNotifDrawer() {
 
 function readNotif(id) {
   const n = notifs.find(x=>x.id===id); if(n) n.read=true;
-  updateNotifBadge(); renderMiniNotifs();
+  _saveNotifState(); updateNotifBadge(); renderMiniNotifs();
 }
 function markAllRead() {
   notifs.forEach(n=>n.read=true);
-  updateNotifBadge(); renderMiniNotifs(); renderDrawerNotifs();
+  _saveNotifState(); updateNotifBadge(); renderMiniNotifs(); renderDrawerNotifs();
 }
 function markAllReadDrawer() {
   markAllRead();
@@ -2232,7 +2249,7 @@ function toggleSlideBookmark(novelId, btn) {
 /* Clear all notifications */
 function clearAllNotifications() {
   notifs = [];
-  updateNotifBadge();
+  _saveNotifState(); updateNotifBadge();
   renderMiniNotifs();
   renderDrawerNotifs();
   toast('🔔 Notifications cleared');
