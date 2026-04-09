@@ -600,17 +600,19 @@ ul{list-style:none;}
 .reader-pref-overlay.on{opacity:1;pointer-events:all;}
 
 .reader-pref-sheet{
-  position:fixed;bottom:-480px;left:0;right:0;
+  position:fixed;bottom:0;left:0;right:0;
   z-index:196;
   background:var(--panel-bg);
   border-radius:20px 20px 0 0;
   border-top:1px solid var(--border-mid);
   box-shadow:0 -8px 40px rgba(10,4,0,.4);
-  transition:bottom .34s cubic-bezier(.4,0,.2,1);
+  transform:translateY(100%);
+  transition:transform .34s cubic-bezier(.4,0,.2,1);
   max-height:82dvh;
   display:flex;flex-direction:column;
+  visibility:hidden;
 }
-.reader-pref-sheet.open{bottom:0;}
+.reader-pref-sheet.open{transform:translateY(0);visibility:visible;}
 
 .rp-handle{width:36px;height:4px;border-radius:4px;background:var(--border-mid);margin:12px auto 0;flex-shrink:0;}
 .rp-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 20px 12px;border-bottom:1px solid var(--border);flex-shrink:0;}
@@ -1073,7 +1075,7 @@ footer strong{color:var(--amber);}
   letter-spacing:8px;margin:2em 0;user-select:none;}
 .ch-end-mark{text-align:center;margin-top:36px;padding-top:20px;border-top:1px solid var(--border);}
 .ch-end-mark span{font-size:.75rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
-  color:var(--text-faint);}
+  color:var(--text-muted);}
 .ch-nav-strip{display:flex;gap:10px;padding:20px;border-top:2px solid var(--border);
   background:var(--bg-card);flex-shrink:0;}
 .ch-nav-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
@@ -1087,10 +1089,12 @@ footer strong{color:var(--amber);}
 
 /* ══════════ LIGHT MODE — READER ══════════ */
 [data-theme="light"] .reading-progress-bar{background:rgba(0,0,0,.09);}
-[data-theme="light"] .ch-nav-strip{background:var(--bg-elevated);}
+[data-theme="light"] .ch-nav-strip{background:var(--bg-card);}
+[data-theme="light"] .ch-nav-btn:not(.pri){background:var(--bg-elevated);border-color:var(--border-mid);}
+[data-theme="light"] .ch-nav-btn.pri{background:var(--carrot);color:#fff;border-color:var(--carrot);}
 [data-theme="light"] .ch-hdr-vol-label{color:var(--carrot-deep);}
 [data-theme="light"] .ch-scene-break{color:var(--text-faint);}
-[data-theme="light"] .ch-end-mark span{color:var(--text-faint);}
+[data-theme="light"] .ch-end-mark span{color:var(--text-muted);}
 [data-theme="light"] .ch-prose{color:var(--text-main);}
 
 /* ══════════ LIGHT MODE — STATUS & GENRE CHIPS ══════════ */
@@ -1587,7 +1591,7 @@ footer strong{color:var(--amber);}
     <div class="contact-icon">📧</div>
     <div class="contact-info">
       <div class="contact-label">Business Email</div>
-      <div class="contact-text">frenzyyybusinessemail@gmail.com</div>
+      <div class="contact-text"><a href="mailto:frenzyyybusinessemail@gmail.com" class="contact-link">frenzyyybusinessemail@gmail.com</a></div>
     </div>
   </div>
 
@@ -1779,7 +1783,10 @@ footer strong{color:var(--amber);}
       <div class="ch-end-mark"><span>— End of Chapter —</span></div>
     </div>
   </div>
-  <div class="ch-nav-strip" id="ch-nav-strip"></div>
+  <div class="ch-nav-strip" id="ch-nav-strip">
+    <button class="ch-nav-btn" onclick="closeChapter()">← Novel</button>
+    <button class="ch-nav-btn" onclick="goHome()">🏠 Home</button>
+  </div>
 </div>
 
 <!-- ════ READER PREFERENCES SHEET ════ -->
@@ -1899,7 +1906,7 @@ footer strong{color:var(--amber);}
      SCRIPT
 ════════════════════════════════════════════ -->
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 'use strict';
 
 /* ═══════════════════════════════════════════
@@ -1982,7 +1989,7 @@ const announcementsData = [
 const notificationsData = [
 { id:'notif-ch8',      msg:'🐰 Ch. 8 is live — "Daylight"! The team catches their breath — but the city has other plans.',                  time:'Mar 30, 2026',   read:false },
 { id:'notif-ch7',      msg:'🐰 Ch. 7 is live — "A New Hand"! The reassignment to take the spot is here.',           time:'Mar 20, 2026',   read:false },
-  { id:'notif-ch6',    msg:'🐰 Ch. 6 is live — "White Leopard"! The predator is now hunting for prey soon.',           time:'Feb 24, 2026',   read:false },
+  { id:'notif-ch6',    msg:'🐰 Ch. 6 is live — "White Leopard"! The predator is now hunting for prey soon.',           time:'Feb 24, 2026',   read:true },
   { id:'notif-ch5',    msg:'🐰 Ch. 5 is live — "Reminisce"! Something from the past has resurfaced.',                  time:'Jan 24, 2026',   read:true },
   { id:'notif-ch4',    msg:'🐰 Ch. 4 is live — "Our Separate Ways"! The team starts pulling apart at the seams.',      time:'Jan 20, 2026',   read:true },
   { id:'notif-ch3',    msg:'🐰 Ch. 3 is live — "Chaotic Result"! Nothing went to plan. Time to deal with it.',         time:'Jan 18, 2026',   read:true },
@@ -6142,7 +6149,8 @@ document.getElementById('ch-prose').innerHTML = paras.map(p => {
     <button class="ch-nav-btn" onclick="closeChapter()">📚 Novel</button>
     <button class="ch-nav-btn pri" onclick="${isLast ? `showEndScreen('${esc(novelId)}',${chapterNum})` : `markReadAndNext('${esc(novelId)}',${chapterNum},${nextCh.number})`}">
       ${isLast ? '🏁 The End' : 'Next →'}
-    </button>`;
+    </button>
+    <button class="ch-nav-btn" onclick="goHome()" style="flex:0 0 auto;padding:12px 14px;" title="Go Home">🏠</button>`;
 
   // Mark in progress
   _setChapterProgress(novelId, chapterNum, false); // mark last-read position
