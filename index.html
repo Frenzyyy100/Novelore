@@ -589,7 +589,55 @@ ul{list-style:none;}
 [data-theme="light"] .about-hero h1{color:#FFF0E6;}
 [data-theme="light"] .about-hero p{color:rgba(255,240,230,.88);}
 
-/* ══════════ FOOTER ══════════ */
+/* ══════════ READER PREFERENCES PANEL ══════════ */
+.reader-pref-overlay{
+  position:fixed;inset:0;z-index:195;
+  background:rgba(10,4,0,.5);
+  backdrop-filter:blur(2px);
+  opacity:0;pointer-events:none;
+  transition:opacity .28s;
+}
+.reader-pref-overlay.on{opacity:1;pointer-events:all;}
+
+.reader-pref-sheet{
+  position:fixed;bottom:-480px;left:0;right:0;
+  z-index:196;
+  background:var(--panel-bg);
+  border-radius:20px 20px 0 0;
+  border-top:1px solid var(--border-mid);
+  box-shadow:0 -8px 40px rgba(10,4,0,.4);
+  transition:bottom .34s cubic-bezier(.4,0,.2,1);
+  max-height:82dvh;
+  display:flex;flex-direction:column;
+}
+.reader-pref-sheet.open{bottom:0;}
+
+.rp-handle{width:36px;height:4px;border-radius:4px;background:var(--border-mid);margin:12px auto 0;flex-shrink:0;}
+.rp-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 20px 12px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.rp-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--text-main);}
+.rp-close{width:30px;height:30px;border-radius:50%;background:var(--bg-elevated);color:var(--text-muted);display:flex;align-items:center;justify-content:center;font-size:.95rem;transition:background .2s;}
+.rp-close:hover{background:var(--carrot);color:#fff;}
+
+.rp-body{flex:1;overflow-y:auto;padding:6px 0 24px;scrollbar-width:none;}
+.rp-body::-webkit-scrollbar{display:none;}
+
+.rp-row{display:flex;align-items:center;justify-content:space-between;padding:13px 20px;border-bottom:1px solid var(--border);}
+.rp-row:last-child{border-bottom:none;}
+.rp-row-l{display:flex;align-items:center;gap:10px;}
+.rp-ico{font-size:1.1rem;width:26px;text-align:center;}
+.rp-lbl{font-size:.87rem;font-weight:600;color:var(--text-main);}
+.rp-sub{font-size:.71rem;color:var(--text-muted);margin-top:1px;}
+
+.rp-theme-opts{display:flex;gap:7px;margin-top:10px;}
+.rp-theme-opt{flex:1;border-radius:9px;padding:10px 6px;text-align:center;cursor:pointer;border:1.5px solid var(--border);transition:all .2s;background:var(--bg-elevated);}
+.rp-theme-opt.active{border-color:var(--carrot);background:rgba(232,98,42,.1);}
+.rp-theme-opt .rt-ico{font-size:1.3rem;margin-bottom:4px;}
+.rp-theme-opt .rt-lbl{font-size:.71rem;font-weight:600;color:var(--text-muted);}
+.rp-theme-opt.active .rt-lbl{color:var(--carrot);}
+
+.rp-section-label{font-size:.68rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--text-faint);padding:14px 20px 4px;}
+
+
 footer{background:#22100A;color:rgba(255,240,230,.38);padding:24px 16px;text-align:center;font-size:.74rem;line-height:1.8;}
 footer strong{color:var(--amber);}
 #scrolltop{position:fixed;bottom:24px;right:16px;width:44px;height:44px;border-radius:50%;background:var(--carrot);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(232,98,42,.5);z-index:70;font-size:1.1rem;opacity:0;pointer-events:none;transform:translateY(14px);transition:opacity .28s,transform .28s;}
@@ -1269,9 +1317,6 @@ footer strong{color:var(--amber);}
           <div class="sec-hdr"><h2 class="sec-ttl">✍️ <span>Frenzyyy's Work</span></h2><a class="see-all" href="#">See all →</a></div>
           <div class="cw"><div class="carousel" id="car-frenzyyy"></div></div>
 
-          <div class="sec-hdr"><h2 class="sec-ttl">🥋 <span>Dojo Duels</span></h2><a class="see-all" href="#">See all →</a></div>
-          <div class="cw"><div class="carousel" id="car-dojo"></div></div>
-
         </div><!-- /panel-home -->
 
         <!-- ════ WHAT'S NEW TAB ════ -->
@@ -1283,7 +1328,11 @@ footer strong{color:var(--amber);}
 
         <!-- ════ UPDATES TAB ════ -->
         <div class="tab-panel" id="panel-updates">
-          <div class="sec-hdr" style="margin-top:22px;"><h2 class="sec-ttl">🔄 Chapter <span>Updates</span></h2></div>
+          <div class="sec-hdr" style="margin-top:22px;"><h2 class="sec-ttl">📚 Book <span>Updates</span></h2></div>
+          <div id="upd-book-list"></div>
+          <div class="sec-hdr" style="margin-top:18px;"><h2 class="sec-ttl">🗂️ Volume <span>Updates</span></h2></div>
+          <div id="upd-vol-list"></div>
+          <div class="sec-hdr" style="margin-top:18px;"><h2 class="sec-ttl">🔄 Chapter <span>Updates</span></h2></div>
           <div id="upd-list"></div>
         </div>
 
@@ -1343,7 +1392,7 @@ footer strong{color:var(--amber);}
             <span class="setting-icon">🔤</span>
             <div><div class="setting-lbl">Font Size</div><div class="setting-sub">Adjust the reading text size</div></div>
           </div>
-          <div class="seg-ctrl" id="font-size-ctrl">
+          <div class="seg-ctrl font-size-ctrl" id="font-size-ctrl">
             <button class="seg-btn" data-val="small" onclick="applyFontSize('small',this)">S</button>
             <button class="seg-btn active" data-val="medium" onclick="applyFontSize('medium',this)">M</button>
             <button class="seg-btn" data-val="large" onclick="applyFontSize('large',this)">L</button>
@@ -1354,7 +1403,7 @@ footer strong{color:var(--amber);}
             <span class="setting-icon">↕️</span>
             <div><div class="setting-lbl">Line Spacing</div><div class="setting-sub">Control paragraph breath</div></div>
           </div>
-          <div class="seg-ctrl" id="line-space-ctrl">
+          <div class="seg-ctrl line-space-ctrl" id="line-space-ctrl">
             <button class="seg-btn" data-val="compact" onclick="applyLineSpace('compact',this)">Tight</button>
             <button class="seg-btn active" data-val="normal" onclick="applyLineSpace('normal',this)">Normal</button>
             <button class="seg-btn" data-val="relaxed" onclick="applyLineSpace('relaxed',this)">Airy</button>
@@ -1365,7 +1414,7 @@ footer strong{color:var(--amber);}
             <span class="setting-icon">📐</span>
             <div><div class="setting-lbl">Reading Width</div><div class="setting-sub">How wide content spans</div></div>
           </div>
-          <div class="seg-ctrl" id="read-width-ctrl">
+          <div class="seg-ctrl read-width-ctrl" id="read-width-ctrl">
             <button class="seg-btn" data-val="narrow" onclick="applyReadWidth('narrow',this)">Narrow</button>
             <button class="seg-btn active" data-val="normal" onclick="applyReadWidth('normal',this)">Normal</button>
             <button class="seg-btn" data-val="wide" onclick="applyReadWidth('wide',this)">Wide</button>
@@ -1571,7 +1620,30 @@ footer strong{color:var(--amber);}
     <div class="page-body">
 
       <div class="ab-sec">
-        <h2>v0.6.7 <span>— Current</span></h2>
+        <h2>v0.6.9 <span>— Current</span></h2>
+        <div class="changelog-version-meta">🗓 April 2026 · Beta</div>
+        <div class="changelog-list">
+          <div class="changelog-item new">✨ Reader Preferences panel — tap "Aa" in the chapter nav to adjust settings mid-read</div>
+          <div class="changelog-item new">✨ Font size, line spacing, and reading width now adjustable without leaving the chapter</div>
+          <div class="changelog-item new">✨ Theme switcher (Light / Dark / System) accessible directly from the reader</div>
+          <div class="changelog-item new">✨ Auto-Mark on Finish and Continue Where You Left Off toggles in reader panel</div>
+          <div class="changelog-item tweak">⚙️ Preference controls now stay in sync between Reader panel and Settings screen</div>
+        </div>
+      </div>
+
+      <div class="ab-sec">
+        <h2>v0.6.8 <span>— Previous</span></h2>
+        <div class="changelog-version-meta">🗓 April 2026 · Beta</div>
+        <div class="changelog-list">
+          <div class="changelog-item fix">🗑️ Removed Dojo Duels tab from the home screen</div>
+          <div class="changelog-item new">✨ Book Updates section added to the Updates tab</div>
+          <div class="changelog-item new">✨ Volume Updates section added to the Updates tab</div>
+          <div class="changelog-item tweak">⚙️ Updates tab now shows Book → Volume → Chapter in order</div>
+        </div>
+      </div>
+
+      <div class="ab-sec">
+        <h2>v0.6.7 <span>— Previous</span></h2>
         <div class="changelog-version-meta">🗓 April 2026 · Beta</div>
         <div class="changelog-list">
           <div class="changelog-item new">✨ Changelog page now fully respects your theme — Light, Dark, and System modes all apply correctly</div>
@@ -1618,7 +1690,7 @@ footer strong{color:var(--amber);}
         <h2>v0.4.0 <span>— Library & Discovery</span></h2>
         <div class="changelog-version-meta">🗓 February 2026 · Alpha</div>
         <div class="changelog-list">
-          <div class="changelog-item new">✨ Trending, Hot Picks, Dojo Duels, Frenzyyy's Work tabs</div>
+          <div class="changelog-item new">✨ Trending, Hot Picks, Frenzyyy's Work tabs</div>
           <div class="changelog-item new">✨ What's New section with novel cards</div>
           <div class="changelog-item new">✨ Chapter updates feed</div>
           <div class="changelog-item new">✨ Announcements panel</div>
@@ -1697,7 +1769,7 @@ footer strong{color:var(--amber);}
       <div class="reader-nav-vol" id="reader-vol-label"></div>
       <div class="reader-nav-ch" id="reader-ch-title"></div>
     </div>
-    <button class="back-btn" onclick="goHome()" style="font-size:.78rem;color:var(--carrot);white-space:nowrap;flex-shrink:0;">🏠</button>
+    <button class="nav-ico" onclick="openReaderPrefs()" title="Reading Preferences" style="font-size:.82rem;font-weight:700;letter-spacing:-.5px;flex-shrink:0;">Aa</button>
   </nav>
   <div class="reading-progress-bar"><div class="reading-progress-fill" id="reading-progress-fill"></div></div>
   <div class="chapter-scroll" id="chapter-scroll">
@@ -1708,6 +1780,96 @@ footer strong{color:var(--amber);}
     </div>
   </div>
   <div class="ch-nav-strip" id="ch-nav-strip"></div>
+</div>
+
+<!-- ════ READER PREFERENCES SHEET ════ -->
+<div class="reader-pref-overlay" id="reader-pref-overlay" onclick="closeReaderPrefs()"></div>
+<div class="reader-pref-sheet" id="reader-pref-sheet">
+  <div class="rp-handle"></div>
+  <div class="rp-hdr">
+    <span class="rp-title">Reading Preferences</span>
+    <button class="rp-close" onclick="closeReaderPrefs()">✕</button>
+  </div>
+  <div class="rp-body">
+
+    <div class="rp-section-label">Appearance</div>
+
+    <!-- Theme -->
+    <div style="padding:6px 20px 14px;border-bottom:1px solid var(--border);">
+      <div style="font-size:.87rem;font-weight:600;color:var(--text-main);margin-bottom:8px;">🎨 Theme</div>
+      <div class="rp-theme-opts">
+        <div class="rp-theme-opt" id="rp-opt-light" onclick="setTheme('light')"><div class="rt-ico">☀️</div><div class="rt-lbl">Light</div></div>
+        <div class="rp-theme-opt" id="rp-opt-dark"  onclick="setTheme('dark')"><div class="rt-ico">🌙</div><div class="rt-lbl">Dark</div></div>
+        <div class="rp-theme-opt" id="rp-opt-system" onclick="setTheme('system')"><div class="rt-ico">🖥️</div><div class="rt-lbl">System</div></div>
+      </div>
+    </div>
+
+    <!-- Font Size -->
+    <div class="rp-row">
+      <div class="rp-row-l">
+        <span class="rp-ico">🔤</span>
+        <div><div class="rp-lbl">Font Size</div><div class="rp-sub">Adjust reading text size</div></div>
+      </div>
+      <div class="seg-ctrl font-size-ctrl" id="reader-font-size-ctrl">
+        <button class="seg-btn" data-val="small"  onclick="applyFontSize('small',this)">S</button>
+        <button class="seg-btn active" data-val="medium" onclick="applyFontSize('medium',this)">M</button>
+        <button class="seg-btn" data-val="large"  onclick="applyFontSize('large',this)">L</button>
+      </div>
+    </div>
+
+    <!-- Line Spacing -->
+    <div class="rp-row">
+      <div class="rp-row-l">
+        <span class="rp-ico">↕️</span>
+        <div><div class="rp-lbl">Line Spacing</div><div class="rp-sub">Control paragraph breath</div></div>
+      </div>
+      <div class="seg-ctrl line-space-ctrl" id="reader-line-space-ctrl">
+        <button class="seg-btn" data-val="compact"  onclick="applyLineSpace('compact',this)">Tight</button>
+        <button class="seg-btn active" data-val="normal"   onclick="applyLineSpace('normal',this)">Normal</button>
+        <button class="seg-btn" data-val="relaxed"  onclick="applyLineSpace('relaxed',this)">Airy</button>
+      </div>
+    </div>
+
+    <!-- Reading Width -->
+    <div class="rp-row">
+      <div class="rp-row-l">
+        <span class="rp-ico">📐</span>
+        <div><div class="rp-lbl">Reading Width</div><div class="rp-sub">How wide content spans</div></div>
+      </div>
+      <div class="seg-ctrl read-width-ctrl" id="reader-read-width-ctrl">
+        <button class="seg-btn" data-val="narrow"  onclick="applyReadWidth('narrow',this)">Narrow</button>
+        <button class="seg-btn active" data-val="normal"   onclick="applyReadWidth('normal',this)">Normal</button>
+        <button class="seg-btn" data-val="wide"    onclick="applyReadWidth('wide',this)">Wide</button>
+      </div>
+    </div>
+
+    <div class="rp-section-label">Reading Behaviour</div>
+
+    <!-- Auto-mark on finish -->
+    <div class="rp-row">
+      <div class="rp-row-l">
+        <span class="rp-ico">✓</span>
+        <div><div class="rp-lbl">Auto-Mark on Finish</div><div class="rp-sub">Mark chapter read at 95% scroll</div></div>
+      </div>
+      <label class="toggle-wrap">
+        <input type="checkbox" id="rp-automark" checked onchange="savePref('nl_automark80',this.checked); document.getElementById('automark80') && (document.getElementById('automark80').checked=this.checked);"/>
+        <span class="toggle-track"></span>
+      </label>
+    </div>
+
+    <!-- Continue where left off -->
+    <div class="rp-row">
+      <div class="rp-row-l">
+        <span class="rp-ico">▶️</span>
+        <div><div class="rp-lbl">Continue Where You Left Off</div><div class="rp-sub">Novel page opens at last chapter</div></div>
+      </div>
+      <label class="toggle-wrap">
+        <input type="checkbox" id="rp-autocontinue" checked onchange="savePref('nl_autocontinue',this.checked); document.getElementById('autocontinue') && (document.getElementById('autocontinue').checked=this.checked);"/>
+        <span class="toggle-track"></span>
+      </label>
+    </div>
+
+  </div>
 </div>
 
 <!-- ════ END-OF-STORY SCREEN ════ -->
@@ -1737,7 +1899,7 @@ footer strong{color:var(--amber);}
      SCRIPT
 ════════════════════════════════════════════ -->
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 'use strict';
 
 /* ═══════════════════════════════════════════
@@ -1768,7 +1930,6 @@ const trendingData  = [
 const hotPicksData  = [
   { title:'The Lantern Pact: Prologue', novelId:'lantern', emoji:'🐰', bg:'linear-gradient(160deg,#C44B1A 0%,#3B1A08 100%)', rating:3.9, genre:'Dark Fantasy', status:'Ongoing', coverImg:'https://i.imgur.com/iQMtLH9.png' },
 ]; // ⭐ Hot Picks tab
-const dojoDuelsData = []; // ⚔️ Dojo Duels tab
 const frenzyyyData  = [
   { title:'The Lantern Pact: Prologue', novelId:'lantern', emoji:'🐰', bg:'linear-gradient(160deg,#C44B1A 0%,#3B1A08 100%)', rating:3.9, genre:'Dark Fantasy', status:'Ongoing', coverImg:'https://i.imgur.com/iQMtLH9.png' },
 ]; // ✍️ Frenzyyy's Work tab
@@ -1778,8 +1939,19 @@ const novelsNew = [
   { title:'The Lantern Pact: Prologue', novelId:'lantern', emoji:'🐰', bg:'linear-gradient(160deg,#C44B1A 0%,#3B1A08 100%)', description:'Three unlikely teammates navigate missions, secrets, and something far bigger moving behind the scenes. Volume 1: False Summer Arc — ongoing.', genre:'Dark Fantasy', status:'Ongoing', rating:5.0, isNew:true, coverImg:'https://i.imgur.com/iQMtLH9.png' },
 ];
 
+// Book updates — { novelId, novelTitle, emoji, bookTitle, description, time }
+const bookUpdatesData = [
+  { novelId:'lantern', novelTitle:'The Lantern Pact: Prologue', emoji:'🐰', bookTitle:'The Lantern Pact: Prologue', description:'Now live — free to read. Dark Fantasy · Action · Adventure.', time:'Jan 17, 2026' },
+];
+
+// Volume updates — { novelId, novelTitle, emoji, volumeNumber, volumeTitle, description, time }
+const volumeUpdatesData = [
+  { novelId:'lantern', novelTitle:'The Lantern Pact: Prologue', emoji:'🐰', volumeNumber:1, volumeTitle:'False Summer Arc', description:'Vol. 1 is underway — new chapters dropping regularly.', time:'Jan 17, 2026' },
+];
+
 // Chapter updates — { novelId, novelTitle, emoji, chapter, chapterTitle, time }
 const updatesData = [
+{ novelId:'lantern', novelTitle:'The Lantern Pact: Prologue', emoji:'🐰', chapter:8, chapterTitle:'Vol. 1 Ch. 8 — Daylight',              time:'Mar 30, 2026'  },
 { novelId:'lantern', novelTitle:'The Lantern Pact: Prologue', emoji:'🐰', chapter:7, chapterTitle:'Vol. 1 Ch. 7 — A New Hand',           time:'Mar 20, 2026'  },
  { novelId:'lantern', novelTitle:'The Lantern Pact: Prologue', emoji:'🐰', chapter:6, chapterTitle:'Vol. 1 Ch. 6 — White Leopard',           time:'Feb 24, 2026'  },
   { novelId:'lantern', novelTitle:'The Lantern Pact: Prologue', emoji:'🐰', chapter:5, chapterTitle:'Vol. 1 Ch. 5 — Reminisce',           time:'Jan 24, 2026'  },
@@ -1791,8 +1963,14 @@ const updatesData = [
 
 // Announcements — { title, body, type, date, novelId? }  type: new | event | system
 const announcementsData = [
+{ title:'🐰 Ch. 8 is Live — Daylight',              body:'Chapter 8 of The Lantern Pact: Prologue is now available. The team takes a breather in the city — but stillness never lasts long.',              type:'new',   date:'March 30, 2026',   novelId:'lantern' },
 { title:'🐰 Ch. 7 is Live — A New Hand',        body:'Chapter 7 of The Lantern Pact: Prologue is now available. False Summer Arc continues, the duo has finally got their third teammate but in a twist.',   type:'new',   date:'March 20, 2026', novelId:'lantern' },
 { title:'🐰 Ch. 6 is Live — White Leopard',        body:'Chapter 6 of The Lantern Pact: Prologue is now available. False Summer Arc continues, the prologue villain is here.',   type:'new',   date:'February 24, 2026', novelId:'lantern' },
+{ title:'🐰 Ch. 5 is Live — Reminisce',            body:'Chapter 5 of The Lantern Pact: Prologue is now available. The team slows down — and something from the past resurfaces.',                          type:'new',   date:'January 24, 2026',  novelId:'lantern' },
+{ title:'🐰 Ch. 4 is Live — Our Separate Ways',    body:'Chapter 4 of The Lantern Pact: Prologue is now available. Tensions fracture the team as everyone starts pulling in different directions.',          type:'new',   date:'January 20, 2026',  novelId:'lantern' },
+{ title:'🐰 Ch. 3 is Live — Chaotic Result',       body:'Chapter 3 of The Lantern Pact: Prologue is now available. Nothing went according to plan — and now they have to deal with the fallout.',           type:'new',   date:'January 18, 2026',  novelId:'lantern' },
+{ title:'🐰 Ch. 2 is Live — Compromise',           body:'Chapter 2 of The Lantern Pact: Prologue is now available. Not everyone agrees on how to handle things — but they press forward anyway.',           type:'new',   date:'January 17, 2026',  novelId:'lantern' },
+{ title:'🐰 Ch. 1 is Live — Rescue Mission',       body:'Chapter 1 of The Lantern Pact: Prologue is now available. The first true field mission begins — and there\'s no room for failure.',               type:'new',   date:'January 17, 2026',  novelId:'lantern' },
   { title:'📖 Vol. 1 Has Begun — False Summer Arc', body:'The Lantern Pact: Prologue is officially live. New chapters dropping regularly — free to read.', type:'event', date:'January 17, 2026', novelId:'lantern' },
 ];
 
@@ -1802,8 +1980,14 @@ const announcementsData = [
 // Never reuse an id — the read-state is persisted by id, so reusing one will
 // cause the new notification to appear already-read for returning visitors.
 const notificationsData = [
+{ id:'notif-ch8',      msg:'🐰 Ch. 8 is live — "Daylight"! The team catches their breath — but the city has other plans.',                  time:'Mar 30, 2026',   read:false },
 { id:'notif-ch7',      msg:'🐰 Ch. 7 is live — "A New Hand"! The reassignment to take the spot is here.',           time:'Mar 20, 2026',   read:false },
-  { id:'notif-ch6',    msg:'🐰 Ch. 6 is live — "White Leopard"! The predator is now hunting for prey soon.',           time:'Feb 24, 2026',   read:true },
+  { id:'notif-ch6',    msg:'🐰 Ch. 6 is live — "White Leopard"! The predator is now hunting for prey soon.',           time:'Feb 24, 2026',   read:false },
+  { id:'notif-ch5',    msg:'🐰 Ch. 5 is live — "Reminisce"! Something from the past has resurfaced.',                  time:'Jan 24, 2026',   read:true },
+  { id:'notif-ch4',    msg:'🐰 Ch. 4 is live — "Our Separate Ways"! The team starts pulling apart at the seams.',      time:'Jan 20, 2026',   read:true },
+  { id:'notif-ch3',    msg:'🐰 Ch. 3 is live — "Chaotic Result"! Nothing went to plan. Time to deal with it.',         time:'Jan 18, 2026',   read:true },
+  { id:'notif-ch2',    msg:'🐰 Ch. 2 is live — "Compromise"! Not everyone agrees — but the mission goes on.',          time:'Jan 17, 2026',   read:true },
+  { id:'notif-ch1',    msg:'🐰 Ch. 1 is live — "Rescue Mission"! The Lantern Pact\'s first field mission begins.',     time:'Jan 17, 2026',   read:true },
   { id:'notif-welcome',msg:'📢 Welcome to NovéLore! Tap any novel card to start reading.',                    time:'Jan 17, 2026',   read:true  },
 ];
 
@@ -1850,6 +2034,7 @@ function setTheme(mode) {
   if (optDark)   optDark.classList.toggle('active',   !isSystem && dark);
   if (optLight)  optLight.classList.toggle('active',  !isSystem && !dark);
   if (optSystem) optSystem.classList.toggle('active', isSystem);
+  if (typeof _syncReaderThemeBtns === 'function') _syncReaderThemeBtns();
 }
 function applyToggle(checked) { setTheme(checked ? 'dark' : 'light'); }
 function loadTheme() {
@@ -1877,17 +2062,17 @@ const READ_WIDTHS  = { narrow:'480px', normal:'640px', wide:'820px' };
 function applyFontSize(val, btn) {
   LS.set('nl_fontsize', val);
   document.documentElement.style.setProperty('--reading-fs', FONT_SIZES[val] || FONT_SIZES.medium);
-  document.querySelectorAll('#font-size-ctrl .seg-btn').forEach(b=>b.classList.toggle('active', b===btn));
+  document.querySelectorAll('.font-size-ctrl .seg-btn').forEach(b=>b.classList.toggle('active', b.dataset.val===val));
 }
 function applyLineSpace(val, btn) {
   LS.set('nl_linespace', val);
   document.documentElement.style.setProperty('--reading-lh', LINE_SPACES[val] || LINE_SPACES.normal);
-  document.querySelectorAll('#line-space-ctrl .seg-btn').forEach(b=>b.classList.toggle('active', b===btn));
+  document.querySelectorAll('.line-space-ctrl .seg-btn').forEach(b=>b.classList.toggle('active', b.dataset.val===val));
 }
 function applyReadWidth(val, btn) {
   LS.set('nl_readwidth', val);
   document.documentElement.style.setProperty('--reading-w', READ_WIDTHS[val] || READ_WIDTHS.normal);
-  document.querySelectorAll('#read-width-ctrl .seg-btn').forEach(b=>b.classList.toggle('active', b===btn));
+  document.querySelectorAll('.read-width-ctrl .seg-btn').forEach(b=>b.classList.toggle('active', b.dataset.val===val));
 }
 function applyReduceMotion(on) {
   LS.set('nl_reducemotion', on);
@@ -1898,6 +2083,28 @@ function applyHighContrast(on) {
   document.documentElement.classList.toggle('high-contrast', on);
 }
 function savePref(key, val) { LS.set(key, val); }
+
+function openReaderPrefs() {
+  // Sync reader panel toggles from saved state
+  const am = LS.get('nl_automark80');    const rpAm = document.getElementById('rp-automark');    if(rpAm) rpAm.checked = am !== null ? am : true;
+  const ac = LS.get('nl_autocontinue'); const rpAc = document.getElementById('rp-autocontinue'); if(rpAc) rpAc.checked = ac !== null ? ac : true;
+  // Sync theme buttons
+  _syncReaderThemeBtns();
+  document.getElementById('reader-pref-overlay')?.classList.add('on');
+  document.getElementById('reader-pref-sheet')?.classList.add('open');
+}
+function closeReaderPrefs() {
+  document.getElementById('reader-pref-overlay')?.classList.remove('on');
+  document.getElementById('reader-pref-sheet')?.classList.remove('open');
+}
+function _syncReaderThemeBtns() {
+  const src = document.documentElement.getAttribute('data-theme-source') || 'system';
+  const theme = document.documentElement.getAttribute('data-theme') || 'light';
+  const isSystem = src === 'system';
+  document.getElementById('rp-opt-dark')  ?.classList.toggle('active', !isSystem && theme==='dark');
+  document.getElementById('rp-opt-light') ?.classList.toggle('active', !isSystem && theme==='light');
+  document.getElementById('rp-opt-system')?.classList.toggle('active', isSystem);
+}
 
 function clearHistory() {
   ['nl_scroll','nl_tab'].forEach(k=>localStorage.removeItem(k));
@@ -2543,11 +2750,6 @@ function renderAll() {
       empty: emptySection('🥱', "No hot picks at the moment. The creator hasn't cooked yet — check back soon! 🍳"),
     },
     {
-      id:'car-dojo', arr:dojoDuelsData,
-      badgeFn:(n,i)=>i===0?'⚔️ Duels':'',
-      empty: emptySection('🥋', "The dojo is empty... no battles have been posted yet. Maybe the sensei is napping! 😴"),
-    },
-    {
       id:'car-frenzyyy', arr:frenzyyyData,
       badgeFn:(n,i)=>i===0?'🐰 Exclusive':'',
       empty: emptySection('✍️', "Frenzyyy hasn't dropped anything here yet. The pen is loaded — just waiting for inspiration! 💭"),
@@ -2609,6 +2811,44 @@ function renderAll() {
       document.getElementById(skNewId)?.remove();
       newList.innerHTML = emptySection('🆕', "Nothing new just yet — the creator's workshop is still running. Fresh titles incoming soon! 🏗️");
     }, 700 + Math.random() * 400);
+  }
+
+  // Book Updates
+  const updBookList = document.getElementById('upd-book-list');
+  if (updBookList) {
+    if (bookUpdatesData.length) {
+      updBookList.innerHTML = bookUpdatesData.map((u, i) => {
+        const clickAttr = u.novelId ? ` onclick="openNovel('${esc(u.novelId)}')" style="cursor:pointer"` : '';
+        return `<div class="upd"${clickAttr}>
+          <div class="upd-ico">${esc(u.emoji||'📚')}</div>
+          <div class="upd-bd">
+            <div class="upd-t">${esc(u.novelTitle)}${i===0?'<span class="np-pill">NEW</span>':''}</div>
+            <div class="upd-s">${esc(u.bookTitle||'')}${u.description?' — '+esc(u.description):''}</div>
+          </div>
+          <div class="upd-tm">${esc(u.time||'')}</div></div>`;
+      }).join('');
+    } else {
+      updBookList.innerHTML = emptySection('📚', "No book updates yet — stay tuned for new titles and releases! 🖊️");
+    }
+  }
+
+  // Volume Updates
+  const updVolList = document.getElementById('upd-vol-list');
+  if (updVolList) {
+    if (volumeUpdatesData.length) {
+      updVolList.innerHTML = volumeUpdatesData.map((u, i) => {
+        const clickAttr = u.novelId ? ` onclick="openNovel('${esc(u.novelId)}')" style="cursor:pointer"` : '';
+        return `<div class="upd"${clickAttr}>
+          <div class="upd-ico">${esc(u.emoji||'🗂️')}</div>
+          <div class="upd-bd">
+            <div class="upd-t">${esc(u.novelTitle)}${i===0?'<span class="np-pill">NEW</span>':''}</div>
+            <div class="upd-s">Vol. ${safeNum(u.volumeNumber,0)|0} — ${esc(u.volumeTitle||'')}${u.description?' · '+esc(u.description):''}</div>
+          </div>
+          <div class="upd-tm">${esc(u.time||'')}</div></div>`;
+      }).join('');
+    } else {
+      updVolList.innerHTML = emptySection('🗂️', "No volume updates yet — new arcs are on the way! 📖");
+    }
   }
 
   // Updates
@@ -4924,12 +5164,737 @@ Sean was quiet for a beat.
 
 "Ask me after the mission," he said.
 
-He rolled his shoulders, adjusted his shades, and started walking toward the gate.
-
-Takeshi watched him for a second, then followed.
-
-The morning stayed exactly as it was — bright, unhurried, entirely unaware that the three of them were already moving into something that wouldn't stay this quiet for long.
+He rolled his shoulders, for long.
          `},
+         {
+         number: 8,
+         title: 'Daylight',
+         date: 'Mar 30, 2026',
+          content: `The city moved the way cities do in the middle of the afternoon — without asking permission, without slowing down.
+
+
+Traffic pushed through the wide roads in steady waves. Shop fronts spilled music onto the sidewalks. People crossed at lights, ducked into convenience stores, sat outside cafés with their drinks sweating in the heat. A normal day in a modern city doing what normal days do.
+
+
+In the park at the center of it all, three people sat on a bench beneath a row of trees.
+
+
+One of them was horizontal.
+
+
+Sean had his legs stretched across the full length of the bench, ankles crossed, one arm folded under his head and the other resting across his stomach. His shades were on. His soda can balanced on his chest, rising and falling with his breathing. His rabbit ears drooped flat against the top of his head.
+
+
+He looked like he was on vacation.
+
+
+Olivia sat on a separate bench across from him, one leg crossed over the other, soda in hand, watching the foot traffic with her usual measured calm. Her wooden sword — requested from Takeshi before departure, now leaning against the bench beside her — drew the occasional glance from passersby who then thought better of asking.
+
+
+Takeshi stood a few feet away from either of them, arms folded, eyes moving steadily across the park. His fox ears rotated in small, frequent adjustments, catching sounds and filing them. He hadn't touched his soda since Olivia handed it to him forty minutes ago. It was warm by now.
+
+
+"Update," he said, not looking at them.
+
+
+"Nothing from my end," Olivia said.
+
+
+"Bench is comfortable," Sean said.
+
+
+Takeshi exhaled through his nose.
+
+
+The VIP — a woman of political significance whose full briefing they'd received that morning — was currently two blocks away inside a mid-rise office building, attending a private client meeting. Expected duration: ninety minutes. Sixty had already passed.
+
+
+Takeshi had placed wards across the perimeter before they settled in. Seven of them — thin, invisible markers anchored to doorframes, lampposts, and the underside of a drainage cover near the building's service entrance. They didn't do anything on their own. They just told him when something entered the area that shouldn't be there.
+
+
+So far, nothing had tripped them.
+
+
+He kept watching anyway.
+
+
+Sean's soda can shifted as he tilted it up, found it empty, and set it back down on his chest with a soft metallic sound.
+
+
+He stared at the sky above the tree canopy. A cloud drifted through it going nowhere fast.
+
+
+"Thirty more minutes," he announced.
+
+
+"Of what?" Olivia asked.
+
+
+"Of this." He gestured vaguely at the park. The city. The bench. Existence in general.
+
+
+"We're on a mission," Takeshi said.
+
+
+"I know. I've been on this mission for an hour. It was interesting for the first four minutes."
+
+
+Olivia tilted her soda, checking how much was left. "What happened in the first four minutes?"
+
+
+"Found a good position on the bench."
+
+
+She considered this. "That's fair, actually. This bench is good."
+
+
+Sean pointed at her without looking over. "See. She gets it."
+
+
+"Don't use me as a reference point," Olivia said.
+
+
+"You just agreed with me."
+
+
+"I agreed about the bench. That's not a philosophical alliance."
+
+
+Sean was quiet for a moment. A pigeon landed near the base of the bench, looked at him, and left.
+
+
+"Do you want to go find food?" he said.
+
+
+"We're on a mission," Takeshi repeated, with the patience of someone who had already used up most of it.
+
+
+"There's a place that does grilled skewers about two minutes from here. I saw it on the way in. The smoke smelled good."
+
+
+"Sean."
+
+
+"Olivia." Sean turned his head toward her. "Skewers."
+
+
+Olivia looked toward the street in the direction he was pointing, visibly calculating whether it was logistically feasible.
+
+
+Takeshi looked at her.
+
+
+"Don't," he said.
+
+
+She looked back at her soda.
+
+
+"…They do sound good," she admitted.
+
+
+"Olivia."
+
+
+"I said they sound good. I didn't say we should go." She paused. "We probably shouldn't go."
+
+
+"Probably," Sean echoed, like the word was doing a lot of work on its own.
+
+
+"Nobody is leaving," Takeshi said firmly, turning back to scan the building. "Thirty more minutes and we're done. You two can get your skewers after. Just—"
+
+
+He stopped.
+
+
+His ears snapped upright.
+
+
+"Takeshi?" Olivia said, already reading him.
+
+
+"Ward three," he said, voice dropping. "It's gone."
+
+
+Not tripped. Not triggered.
+
+
+Gone. Destroyed.
+
+
+"Which entrance?" Olivia was on her feet before he finished the sentence, wooden sword in hand.
+
+
+"Service side. East." Takeshi pulled a talisman from his waist, running a read on the remaining wards. "Ward six is flickering. Something's moving fast along the perimeter — deliberately avoiding the main entrance."
+
+
+"They've scouted it," Olivia said. "They knew the layout before they came in." She turned to him fully. "I'll take the lobby. If they're moving along the east side this fast, they either have someone inside already or they're about to create a distraction at the front to cover the east entry. You take the stairwell between floors two and three — natural choke point for a snatch-and-go." She glanced at Sean. "Sean—"
+
+
+She turned.
+
+
+The bench was empty.
+
+
+The soda can sat perfectly upright on the ground where he'd been lying, like he'd taken the time to set it down neatly before disappearing entirely.
+
+
+Takeshi stared at it.
+
+
+"He didn't wait," he said.
+
+
+"No." Olivia was already moving. "Go. Trust the strategy."
+
+
+Takeshi pulled another talisman and ran.
+
+
+Olivia gripped her wooden sword and moved toward the building — measured, reading the street, watching the windows.
+
+
+*If I were running this,* she thought, *I'd have sent the distraction already.*
+
+
+Right on cue —
+
+
+A deep, pressurized boom rolled through the city block. Not just sound — the kind you feel come up through the pavement, through the soles of your feet. Black smoke curled from the east face of the building, second floor up. Glass blew outward and rained across the road. Car alarms triggered down the block in a chain reaction. The crowd froze for half a second, then moved — fast, away, the way crowds do when something stops being background noise.
+
+
+Olivia ran.
+
+
+---
+
+
+Sean had found the stairwell on instinct and cleared it in seconds.
+
+
+The smoke hit him on the second floor — thick, fast, spreading from the east corridor. Fire suppressors kicked on overhead, throwing water across the floor in wide, sweeping arcs. Voices rose in the stairwell below him, tangled and urgent.
+
+
+He pushed through the smoke and came out into the hallway.
+
+
+There she was.
+
+
+The VIP — mid-forties, dark suit, the kind of face built for composed rooms — was being wrestled forward by two men in tactical masks. One had her arm wrenched behind her back. The other was looping a coarse rope around her wrists, a sack ready in his other hand.
+
+
+They heard Sean step into the hall.
+
+
+Both looked up.
+
+
+Sean stood in the middle of the corridor, hands in his pockets, water dripping from the suppressors onto his shoulders, shades slightly fogged from the smoke.
+
+
+He looked at them. They looked at him.
+
+
+"Rough day?" Sean said.
+
+
+Neither of them answered.
+
+
+"I'm going to take that as a yes." He tilted his head slightly. "You can let her go now, by the way. Save us all some time."
+
+
+The man with the rope shoved the woman toward his partner and bolted.
+
+
+"Yeah, I figured," Sean said, already moving.
+
+
+The second man yanked the woman forward and ran after his partner, dragging her stumbling behind him. She fought against the grip — short, sharp resistance, refusing to just be pulled.
+
+
+Sean followed at a run, closing the gap fast down the corridor.
+
+
+"You know," he called after them, "for guys who planned this whole thing out — the ward-sweeping, the timed explosion, all of it — the exit strategy is pretty embarrassing."
+
+
+They hit the service door at the end of the hall and crashed through it.
+
+
+Sean came out right behind them.
+
+
+---
+
+
+The minivan was idling at the far end of the alley, side door already open. The first man reached it and dove in. The second shoved the woman through the door after him, rope half-tied, and jumped in. The van lurched forward before the door was fully shut.
+
+
+Sean came out of the service exit and watched it pull away down the side road.
+
+
+He started running.
+
+
+"Seriously," he muttered, "a van. They brought a van."
+
+
+He burned a thread of moon energy into his legs — felt the afternoon sun sitting on it like pressure, like trying to run uphill — and pushed through it anyway, closing the distance as the van swung wide around a corner.
+
+
+He grabbed the rear handle and held on.
+
+
+The van surged. His boots dragged along the road, sparking.
+
+
+Someone inside noticed. The side door slid open and a masked man leaned out, arm cocked back.
+
+
+Sean looked up at him from the back of the moving van.
+
+
+"Hi," he said.
+
+
+The man swung.
+
+
+Sean ducked, released the handle, hit the road in a roll, and came up running.
+
+
+"Okay!" he shouted after it. "Rude!"
+
+
+He pushed harder, closing the gap again — and then an idea landed.
+
+
+*Blood Moon.*
+
+
+If he could get it off cleanly — just once, just enough to flip the van or blast it into the wall — this would be done in two seconds. He knew it was there. He could feel it the way you feel pressure behind a door you haven't figured out how to open yet. He'd tried it before. It had worked. Sort of. In a forest. On some trees that definitely deserved it.
+
+
+This was basically the same thing.
+
+
+He raised his right hand while running, fingers spread, the crescent glow in his eyes flickering unevenly.
+
+
+Crimson light began churning in his palm — raw and restless, nothing like the clean blue of Azure Moon. This was angrier. More unpredictable. The kind of thing that wanted out more than he knew how to let it.
+
+
+"Calling the Second—" he started.
+
+
+The light surged.
+
+
+"—Blood Moon—"
+
+
+It scattered.
+
+
+Broke apart like smoke in wind, dissolving into nothing before it became anything real. Just his empty hand and the afternoon sun still pressing down on his shoulders like it was making a point.
+
+
+Sean clicked his tongue.
+
+
+*Again.*
+
+
+"Calling the Second," he said again, lower this time, more focused, one eye on the van and one eye on whatever was happening in his palm. "Blood Moon— Repul—"
+
+
+The pressure built in his eyes, hot and sharp, climbing fast — and then the shape of it collapsed again, leaking out through his fingers before he could lock it into anything.
+
+
+"—sion," he finished, to absolutely nothing.
+
+
+He stared at his hand while running.
+
+
+"…Come on," he muttered.
+
+
+The van cut left down a narrow street — too narrow, badly misjudged — and clipped a stack of crates outside a loading bay. The front end lurched, overcorrected hard, and the van went sideways into a parked delivery truck with a grinding, heavy crash that echoed off the alley walls.
+
+
+Sean rounded the corner, chest heaving slightly.
+
+
+*Well,* he thought. *That works too.*
+
+
+The side door wrenched open and both men scrambled out, one hauling the woman behind him by the rope. She hit the ground on her knees, caught herself, and immediately started working her wrists against the rope. It held.
+
+
+Sean came around the corner measuring what he had left — the failed attempts had burned through more than a clean technique would have. He could feel it, the reserve sitting lower than he liked. He let the second moon go and dropped back to physical.
+
+
+*Stop wasting it on something you can't finish,* he told himself.
+
+
+The men spotted him and split — one dragging the woman deeper into the alley, the other turning to intercept.
+
+
+The one turning came in fast and low, going straight for Sean's center.
+
+
+Sean sidestepped, let the momentum carry the man past him, and put him into the alley wall with one short, clean strike. No power. Just hands.
+
+
+The man went down and stayed there.
+
+
+"You really ran at me," Sean said, looking down at him. "Bold choice."
+
+
+He turned.
+
+
+The second man was twenty meters deep in the alley, the woman stumbling hard behind him on the uneven ground. Sean went after them, pushing what was left in his legs. His vision pulsed once at the edges — the crescent glow thin and muted, barely lit.
+
+
+He was ten meters back when his hand rose again.
+
+
+Not a decision. More like a reflex — the power reaching for the second moon one more time because some part of him still thought he could catch it if he was just fast enough about it.
+
+
+"Calling the Second," he said under his breath, teeth together, crimson light sputtering back into his palm. "Blood Moon… Repulsion—"
+
+
+This time it held.
+
+
+For a full second it actually held — the pressure surging up through his arm, the crimson steadying into something real, and for one genuine moment he thought: *I've got it—*
+
+
+It slipped.
+
+
+Not a fizzle this time.
+
+
+The other kind.
+
+
+The repulsion released — not forward, not aimed, not remotely close to what he'd intended — just *out*, wild and directionless, a burst that cracked the alley wall to his left and sent a section of loose brick scattering across the ground like it had been hit by something considerably larger than one person.
+
+
+Sean stumbled sideways from the recoil, catching himself against the opposite wall.
+
+
+Dust settled.
+
+
+He stood there for a second, one hand braced against the brick, staring at the dent he'd just put in a wall that was supposed to be a van-flipping technique sixty seconds ago.
+
+
+"...Hm," he said.
+
+
+Not to anyone. Just to himself and the alley.
+
+
+Ahead of him, the man with the woman had stopped and was staring back at the destruction with the expression of someone rapidly reassessing several life decisions.
+
+
+Sean straightened up and pointed at him.
+
+
+"That," he said, completely calmly, "was on purpose."
+
+
+The man turned and ran faster.
+
+
+Sean exhaled and went after him, the second moon already folded back down somewhere beneath the surface where he couldn't quite get his hands on it.
+
+
+*One day,* he thought. *One day I'll actually work out how that's supposed to go.*
+
+
+He pushed his legs harder.
+
+
+A sharp whistle cut through the alley from above.
+
+
+The man with the woman spun.
+
+
+Olivia dropped from the fire escape.
+
+
+She landed clean — both feet, no stumble — wooden sword already in motion, and swept it hard across the back of the man's knees. His legs buckled. She followed through with a firm strike across his shoulders that drove him flat into the ground, and he stayed there, face-down, finished.
+
+
+She straightened up and looked at the woman.
+
+
+"Are you hurt?"
+
+
+The woman stared at her, chest heaving, wrists still bound.
+
+
+"…No," she managed.
+
+
+Olivia nodded and crouched to work the rope loose.
+
+
+Sean stopped a few meters back. He stood there, breathing, and looked at the man on the ground, then at Olivia, then — briefly — at the chunk of wall he'd taken out halfway down the alley.
+
+
+"Where were you ten minutes ago?" he said.
+
+
+"Lobby." She didn't look up from the rope. "There was a third one waiting at the front entrance. He's not a problem anymore."
+
+
+"And the sword worked?"
+
+
+"It always works." She stood, rope in hand, and looked at him properly — eyes moving past him to the cracked wall, the scattered brick, the general shape of something that had gone off in the wrong direction, then back to his face.
+
+
+"Was that you?" she asked.
+
+
+Sean looked at the wall. Then back at her.
+
+
+"The structural integrity in this city is genuinely concerning," he said.
+
+
+Olivia held his gaze for a moment with her usual expression — calm, reading, giving nothing away.
+
+
+She let it go.
+
+
+She turned to the woman. "We're with the Kaihon Light Pact. You're safe. Can you walk?"
+
+
+The woman straightened, composing herself with a visible, practiced effort. "Yes."
+
+
+"Good. We're moving in a moment."
+
+
+"Olivia."
+
+
+She looked at Sean.
+
+
+He had his hands back in his pockets, posture easy, like the last ten minutes hadn't happened. But he wasn't quite meeting her eyes.
+
+
+"Good timing," he said.
+
+
+It came out flat. Casual. The kind of thing he might say about anything.
+
+
+But she heard it.
+
+
+"You're welcome," she said simply.
+
+
+---
+
+
+Takeshi appeared at the far end of the alley a minute later, slightly out of breath, a talisman still warm in his hand. He took in the scene — two men down, the van wrecked and steaming at the alley mouth, the woman standing, Sean upright.
+
+
+Then his eyes found the destroyed section of wall.
+
+
+He looked at it for a moment.
+
+
+Then at Sean.
+
+
+"Daytime," Sean said, before Takeshi could open his mouth.
+
+
+"That's not what—"
+
+
+"Daytime," Sean said again.
+
+
+Takeshi closed his mouth. He looked at the wall once more — the caved-in brick, the scatter radius, the particular shape of something that had released without any real direction — and made a quiet, private decision not to finish that sentence.
+
+
+"Anyone hurt?" he called toward Olivia instead.
+
+
+"No," she said.
+
+
+He walked in, deactivating the talisman, and fell into step beside the woman. "We'll get you out through the west side. There's a secure route — I'll walk you through it."
+
+
+She nodded once, firm. Whatever fear had been on her face in the alley was already folding itself back behind something practiced and controlled.
+
+
+Takeshi glanced at Sean as he passed, dropping his voice.
+
+
+"You tried the second moon."
+
+
+It wasn't a question.
+
+
+Sean said nothing for a beat.
+
+
+"It almost worked," he said.
+
+
+"The wall—"
+
+
+"Almost," Sean repeated, with complete conviction.
+
+
+Takeshi looked at him for a long moment.
+
+
+Then he sighed quietly and kept walking.
+
+
+Olivia fell into step beside Sean as the group moved toward the alley entrance. The city noise came back around them gradually — traffic, people, the ordinary sound of an afternoon that had no idea what had just happened behind the mid-rise.
+
+
+After a moment, quiet enough that it wasn't for anyone else:
+
+
+"The second moon," she said. "You called it three times."
+
+
+"I don't know what you're talking about."
+
+
+"I heard you from the fire escape. Twice it dispersed mid-callout. The third one took out a section of wall."
+
+
+"Wind," Sean said.
+
+
+"Sean."
+
+
+"Strong wind. Localized."
+
+
+She looked at him sideways and said nothing. Just waited.
+
+
+Sean rolled his shoulders.
+
+
+"It keeps dispersing," he said, after a moment. Quiet. Matter-of-fact, like noting a technical problem he wasn't particularly bothered by — except that he was, slightly, in a way he wasn't going to name out loud. "I can feel exactly where it is. I can call it. I just can't get a clean hold on it before it either falls apart mid-call or—" he tilted his head toward the ruined wall, "—does that."
+
+
+"Has it ever actually worked?" Olivia asked.
+
+
+A pause.
+
+
+"Once," he said. "Sort of."
+
+
+"What does sort of mean?"
+
+
+"It means it went off." He glanced at her. "Just not in the right direction. Or the right size."
+
+
+"How wrong a size?"
+
+
+"There were trees involved."
+
+
+"Were the trees okay?"
+
+
+"The trees were not okay," he said.
+
+
+Olivia looked ahead, pressing her lips together in a way that was clearly not a smile and also clearly was.
+
+
+"Next time you're going to call it," she said, "say something first."
+
+
+"I'll figure it out on my own."
+
+
+"I know you will." A beat. "Say something first anyway."
+
+
+He looked at her sideways.
+
+
+"Don't make it weird," he said.
+
+
+"I'm not making anything weird."
+
+
+"You're being reasonable about something that doesn't need to be reasonable. It's weird."
+
+
+She said nothing.
+
+
+But she filed it away — the wall, the three attempts, the callouts that went nowhere, the one that went wrong in a forest somewhere — and kept walking.
+
+
+Sean reached up and adjusted his shades. The afternoon sat flat and bright across the street ahead, the kind of light that didn't ask whether you were ready for it.
+
+
+"I hate daytime missions," he said.
+
+
+"Noted," Olivia said.
+
+
+"Write it down."
+
+
+"I'll remember it."
+
+
+"Write it down anyway."
+
+
+She didn't answer.
+
+
+But somewhere behind the calm exterior, she almost smiled again.
+
+
+Almost.`
+         },
         ]
       }
     ]
@@ -5457,7 +6422,7 @@ const Loader = (() => {
     });
   }
 
-  // ── Step 8: dismiss loader
+  // ── Step 8: done — dismiss loading screen
   await Loader.dismiss();
 
 })();
