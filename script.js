@@ -18,6 +18,21 @@ const heroSlides = [
     novelId:     'lantern',
     coverImg: 'https://i.imgur.com/iQMtLH9.png',
   },
+  {
+    tag:         '🔥 New Chapter',
+    title:       'The Lantern Pact: Prologue',
+    description: 'The Lantern Pact: Prologue has dropped a new chapter. Go check it out and read the latest chapter! Stay tuned for more updates!',
+    bg:          'linear-gradient(135deg,#060D2C 0%,#0F2A5A 55%,#1A6BC4 100%)',
+    readHref:    '#',
+    coverImg: 'https://i.imgur.com/iQMtLH9.png',
+
+  },
+  {
+    tag:         '🥕 Working in Progress',
+    title:       'Bunny is working!',
+    description: 'Thank you for visiting Novélore! I am trying my very best to build this website to its fullest. Build with love and carrot by Frenzyyy.',
+    bg:          'linear-gradient(135deg,#0D0620 0%,#1E0A4A 55%,#3A1A8C 100%)',
+  },
 ];
 
 // Novel cards — { title, novelId, emoji, bg, rating, genre, status, coverImg? }
@@ -256,7 +271,6 @@ function buildSlides() {
     document.getElementById('hero-slider').innerHTML = `
       <div class="hero-slide hero-empty" style="background:linear-gradient(135deg,#2C1206 0%,#3B1A08 60%,#4A2210 100%)">
         <div class="slide-pat"></div>
-        <div class="slide-glow"></div>
         <div class="slide-body">
           <div class="slide-tag">👀 Coming Soon</div>
           <h1>No Featured Stories Yet</h1>
@@ -287,16 +301,16 @@ function buildSlides() {
     }
     return `
     <div class="hero-slide" style="background:${safeCss(s.bg)}">
-      <div class="slide-pat"></div><div class="slide-glow"></div>
-      ${slideCover}
+      <div class="slide-pat"></div>
+      ${(s.coverImg || s.novelId) ? slideCover : ''}
       <div class="slide-body">
-        <div class="slide-tag">${esc(s.tag)}</div>
-        <h1>${esc(s.title)}</h1>
-        <p>${esc(s.description)}</p>
-        <div class="slide-acts">
+        ${s.tag ? `<div class="slide-tag">${esc(s.tag)}</div>` : ''}
+        ${s.title ? `<h1>${esc(s.title)}</h1>` : ''}
+        ${s.description ? `<p>${esc(s.description)}</p>` : ''}
+        ${(s.novelId || s.readHref) ? `<div class="slide-acts">
           ${s.novelId ? `<button class="btn-pri" onclick="openNovel('${s.novelId}')">▶ Read Now</button>` : `<a class="btn-pri" href="${safeUrl(s.readHref)}" rel="noopener noreferrer">▶ Read Now</a>`}
           ${s.novelId ? `<button class="btn-out slide-bm-btn" id="slide-bm-${s.novelId}" onclick="toggleSlideBookmark('${s.novelId}',this)">${bookmarks.some(b=>b.novelId===s.novelId)?'🔖 Saved':'🔖 Bookmark'}</button>` : ''}
-        </div>
+        </div>` : ''}
       </div>
     </div>`;
   }).join('');
