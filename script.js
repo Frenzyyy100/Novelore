@@ -4542,5 +4542,4 @@ const Loader = (() => {
   // ── Step 8: done — dismiss loading screen
   Loader.setP(100, 'Welcome!');
   await Loader.dismiss();
-
 })();
