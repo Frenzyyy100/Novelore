@@ -8,173 +8,244 @@
 
 ## 1. Acceptance of Terms
 
-By accessing or using NovéLore ("the Platform"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree, please discontinue use immediately.
+By visiting or using NovéLore ("the Platform"), you agree to these Terms of Service ("Terms"). If you don't agree with any part of this, please stop using the Platform.
 
 ---
 
 ## 2. About the Platform
 
-NovéLore is a personal fiction reading platform created and maintained by **Frenzyyy**. Works published on this platform are authored by Frenzyyy and/or a circle of invited collaborating Creators. The Platform is provided free of charge and hosted as a static web application.
+NovéLore is a personal fiction reading platform built and maintained by **Frenzyyy**. The works published here are written by Frenzyyy and a group of invited collaborating Creators. The Platform is free to use and runs as a static web app hosted on GitHub Pages.
 
 ---
 
-## 3. Copyright
+## 3. Age Requirement
 
-All original works published on NovéLore — including but not limited to stories, characters, dialogue, lore, and narrative content — are protected under copyright law. These works are the **exclusive intellectual property of their respective Creators** the moment they are authored, regardless of formal registration.
+NovéLore is intended for readers aged **13 and above**. Some works on the Platform contain mature themes such as violence, dark fantasy, or morally heavy narratives — these are recommended for readers aged **17 and above**. By using the Platform, you confirm that you meet the appropriate age requirement for the content you are accessing.
 
-> © NovéLore & respective Creators. All rights reserved.
-
-Copyright applies to each Creator individually for their own works. Frenzyyy holds copyright over platform-original content and works authored under the Frenzyyy pen name. Collaborating Creators hold copyright over their own respective works.
-
-Unauthorized reproduction, distribution, adaptation, or use of any content — in any form, for any purpose — without prior written consent from the copyright holder is strictly prohibited and may be subject to legal action under applicable copyright law.
+Parents and guardians are encouraged to review the content their children are reading.
 
 ---
 
-## 4. Intellectual Property
+## 4. Copyright
 
-All stories, characters, world-building, plot lines, and written content published on NovéLore are the **exclusive intellectual property of their respective Creators** — this includes Frenzyyy and all collaborating authors featured on the Platform (collectively, "Creators"). This includes but is not limited to:
+All original works on NovéLore — stories, characters, dialogue, lore, narrative content, and associated assets — are protected by copyright and belong to their respective Creators from the moment they are written, with or without formal registration.
 
-- Novel titles, chapter content, and summaries
-- Character names, personalities, and backstories
-- World lore, fictional systems, and narrative arcs
-- Cover art, illustrations, and visual assets associated with any work
+> © 2026 NovéLore & respective Creators. All Rights Reserved.
 
-Each work belongs solely to the Creator who authored it. No work may be used, reproduced, or claimed by any other party — including other Creators on this platform — without explicit written permission from the original author.
+Frenzyyy holds copyright over the platform itself and any works written under the Frenzyyy pen name. Each collaborating Creator holds copyright over their own individual works. No one else's work on this platform is yours to use, even if you are also a Creator here.
 
-You are **not permitted** to:
-
-- Copy, reproduce, or redistribute any story content in whole or in part
-- Translate, adapt, or create derivative works based on any content on this platform
-- Claim authorship or ownership of any content published here
-- Use any content for commercial purposes without explicit written permission from the respective Creator
-- Use any content to train, fine-tune, or develop AI/ML models or automated systems
+Reproducing, distributing, or using any content without written permission from the copyright holder is not allowed and may lead to legal action.
 
 ---
 
-## 5. Source Code & Platform Design
+## 5. Intellectual Property
 
-NovéLore is hosted as a static web application, which means its source code may be technically visible through browser developer tools. While we acknowledge this cannot be fully prevented, we ask that you respect the following:
+Everything you read on NovéLore belongs to whoever wrote it. This covers novel titles, chapter content, character names and personalities, world lore, story systems, cover art, and any other creative assets tied to a work.
 
-- **Do not intentionally inspect, copy, or study the source code** of this Platform without permission from Frenzyyy
-- Do not replicate, redistribute, or repurpose the Platform's design, structure, or codebase — in whole or in part — for your own projects
-- Do not use the source code as a base or reference to build competing or derivative platforms
+You are not allowed to:
 
-The Platform's code represents significant personal effort and creative work. Accessing it out of curiosity is understandable, but using it without permission is considered a violation of the spirit of these Terms and is strongly discouraged.
-
----
-
-## 6. Permitted Use
-
-You are welcome to:
-
-- Read and enjoy all published content on NovéLore for **personal, non-commercial** purposes
-- Share a **link** to the Platform or to a specific novel/chapter
-- Quote brief excerpts (no more than two sentences) for the purpose of personal recommendation or review, provided clear credit is given to the respective **Creator / NovéLore**
-- Discuss, analyze, or write commentary about any work on the Platform, provided the original Creator is properly credited
+- Copy, reproduce, or share any story content without permission
+- Translate or adapt any work into something else
+- Claim ownership or authorship of anything published here
+- Use any content for commercial gain without written consent from the Creator
+- Feed any content into AI or machine learning systems for training purposes
 
 ---
 
-## 7. Cross-References, Collaborations & Credits
+## 6. Source Code and Platform Design
 
-NovéLore supports a creative community where Creators may reference, mention, or draw inspiration from each other's works. The following rules apply:
+Because NovéLore runs as a static web app, the source code is technically visible through browser developer tools. We can't fully prevent that, but we do ask you to respect the work behind it.
 
-**Allowed with mutual agreement:**
-- Referencing another Creator's characters, events, or lore within your own work
-- Writing crossover content or shared-universe stories
-- Crediting another Creator's work in your author notes or acknowledgments
-- Fan works or tributes created with the blessing of the original Creator
+Please do not:
 
-**Not allowed without explicit permission:**
-- Referencing or including another Creator's characters or story elements without their knowledge and consent
-- Implying affiliation, collaboration, or canonical connection to another Creator's work without agreement
-- Using another Creator's work to promote, market, or gain traction for your own without credit
+- Intentionally inspect or copy the source code without permission from Frenzyyy
+- Use the code or design as a base for your own projects
+- Redistribute or repurpose any part of the codebase
 
-When referencing another Creator's work, **both parties must agree** — ideally in writing or through a documented mutual acknowledgment. NovéLore and Frenzyyy are not responsible for mediating disputes between Creators regarding unauthorized references.
+A lot of time and effort went into building this platform. Even if the code is technically visible, using it without asking is something we consider a breach of trust.
 
 ---
 
-## 8. Fan Works & Derivative Content by Readers
+## 7. Permitted Use
 
-Readers who wish to create fan art, fan fiction, or other derivative works inspired by stories on NovéLore must:
+You're welcome to:
 
-- Clearly label the work as **unofficial fan content**
+- Read anything on NovéLore for personal, non-commercial enjoyment
+- Share links to the Platform, a specific novel, or a chapter
+- Quote up to two sentences from any work for a review or recommendation, as long as you credit the original Creator and NovéLore
+- Write commentary, analysis, or discussion about any work, provided the Creator is credited
+
+---
+
+## 8. Cross-References, Collaborations and Credits
+
+NovéLore is home to a small creative community, and Creators may sometimes want to reference or build on each other's work. That's totally fine as long as both sides agree.
+
+**Okay with mutual agreement:**
+- Referencing another Creator's characters, events, or lore in your own story
+- Writing crossovers or shared-universe content
+- Crediting another Creator in your author notes
+- Fan tributes or inspired works created with the original Creator's blessing
+
+**Not okay without permission:**
+- Using another Creator's characters or story elements without their knowledge
+- Implying a canonical connection or collaboration that wasn't agreed upon
+- Leveraging someone else's work to promote your own without giving credit
+
+Both Creators need to be on the same page before anything goes live. NovéLore and Frenzyyy won't mediate disputes between Creators over unauthorized references, so sort it out between yourselves first.
+
+---
+
+## 9. Fan Works and Derivative Content
+
+If you're a reader who wants to create fan art, fan fiction, or any other work inspired by something on NovéLore, here's what we ask:
+
+- Label it clearly as unofficial fan content
 - Credit the original Creator by name
-- Not monetize or commercially distribute the fan work without written permission from the Creator
-- Not present fan works as canon or officially endorsed by NovéLore or the Creator
+- Don't sell it or distribute it commercially without the Creator's written permission
+- Don't present it as canon or officially endorsed
 
-Fan works that violate these terms may be subject to a takedown request from the respective Creator.
-
----
-
-## 9. Screenshot & Recording Policy
-
-While we cannot technically prevent screenshots or screen recordings, doing so for the purpose of **distributing, republishing, or reproducing** content from NovéLore is a violation of these Terms and may constitute copyright infringement under applicable law.
+Fan works that break these rules may be subject to a takedown request from the Creator involved.
 
 ---
 
-## 10. No Account / No Data Collection
+## 10. Spoiler Policy
 
-NovéLore does not require user registration. The Platform does not collect personal data. Any data stored (such as reading progress, bookmarks, and settings) is saved **locally on your device** via your browser's localStorage and is never transmitted to any server.
-
----
-
-## 11. Availability & Modifications
-
-NovéLore is a personal project maintained on a best-effort basis. Frenzyyy reserves the right to:
-
-- Modify, update, or remove any content at any time without prior notice
-- Change the design, features, or structure of the Platform
-- Update these Terms at any time — continued use constitutes acceptance of revised Terms
+Please be mindful of spoilers, especially for ongoing or recently updated stories. Publicly posting major plot spoilers in a way that ruins the experience for other readers is something we strongly discourage. Creators may mark certain content as spoiler-sensitive, and readers should respect those labels.
 
 ---
 
-## 12. Disclaimer of Warranties
+## 11. Character and Lore Integrity
 
-NovéLore is provided **"as is"** without warranties of any kind. Frenzyyy makes no guarantees regarding uptime, content availability, or fitness for any particular purpose.
-
----
-
-## 13. Limitation of Liability
-
-To the fullest extent permitted by law, Frenzyyy shall not be held liable for any direct, indirect, incidental, or consequential damages arising from your use of or inability to use NovéLore.
+Do not spread false information about a story's canon. This includes fake leaks, fabricated lore, or misrepresenting a Creator's work in a way that misleads other readers or damages the Creator's reputation. If you're unsure about something, label it as fan speculation.
 
 ---
 
-## 14. Content Advisory
+## 12. Mature Content
 
-Some stories on NovéLore may contain mature themes including but not limited to violence, dark fantasy elements, or morally complex narratives. Reader discretion is advised. By using the Platform, you confirm you are of appropriate age and maturity to engage with such content.
-
----
-
-## 15. DMCA & Takedown Requests
-
-If you believe any content on NovéLore infringes your copyright or the copyright of someone you represent, please contact Frenzyyy through the official channels listed on the Platform with the following information:
-
-- A description of the copyrighted work you believe has been infringed
-- The specific content on NovéLore you are disputing
-- Your contact information
-- A statement that you have a good-faith belief that the use is not authorized by the copyright owner
-
-NovéLore will review all valid requests and respond in a reasonable timeframe.
+Stories with mature or heavy themes will be labeled by the Creator. Readers are expected to take those labels seriously. Creators are responsible for tagging their own content accurately. NovéLore is not liable for content a reader finds inappropriate if the provided warnings were ignored.
 
 ---
 
-## 16. Termination of Access
+## 13. Creator Responsibilities
 
-Frenzyyy reserves the right to restrict or block access to the Platform for any user or party found to be in violation of these Terms, including but not limited to unauthorized use of content, scraping, or misuse of any Platform feature.
+If you're a Creator on NovéLore, you agree that:
+
+- The work you publish is your own original creation and does not plagiarize anyone else
+- You have the right to publish it and are not violating any existing agreements
+- You are responsible for tagging your work with accurate content warnings
+- You will not use NovéLore to publish content that is harmful, hateful, or illegal
+
+Frenzyyy reserves the right to remove any work that violates these responsibilities.
 
 ---
 
-## 17. Governing Law
+## 14. Readers vs. Creators
 
-These Terms are governed by and construed in accordance with generally accepted principles of intellectual property and internet law. As NovéLore is a personal, non-commercial project with an international readership, disputes will be handled in good faith on a case-by-case basis.
+Readers can browse, bookmark, and enjoy everything on the Platform. Creators have additional responsibilities that come with publishing through NovéLore, as outlined in these Terms.
+
+If you're a Creator here, you're not just a user. You're part of the platform, and that comes with accountability.
 
 ---
 
-## 18. Contact
+## 15. Acceptable Use
 
-For permissions, collaboration inquiries, takedown requests, or general questions, please reach out to Frenzyyy through the official channels listed on the Platform.
+NovéLore is a reading platform. You agree not to:
+
+- Harass, impersonate, or target any Creator or reader
+- Spread malicious or illegal content using the Platform in any way
+- Use bots, scrapers, or automated tools to access or extract content
+- Attempt to disrupt or interfere with how the Platform runs
+
+---
+
+## 16. Screenshot and Recording
+
+We can't technically stop you from taking screenshots or recording your screen, but using those captures to distribute, republish, or reproduce NovéLore content is a violation of these Terms and may count as copyright infringement.
+
+---
+
+## 17. Reading Progress and Bookmarks
+
+NovéLore saves your reading progress, bookmarks, and settings directly in your browser's localStorage. This data never leaves your device and is not stored on any server.
+
+Because of this, clearing your browser data or switching devices will permanently remove that information. NovéLore is not responsible for any lost reading data.
+
+---
+
+## 18. No Warranty on Story Continuity
+
+Creators have the right to discontinue, rewrite, go on hiatus, or cancel any work at any time without obligation to readers. NovéLore does not guarantee that any story will be completed or kept available.
+
+---
+
+## 19. Third-Party Links
+
+Some works or author notes may link to external websites. NovéLore is not responsible for the content, accuracy, or safety of any third-party sites. Visiting external links is at your own discretion.
+
+---
+
+## 20. No Commercial Endorsement
+
+NovéLore does not endorse or have any affiliation with any product, service, or external content mentioned in any story or author note. Any such references are purely part of the creative work and should not be taken as a recommendation.
+
+---
+
+## 21. Availability and Modifications
+
+NovéLore is a personal project maintained on a best-effort basis. Frenzyyy can modify, update, or remove content or features at any time without prior notice. These Terms can also be updated at any time, and continuing to use the Platform means you accept the latest version.
+
+---
+
+## 22. Disclaimer of Warranties
+
+NovéLore is provided as-is. Frenzyyy makes no guarantees about uptime, availability, or anything else.
+
+---
+
+## 23. Limitation of Liability
+
+To the extent allowed by law, Frenzyyy is not liable for any damages that come from your use of NovéLore or inability to access it.
+
+---
+
+## 24. Indemnification
+
+By using NovéLore, you take responsibility for your own actions on or related to the Platform. If your actions result in any legal claims against Frenzyyy or NovéLore, you agree to handle those on your own.
+
+---
+
+## 25. DMCA and Takedown Requests
+
+If you believe something on NovéLore infringes your copyright, contact Frenzyyy through the official channels with the following:
+
+- A description of the work you believe was infringed
+- The specific content on NovéLore you're disputing
+- Your contact details
+- A statement that you genuinely believe the use is unauthorized
+
+We'll review it and get back to you within a reasonable time.
+
+---
+
+## 26. Termination of Access
+
+Frenzyyy can restrict or block access to the Platform for anyone found violating these Terms, including misuse of content, scraping, or any other harmful behavior.
+
+---
+
+## 27. Governing Law
+
+These Terms follow generally accepted principles of intellectual property and internet law. Since NovéLore is a personal, non-commercial project with readers from different countries, disputes will be handled in good faith on a case-by-case basis.
+
+---
+
+## 28. Contact
+
+For permissions, collaboration requests, takedown notices, or general questions, contact Frenzyyy through the official channels listed on the Platform.
 
 ---
 
 *NovéLore is a passion project. Please respect the work that goes into every word.*
+
+*Built with love and carrot by Frenzyyy.*
