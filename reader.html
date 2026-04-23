@@ -1,0 +1,202 @@
+<!--
+Copyright © 2026 Frenzyyy. All Rights Reserved.
+
+This source code is proprietary and confidential. Unauthorized copying, redistribution, or use of this code, in whole or in part, is strictly prohibited.
+-->
+
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-theme-source="system">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'none';"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <link rel="icon" type="image/png" href="https://i.imgur.com/VOiHDlz.png"/>
+  <link rel="apple-touch-icon" href="https://i.imgur.com/VOiHDlz.png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
+  <script>
+  (function(){
+    try {
+      var t = JSON.parse(localStorage.getItem('nl_theme'));
+      if (t === 'light' || t === 'dark') {
+        document.documentElement.setAttribute('data-theme', t);
+        document.documentElement.setAttribute('data-theme-source', 'manual');
+      } else {
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme-source', 'system');
+      }
+    } catch(e) {}
+  })();
+  </script>
+<title>Chapter — NovéLore</title>
+</head>
+<body>
+<div id="loading-screen">
+  <div class="ls-glow2"></div>
+  <div class="ls-inner">
+    <div class="ls-icon"></div>
+    <div class="ls-logo">Novél<em>ore</em></div>
+    <div class="ls-tagline">Read Without Limits</div>
+    <div class="ls-bar-wrap"><div class="ls-bar" id="ls-bar"></div></div>
+    <div class="ls-status" id="ls-status">Initializing…</div>
+    <div class="ls-dots">
+      <div class="ls-dot"></div>
+      <div class="ls-dot"></div>
+      <div class="ls-dot"></div>
+    </div>
+  </div>
+</div>
+<div id="screen-chapter" class="screen active">
+  <nav class="reader-nav">
+    <button class="back-btn" onclick="closeChapter()">← Novel</button>
+    <div class="reader-nav-info">
+      <div class="reader-nav-vol" id="reader-vol-label"></div>
+      <div class="reader-nav-ch" id="reader-ch-title"></div>
+    </div>
+    <button class="nav-ico" onclick="openReaderPrefs()" title="Reading Preferences" style="font-size:.82rem;font-weight:700;letter-spacing:-.5px;flex-shrink:0;">Aa</button>
+  </nav>
+  <div class="reading-progress-bar"><div class="reading-progress-fill" id="reading-progress-fill"></div></div>
+  <div class="chapter-scroll" id="chapter-scroll">
+    <div class="chapter-body-wrap">
+      <div class="ch-hdr-block" id="ch-hdr-block"></div>
+      <div class="ch-prose" id="ch-prose"></div>
+      <div class="ch-end-mark"><span>— End of Chapter —</span></div>
+    </div>
+  </div>
+  <div class="ch-nav-strip" id="ch-nav-strip">
+    <button class="ch-nav-btn" onclick="closeChapter()">← Novel</button>
+    <button class="ch-nav-btn" onclick="goHome()">Home</button>
+  </div>
+</div>
+
+<div class="reader-pref-overlay" id="reader-pref-overlay" onclick="closeReaderPrefs()"></div>
+<div class="reader-pref-sheet" id="reader-pref-sheet">
+  <div class="rp-handle"></div>
+  <div class="rp-hdr">
+    <span class="rp-title">Reading Preferences</span>
+    <button class="rp-close" onclick="closeReaderPrefs()">✕</button>
+  </div>
+  <div class="rp-body">
+
+    <div class="rp-section-label">Appearance</div>
+
+    <!-- Theme -->
+    <div style="padding:6px 20px 14px;border-bottom:1px solid var(--border);">
+      <div style="font-size:.87rem;font-weight:600;color:var(--text-main);margin-bottom:8px;">Theme</div>
+      <div class="rp-theme-opts">
+        <div class="rp-theme-opt" id="rp-opt-light" onclick="setTheme('light')"><div class="rt-lbl">Light</div></div>
+        <div class="rp-theme-opt" id="rp-opt-dark"  onclick="setTheme('dark')"><div class="rt-lbl">Dark</div></div>
+        <div class="rp-theme-opt" id="rp-opt-system" onclick="setTheme('system')"><div class="rt-lbl">System</div></div>
+      </div>
+    </div>
+
+    <!-- Font Size -->
+    <div class="rp-row">
+      <div class="rp-row-l">
+        <span class="rp-ico">Aa</span>
+        <div><div class="rp-lbl">Font Size</div><div class="rp-sub">Adjust reading text size</div></div>
+      </div>
+      <div class="seg-ctrl font-size-ctrl" id="reader-font-size-ctrl">
+        <button class="seg-btn" data-val="small"  onclick="applyFontSize('small',this)">S</button>
+        <button class="seg-btn active" data-val="medium" onclick="applyFontSize('medium',this)">M</button>
+        <button class="seg-btn" data-val="large"  onclick="applyFontSize('large',this)">L</button>
+      </div>
+    </div>
+
+    <!-- Line Spacing -->
+    <div class="rp-row">
+      <div class="rp-row-l">
+        <span class="rp-ico">↕</span>
+        <div><div class="rp-lbl">Line Spacing</div><div class="rp-sub">Control paragraph breath</div></div>
+      </div>
+      <div class="seg-ctrl line-space-ctrl" id="reader-line-space-ctrl">
+        <button class="seg-btn" data-val="compact"  onclick="applyLineSpace('compact',this)">Tight</button>
+        <button class="seg-btn active" data-val="normal"   onclick="applyLineSpace('normal',this)">Normal</button>
+        <button class="seg-btn" data-val="relaxed"  onclick="applyLineSpace('relaxed',this)">Airy</button>
+      </div>
+    </div>
+
+    <!-- Reading Width -->
+    <div class="rp-row">
+      <div class="rp-row-l">
+        <span class="rp-ico">↔</span>
+        <div><div class="rp-lbl">Reading Width</div><div class="rp-sub">How wide content spans</div></div>
+      </div>
+      <div class="seg-ctrl read-width-ctrl" id="reader-read-width-ctrl">
+        <button class="seg-btn" data-val="narrow"  onclick="applyReadWidth('narrow',this)">Narrow</button>
+        <button class="seg-btn active" data-val="normal"   onclick="applyReadWidth('normal',this)">Normal</button>
+        <button class="seg-btn" data-val="wide"    onclick="applyReadWidth('wide',this)">Wide</button>
+      </div>
+    </div>
+
+    <div class="rp-section-label">Reading Behaviour</div>
+
+    <!-- Auto-mark on finish -->
+    <div class="rp-row">
+      <div class="rp-row-l">
+        <span class="rp-ico">✓</span>
+        <div><div class="rp-lbl">Auto-Mark on Finish</div><div class="rp-sub">Mark chapter read at 95% scroll</div></div>
+      </div>
+      <label class="toggle-wrap">
+        <input type="checkbox" id="rp-automark" checked onchange="savePref('nl_automark80',this.checked); document.getElementById('automark80') && (document.getElementById('automark80').checked=this.checked);"/>
+        <span class="toggle-track"></span>
+      </label>
+    </div>
+
+    <!-- Continue where left off -->
+    <div class="rp-row">
+      <div class="rp-row-l">
+        <span class="rp-ico">·</span>
+        <div><div class="rp-lbl">Continue Where You Left Off</div><div class="rp-sub">Novel page opens at last chapter</div></div>
+      </div>
+      <label class="toggle-wrap">
+        <input type="checkbox" id="rp-autocontinue" checked onchange="savePref('nl_autocontinue',this.checked); document.getElementById('autocontinue') && (document.getElementById('autocontinue').checked=this.checked);"/>
+        <span class="toggle-track"></span>
+      </label>
+    </div>
+
+  </div>
+</div>
+
+<div id="screen-end" class="screen">
+  <nav class="reader-nav">
+    <button class="back-btn" id="end-back-btn" onclick="closeChapter()">← Novel</button>
+    <div class="reader-nav-info">
+      <div class="reader-nav-ch" style="font-size:.88rem;">NovéLore</div>
+    </div>
+    <button class="back-btn" onclick="goHome()" style="font-size:.78rem;color:var(--carrot);white-space:nowrap;flex-shrink:0;"></button>
+  </nav>
+  <div class="page-scroll" id="end-scroll">
+    <div class="end-screen-wrap">
+      <div class="end-card" id="end-card">
+        <div class="end-glow"></div>
+        <!-- content injected by showEndScreen() -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="toast"></div>
+
+<script>
+(function(){
+  function forceRemoveLoader() {
+    var ls = document.getElementById('loading-screen');
+    if (ls) { ls.style.transition='none'; ls.style.opacity='0'; ls.style.pointerEvents='none'; setTimeout(function(){ ls.remove(); },50); }
+  }
+  window._loaderFailsafe = setTimeout(forceRemoveLoader, 6000);
+})();
+</script>
+
+<script src="data.js"></script>
+<script src="utils.js"></script>
+<script src="reader.js"></script>
+</body>
+</html>

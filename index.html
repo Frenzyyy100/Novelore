@@ -1,0 +1,1035 @@
+<!--
+Copyright © 2026 Frenzyyy. All Rights Reserved.
+
+This source code is proprietary and confidential. Unauthorized copying, redistribution, or use of this code, in whole or in part, is strictly prohibited.
+-->
+
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-theme-source="system">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'none';"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <link rel="icon" type="image/png" href="https://i.imgur.com/VOiHDlz.png"/>
+  <link rel="apple-touch-icon" href="https://i.imgur.com/VOiHDlz.png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
+  <!-- Critical inline CSS: FOUC guard — hides off-screen elements before styles.css loads -->
+  <style>
+    #loading-screen{position:fixed;inset:0;z-index:9999;background:#1A0D05;overflow:hidden;}
+    #sidebar{position:fixed;top:0;left:-400px;width:280px;height:100dvh;}
+    #overlay,#panel-overlay{position:fixed;inset:0;opacity:0;pointer-events:none;}
+    #notif-mini,#bm-mini{position:fixed;opacity:0;pointer-events:none;}
+    .screen{display:none;}
+    .screen.active{display:flex;}
+    /* Secondary screens: fixed overlays above panel-overlay (200), below sidebar (260) */
+    #screen-settings,#screen-about,#screen-tos,#screen-changelog{
+      position:fixed;inset:0;z-index:210;
+      background:var(--bg,#1A0D05);
+      display:none;flex-direction:column;overflow:hidden;
+    }
+    #screen-settings.active,#screen-about.active,
+    #screen-tos.active,#screen-changelog.active{display:flex;}
+    /* Novel modal */
+    #novel-modal{
+      position:fixed;inset:0;z-index:230;
+      background:var(--bg,#1A0D05);
+      display:flex;flex-direction:column;
+      transform:translateX(100%);
+      transition:transform .35s cubic-bezier(.4,0,.2,1);
+      overflow:hidden;visibility:hidden;
+    }
+    #novel-modal.open{transform:translateX(0);visibility:visible;}
+  </style>
+  <script>
+  (function(){
+    try {
+      var t = JSON.parse(localStorage.getItem('nl_theme'));
+      if (t === 'light' || t === 'dark') {
+        document.documentElement.setAttribute('data-theme', t);
+        document.documentElement.setAttribute('data-theme-source', 'manual');
+      } else {
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme-source', 'system');
+      }
+    } catch(e) {}
+  })();
+  </script>
+</head>
+<body>
+<div id="loading-screen">
+  <div class="ls-glow2"></div>
+  <div class="ls-inner">
+    <div class="ls-icon"></div>
+    <div class="ls-logo">Novél<em>ore</em></div>
+    <div class="ls-tagline">Read Without Limits</div>
+    <div class="ls-bar-wrap"><div class="ls-bar" id="ls-bar"></div></div>
+    <div class="ls-status" id="ls-status">Initializing…</div>
+    <div class="ls-dots">
+      <div class="ls-dot"></div>
+      <div class="ls-dot"></div>
+      <div class="ls-dot"></div>
+    </div>
+  </div>
+</div>
+
+<div id="overlay" onclick="closeSB()"></div>
+<div id="panel-overlay" class="panel-overlay" onclick="closeAllPanels()"></div>
+
+<div id="notif-mini">
+  <div class="mini-hdr">
+    <span class="mini-title">Notifications</span>
+    <span class="mini-mark" onclick="markAllRead()">Mark all read</span>
+  </div>
+  <div class="mini-list" id="mini-list"></div>
+  <div class="mini-footer">
+    <span class="view-all" onclick="openNotifDrawer()">View all →</span>
+  </div>
+</div>
+
+<div id="bm-mini">
+  <div class="bm-hdr">
+    <span class="bm-title-hdr">Bookmarks</span>
+  </div>
+  <div id="bm-mini-list"></div>
+  <div class="mini-footer">
+    <span class="view-all" onclick="openBmDrawer()">View all →</span>
+  </div>
+</div>
+
+<div id="notif-drawer" class="side-drawer">
+  <div class="drawer-hdr">
+    <div class="drawer-hdr-l">
+      <span class="drawer-title">Notifications</span>
+      <span class="drawer-count" id="notif-drawer-count"></span>
+    </div>
+    <div class="drawer-hdr-r">
+      <button class="drawer-action" onclick="markAllReadDrawer()">Mark all read</button>
+      <button class="drawer-close" onclick="closeDrawer('notif-drawer')">✕</button>
+    </div>
+  </div>
+  <div class="drawer-body" id="notif-drawer-list"></div>
+</div>
+
+<div id="bm-drawer" class="side-drawer">
+  <div class="drawer-hdr">
+    <div class="drawer-hdr-l">
+      <span class="drawer-title">My Bookmarks</span>
+      <span class="drawer-count" id="bm-drawer-count"></span>
+    </div>
+    <div class="drawer-hdr-r">
+      <button class="drawer-close" onclick="closeDrawer('bm-drawer')">✕</button>
+    </div>
+  </div>
+  <div class="drawer-body" id="bm-drawer-list"></div>
+</div>
+
+<nav id="sidebar">
+  <div class="sb-hdr">
+    <span class="sb-logo">Novél<em>ore</em></span>
+    <button class="sb-close" onclick="closeSB()">✕</button>
+  </div>
+  <div class="sb-nav">
+    <div class="sb-lbl">Navigate</div>
+    <button class="sb-link" id="sbl-home" onclick="goHome()">Home</button>
+    <button class="sb-link" id="sbl-changelog" onclick="goChangelog()">Changelog</button>
+    <button class="sb-link" id="sbl-settings" onclick="goSettings()">Settings</button>
+    <button class="sb-link" id="sbl-about" onclick="goAbout()">About</button>
+    <button class="sb-link" id="sbl-tos" onclick="goTos()">Terms of Service</button>
+  </div>
+</nav>
+
+<div id="screen-app" class="screen active">
+
+  <header id="topnav">
+    <button class="burger" onclick="openSB()"><span></span><span></span><span></span></button>
+    <span class="nav-logo">Novél<em>ore</em></span>
+    <!-- Bookmark button -->
+    <button class="nav-ico" id="bm-btn" onclick="toggleBmMini()" aria-label="Bookmarks">
+      <svg width="15" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      <span class="nav-badge hidden" id="bm-badge"></span>
+    </button>
+    <!-- Notification button -->
+    <button class="nav-ico" id="notif-btn" onclick="toggleNotifMini()" aria-label="Notifications">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="nav-badge" id="notif-badge"></span>
+    </button>
+  </header>
+
+  <div id="tabbar">
+    <button class="tab-btn active" data-tab="home" onclick="swTab('home',this)">Home</button>
+    <button class="tab-btn" data-tab="new" onclick="swTab('new',this)">What's New</button>
+    <button class="tab-btn" data-tab="updates" onclick="swTab('updates',this)">Updates</button>
+    <button class="tab-btn" data-tab="announce" onclick="swTab('announce',this)">Announce</button>
+  </div>
+
+  <div id="app-wrap">
+    <div id="main-scroll">
+      <main id="main">
+
+        
+        <div class="tab-panel active" id="panel-home">
+
+          <!-- HERO SLIDER -->
+          <div class="hero-slider" id="hero-slider">
+            <div class="hero-track" id="hero-track"></div>
+            <div class="hero-dots" id="hero-dots"></div>
+            <div class="hero-progress" id="hero-progress"></div>
+          </div>
+
+          <!-- STACKED SECTIONS -->
+          <div class="sec-hdr" style="margin-top:22px;"><h2 class="sec-ttl"><span>Trending</span></h2><a class="see-all" href="#" onclick="openSeeAll('trending');return false;">See all →</a></div>
+          <div class="cw"><div class="carousel" id="car-trending"></div></div>
+
+          <div class="sec-hdr"><h2 class="sec-ttl"><span>Hot Picks</span></h2><a class="see-all" href="#" onclick="openSeeAll('hot');return false;">See all →</a></div>
+          <div class="cw"><div class="carousel" id="car-hot"></div></div>
+
+          <div class="sec-hdr"><h2 class="sec-ttl"><span>Frenzyyy's Work</span></h2><a class="see-all" href="#" onclick="openSeeAll('frenzyyy');return false;">See all →</a></div>
+          <div class="cw"><div class="carousel" id="car-frenzyyy"></div></div>
+
+        </div>
+
+        
+        <div class="tab-panel" id="panel-new">
+          <div class="sec-hdr" style="margin-top:22px;"><h2 class="sec-ttl">What's <span>New</span></h2><a class="see-all" href="#" onclick="openSeeAll('new');return false;">See all →</a></div>
+          <div class="cw"><div class="carousel" id="car-new"></div></div>
+          <div id="new-list"></div>
+        </div>
+
+        
+        <div class="tab-panel" id="panel-updates">
+          <div class="sec-hdr" style="margin-top:22px;"><h2 class="sec-ttl">Book <span>Updates</span></h2><a class="see-all" href="#" onclick="openSeeAll('upd-book');return false;">See all →</a></div>
+          <div id="upd-book-list"></div>
+          <div class="sec-hdr" style="margin-top:18px;"><h2 class="sec-ttl">Volume <span>Updates</span></h2><a class="see-all" href="#" onclick="openSeeAll('upd-vol');return false;">See all →</a></div>
+          <div id="upd-vol-list"></div>
+          <div class="sec-hdr" style="margin-top:18px;"><h2 class="sec-ttl">Chapter <span>Updates</span></h2><a class="see-all" href="#" onclick="openSeeAll('upd-chapter');return false;">See all →</a></div>
+          <div id="upd-list"></div>
+        </div>
+
+        
+        <div class="tab-panel" id="panel-announce">
+          <div class="sec-hdr" style="margin-top:22px;"><h2 class="sec-ttl"><span>Announcements</span></h2></div>
+          <div id="ann-list"></div>
+        </div>
+
+      </main>
+      <footer>
+        <strong>NovéLore</strong> &nbsp;|&nbsp; Read Without Limits<br/>
+        © <span id="fy"></span> NovéLore · All rights reserved · <span class="footer-link" onclick="goAbout()">About</span> · <span class="footer-link" onclick="goTos()">Terms of Service</span>
+      </footer>
+    </div>
+  </div>
+</div>
+
+
+<div id="screen-tos" class="screen">
+  <header class="topnav-secondary" id="topnav-tos">
+    <button class="burger" onclick="openSB()"><span></span><span></span><span></span></button>
+    <span class="nav-logo">Novél<em>ore</em> <span style="font-size:.75rem;opacity:.6;font-family:'DM Sans',sans-serif;font-weight:400;">Terms of Service</span></span>
+  </header>
+  <div class="page-scroll">
+
+    <div class="tos-hero">
+      <div class="tos-hero-eyebrow">Legal Document</div>
+      <h1>Terms of Service</h1>
+      <p>Please read these terms carefully before using NovéLore. By continuing to use the Platform you agree to be bound by them.</p>
+      <div class="tos-meta-row">
+        <div class="tos-meta-item">
+          <span class="tos-meta-label">Effective</span>
+          <span class="tos-meta-val">April 13, 2026</span>
+        </div>
+        <div class="tos-meta-divider"></div>
+        <div class="tos-meta-item">
+          <span class="tos-meta-label">Last Updated</span>
+          <span class="tos-meta-val">April 13, 2026</span>
+        </div>
+        <div class="tos-meta-divider"></div>
+        <div class="tos-meta-item">
+          <span class="tos-meta-label">Sections</span>
+          <span class="tos-meta-val">28</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-body tos-body">
+
+      <div class="tos-group-hdr">Platform Basics</div>
+
+      <div class="tos-sec">
+        <div class="tos-num">01</div>
+        <div class="tos-content">
+          <h2>Acceptance of Terms</h2>
+          <p>By visiting or using NovéLore ("the Platform"), you agree to these Terms of Service ("Terms"). If you don't agree with any part of this, please stop using the Platform.</p>
+        </div>
+      </div>
+
+      <div class="tos-sec">
+        <div class="tos-num">02</div>
+        <div class="tos-content">
+          <h2>About The Platform</h2>
+          <p>NovéLore is a personal fiction reading platform built and maintained by Frenzyyy. The works published here are written by Frenzyyy and a group of invited collaborating Creators. The Platform is free to use and runs as a static web app hosted on GitHub Pages.</p>
+        </div>
+      </div>
+
+      <div class="tos-sec">
+        <div class="tos-num">03</div>
+        <div class="tos-content">
+          <h2>Age Requirement</h2>
+          <p>NovéLore is intended for readers aged 13 and above. Some works on the Platform contain mature themes such as violence, dark fantasy, or morally heavy narratives — these are recommended for readers aged 17 and above. By using the Platform, you confirm that you meet the appropriate age requirement for the content you are accessing.</p>
+          <p>Parents and guardians are encouraged to review the content their children are reading.</p>
+        </div>
+      </div>
+
+      <div class="tos-sec">
+        <div class="tos-num">07</div>
+        <div class="tos-content">
+          <h2>Permitted Use</h2>
+          <p>You are welcome to:</p>
+          <ul>
+            <li>Read anything on NovéLore for personal, non-commercial enjoyment</li>
+            <li>Share links to the Platform, a specific novel, or a chapter</li>
+            <li>Quote up to two sentences from any work for a review or recommendation, as long as you credit the original Creator and NovéLore</li>
+            <li>Write commentary, analysis, or discussion about any work, provided the Creator is credited</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tos-group-hdr">Content &amp; Intellectual Property</div>
+
+      <div class="tos-sec">
+        <div class="tos-num">04</div>
+        <div class="tos-content">
+          <h2>Copyright</h2>
+          <p>All original works on NovéLore — stories, characters, dialogue, lore, narrative content, and associated assets — are protected by copyright and belong to their respective Creators from the moment they are written, with or without formal registration.</p>
+          <div class="tos-copyright-notice">© 2026 NovéLore &amp; respective Creators. All Rights Reserved.</div>
+          <p>Frenzyyy holds copyright over the platform itself and any works written under the Frenzyyy pen name. Each collaborating Creator holds copyright over their own individual works. No one else's work on this platform is yours to use, even if you are also a Creator here.</p>
+          <p>Reproducing, distributing, or using any content without written permission from the copyright holder is not allowed and may lead to legal action.</p>
+        </div>
+      </div>
+
+      <div class="tos-sec">
+        <div class="tos-num">05</div>
+        <div class="tos-content">
+          <h2>Intellectual Property</h2>
+          <p>Everything you read on NovéLore belongs to whoever wrote it. This covers novel titles, chapter content, character names and personalities, world lore, story systems, cover art, and any other creative assets tied to a work.</p>
+          <div class="tos-block tos-block-no">
+            <div class="tos-block-label">Not permitted</div>
+            <ul>
+              <li>Copy, reproduce, or share any story content without permission</li>
+              <li>Translate or adapt any work into something else</li>
+              <li>Claim ownership or authorship of anything published here</li>
+              <li>Use any content for commercial gain without written consent from the Creator</li>
+              <li>Feed any content into AI or machine learning systems for training purposes</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="tos-sec">
+        <div class="tos-num">06</div>
+        <div class="tos-content">
+          <h2>Source Code and Platform Design</h2>
+          <p>Because NovéLore runs as a static web app, the source code is technically visible through browser developer tools. We can't fully prevent that, but we do ask you to respect the work behind it.</p>
+          <div class="tos-block tos-block-no">
+            <div class="tos-block-label">Please do not</div>
+            <ul>
+              <li>Intentionally inspect or copy the source code without permission from Frenzyyy</li>
+              <li>Use the code or design as a base for your own projects</li>
+              <li>Redistribute or repurpose any part of the codebase</li>
+            </ul>
+          </div>
+          <p style="margin-top:12px;">A lot of time and effort went into building this platform. Even if the code is technically visible, using it without asking is something we consider a breach of trust.</p>
+        </div>
+      </div>
+
+      <div class="tos-group-hdr">Community Standards</div>
+
+      <div class="tos-sec">
+        <div class="tos-num">08</div>
+        <div class="tos-content">
+          <h2>Cross-References, Collaborations and Credits</h2>
+          <p>NovéLore is home to a small creative community, and Creators may sometimes want to reference or build on each other's work. That's totally fine as long as both sides agree.</p>
+          <div class="tos-block tos-block-ok">
+            <div class="tos-block-label">Okay with mutual agreement</div>
+            <ul>
+              <li>Referencing another Creator's characters, events, or lore in your own story</li>
+              <li>Writing crossovers or shared-universe content</li>
+              <li>Crediting another Creator in your author notes</li>
+              <li>Fan tributes or inspired works created with the original Creator's blessing</li>
+            </ul>
+          </div>
+          <div class="tos-block tos-block-no">
+            <div class="tos-block-label">Not okay without permission</div>
+            <ul>
+              <li>Using another Creator's characters or story elements without their knowledge</li>
+              <li>Implying a canonical connection or collaboration that wasn't agreed upon</li>
+              <li>Leveraging someone else's work to promote your own without giving credit</li>
+            </ul>
+          </div>
+          <p style="margin-top:12px;">Both Creators need to be on the same page before anything goes live. NovéLore and Frenzyyy won't mediate disputes between Creators over unauthorized references, so sort it out between yourselves first.</p>
+        </div>
+      </div>
+
+      <div class="tos-sec">
+        <div class="tos-num">09</div>
+        <div class="tos-content">
+          <h2>Fan Works and Derivative Content</h2>
+          <p>If you're a reader who wants to create fan art, fan fiction, or any other work inspired by something on NovéLore, here's what we ask:</p>
+          <ul>
+            <li>Label it clearly as unofficial fan content</li>
+            <li>Credit the original Creator by name</li>
+            <li>Don't sell it or distribute it commercially without the Creator's written permission</li>
+            <li>Don't present it as canon or officially endorsed</li>
+          </ul>
+          <p style="margin-top:10px;">Fan works that break these rules may be subject to a takedown request from the Creator involved.</p>
+        </div>
+      </div>
+
+      <div class="tos-sec">
+        <div class="tos-num">10</div>
+        <div class="tos-content">
+          <h2>Spoiler Policy</h2>
+          <p>Please be mindful of spoilers, especially for ongoing or recently updated stories. Publicly posting major plot spoilers in a way that ruins the experience for other readers is something we strongly discourage. Creators may mark certain content as spoiler-sensitive, and readers should respect those labels.</p>
+        </div>
+      </div>
+
+      <div class="tos-sec">
+        <div class="tos-num">11</div>
+        <div class="tos-content">
+          <h2>Character and Lore Integrity</h2>
+          <p>Do not spread false information about a story's canon. This includes fake leaks, fabricated lore, or misrepresenting a Creator's work in a way that misleads other readers or damages the Creator's reputation. If you're unsure about something, label it as fan speculation.</p>
+        </div>
+      </div>
+
+      <div class="tos-sec">
+        <div class="tos-num">12</div>
+        <div class="tos-content">
+          <h2>Mature Content</h2>
+          <p>Stories with mature or heavy themes will be labeled by the Creator. Readers are expected to take those labels seriously. Creators are responsible for tagging their own content accurately. NovéLore is not liable for content a reader finds inappropriate if the provided warnings were ignored.</p>
+        </div>
+      </div>
+
+      <div class="tos-group-hdr">Creator Guidelines</div>
+
+      <div class="tos-sec">
+        <div class="tos-num">13</div>
+        <div class="tos-content">
+          <h2>Creator Responsibilities</h2>
+          <p>If you're a Creator on NovéLore, you agree that:</p>
+          <ul>
+            <li>The work you publish is your own original creation and does not plagiarize anyone else</li>
+            <li>You have the right to publish it and are not violating any existing agreements</li>
+            <li>You are responsible for tagging your work with accurate content warnings</li>
+            <li>You will not use NovéLore to publish content that is harmful, hateful, or illegal</li>
+          </ul>
+          <p style="margin-top:10px;">Frenzyyy reserves the right to remove any work that violates these responsibilities.</p>
+        </div>
+      </div>
+
+      <div class="tos-sec">
+        <div class="tos-num">14</div>
+        <div class="tos-content">
+          <h2>Readers vs. Creators</h2>
+          <p>Readers can browse, bookmark, and enjoy everything on the Platform. Creators have additional responsibilities that come with publishing through NovéLore, as outlined in these Terms.</p>
+          <p>If you're a Creator here, you're not just a user. You're part of the platform, and that comes with accountability.</p>
+        </div>
+      </div>
+
+      <div class="tos-group-hdr">Platform Rules</div>
+
+      <div class="tos-sec">
+        <div class="tos-num">15</div>
+        <div class="tos-content">
+          <h2>Acceptable Use</h2>
+          <p>NovéLore is a reading platform. You agree not to:</p>
+          <ul>
+            <li>Harass, impersonate, or target any Creator or reader</li>
+            <li>Spread malicious or illegal content using the Platform in any way</li>
+            <li>Use bots, scrapers, or automated tools to access or extract content</li>
+            <li>Attempt to disrupt or interfere with how the Platform runs</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tos-sec">
+        <div class="tos-num">16</div>
+        <div class="tos-content">
+          <h2>Screenshot and Recording</h2>
+          <p>We can't technically stop you from taking screenshots or recording your screen, but using those captures to distribute, republish, or reproduce NovéLore content is a violation of these Terms and may count as copyright infringement.</p>
+        </div>
+      </div>
+
+      <div class="tos-sec">
+        <div class="tos-num">17</div>
+        <div class="tos-content">
+          <h2>Reading Progress and Bookmarks</h2>
+          <p>NovéLore saves your reading progress, bookmarks, and settings directly in your browser's localStorage. This data never leaves your device and is not stored on any server.</p>
+          <p>Because of this, clearing your browser data or switching devices will permanently remove that information. NovéLore is not responsible for any lost reading data.</p>
+        </div>
+      </div>
+
+      <div class="tos-group-hdr">Legal</div>
+
+      <div class="tos-sec">
+        <div class="tos-num">18</div>
+        <div class="tos-content">
+          <h2>No Warranty on Story Continuity</h2>
+          <p>Creators have the right to discontinue, rewrite, go on hiatus, or cancel any work at any time without obligation to readers. NovéLore does not guarantee that any story will be completed or kept available.</p>
+        </div>
+      </div>
+
+      <div class="tos-sec">
+        <div class="tos-num">19</div>
+        <div class="tos-content">
+          <h2>Third-Party Links</h2>
+          <p>Some works or author notes may link to external websites. NovéLore is not responsible for the content, accuracy, or safety of any third-party sites. Visiting external links is at your own discretion.</p>
+        </div>
+      </div>
+
+      <div class="tos-sec">
+        <div class="tos-num">20</div>
+        <div class="tos-content">
+          <h2>No Commercial Endorsement</h2>
+          <p>NovéLore does not endorse or have any affiliation with any product, service, or external content mentioned in any story or author note. Any such references are purely part of the creative work and should not be taken as a recommendation.</p>
+        </div>
+      </div>
+
+      <div class="tos-sec">
+        <div class="tos-num">21</div>
+        <div class="tos-content">
+          <h2>Availability and Modifications</h2>
+          <p>NovéLore is a personal project maintained on a best-effort basis. Frenzyyy can modify, update, or remove content or features at any time without prior notice. These Terms can also be updated at any time, and continuing to use the Platform means you accept the latest version.</p>
+        </div>
+      </div>
+
+      <div class="tos-sec">
+        <div class="tos-num">22</div>
+        <div class="tos-content">
+          <h2>Disclaimer of Warranties</h2>
+          <p>NovéLore is provided as-is. Frenzyyy makes no guarantees about uptime, availability, or anything else.</p>
+        </div>
+      </div>
+
+      <div class="tos-sec">
+        <div class="tos-num">23</div>
+        <div class="tos-content">
+          <h2>Limitation of Liability</h2>
+          <p>To the extent allowed by law, Frenzyyy is not liable for any damages that come from your use of NovéLore or inability to access it.</p>
+        </div>
+      </div>
+
+      <div class="tos-sec">
+        <div class="tos-num">24</div>
+        <div class="tos-content">
+          <h2>Indemnification</h2>
+          <p>By using NovéLore, you take responsibility for your own actions on or related to the Platform. If your actions result in any legal claims against Frenzyyy or NovéLore, you agree to handle those on your own.</p>
+        </div>
+      </div>
+
+      <div class="tos-sec">
+        <div class="tos-num">25</div>
+        <div class="tos-content">
+          <h2>DMCA and Takedown Requests</h2>
+          <p>If you believe something on NovéLore infringes your copyright, contact Frenzyyy through the official channels with the following:</p>
+          <ul>
+            <li>A description of the work you believe was infringed</li>
+            <li>The specific content on NovéLore you're disputing</li>
+            <li>Your contact details</li>
+            <li>A statement that you genuinely believe the use is unauthorized</li>
+          </ul>
+          <p style="margin-top:10px;">We'll review it and get back to you within a reasonable time.</p>
+        </div>
+      </div>
+
+      <div class="tos-sec">
+        <div class="tos-num">26</div>
+        <div class="tos-content">
+          <h2>Termination of Access</h2>
+          <p>Frenzyyy can restrict or block access to the Platform for anyone found violating these Terms, including misuse of content, scraping, or any other harmful behavior.</p>
+        </div>
+      </div>
+
+      <div class="tos-sec">
+        <div class="tos-num">27</div>
+        <div class="tos-content">
+          <h2>Governing Law</h2>
+          <p>These Terms follow generally accepted principles of intellectual property and internet law. Since NovéLore is a personal, non-commercial project with readers from different countries, disputes will be handled in good faith on a case-by-case basis.</p>
+        </div>
+      </div>
+
+      <div class="tos-sec">
+        <div class="tos-num">28</div>
+        <div class="tos-content">
+          <h2>Contact</h2>
+          <p>For permissions, collaboration requests, takedown notices, or general questions, contact Frenzyyy through the official channels listed on the Platform.</p>
+          <a href="mailto:frenzyyybusinessemail@gmail.com" class="tos-contact-link">frenzyyybusinessemail@gmail.com</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="tos-closing">
+      <div class="tos-closing-rule"></div>
+      <p>NovéLore is a passion project. Please respect the work that goes into every word.</p>
+      <p class="tos-closing-sig">Built with ❤️ and 🥕 by Frenzyyy.</p>
+      <div class="tos-closing-rule"></div>
+    </div>
+
+    <footer><strong>NovéLore</strong> — Read Without Limits · © <span id="fy-tos"></span> · <span class="footer-link" onclick="goAbout()">About</span> · <span class="footer-link" onclick="goTos()">Terms of Service</span></footer>
+  </div>
+</div>
+
+
+<div id="screen-settings" class="screen">
+  <header class="topnav-secondary" id="topnav-settings">
+    <button class="burger" onclick="openSB()"><span></span><span></span><span></span></button>
+    <span class="nav-logo">Novél<em>ore</em> <span style="font-size:.75rem;opacity:.6;font-family:'DM Sans',sans-serif;font-weight:400;">Settings</span></span>
+  </header>
+  <div class="page-scroll"><div class="page-body">
+    <div class="page-title">Settings</div>
+    <div class="page-sub">Customise your NovéLore experience.</div>
+    <div class="sc">
+      <div class="sc-hdr"><h2>Appearance</h2></div>
+      <div class="sc-body">
+        <div class="theme-row">
+          <div class="theme-row-l">
+            <span class="theme-icon" id="theme-icon"></span>
+            <div><div class="theme-lbl" id="theme-lbl">System Default</div><div class="theme-sub" id="theme-sub">Follows your OS light/dark setting</div></div>
+          </div>
+          <label class="toggle-wrap">
+            <input type="checkbox" id="theme-toggle" onchange="applyToggle(this.checked)"/>
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+        <div class="theme-options">
+          <div class="theme-opt" id="opt-light" onclick="setTheme('light')"><div class="ol">Light</div></div>
+          <div class="theme-opt" id="opt-dark" onclick="setTheme('dark')"><div class="ol">Dark</div></div>
+          <div class="theme-opt active" id="opt-system" onclick="setTheme('system')"><div class="ol">System</div></div>
+        </div>
+        <p style="font-size:.71rem;color:var(--text-faint);margin-top:10px;line-height:1.6;padding:0 2px;">
+          <strong style="color:var(--text-muted)">System</strong> automatically follows your device's light/dark setting and updates live.
+        </p>
+      </div>
+    </div>
+    <!-- ── Reading Preferences ── -->
+    <div class="sc">
+      <div class="sc-hdr"><h2>Reading</h2></div>
+      <div class="sc-body">
+        <div class="setting-row">
+          <div class="setting-row-l">
+            <span class="setting-icon">Aa</span>
+            <div><div class="setting-lbl">Font Size</div><div class="setting-sub">Adjust the reading text size</div></div>
+          </div>
+          <div class="seg-ctrl font-size-ctrl" id="font-size-ctrl">
+            <button class="seg-btn" data-val="small" onclick="applyFontSize('small',this)">S</button>
+            <button class="seg-btn active" data-val="medium" onclick="applyFontSize('medium',this)">M</button>
+            <button class="seg-btn" data-val="large" onclick="applyFontSize('large',this)">L</button>
+          </div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-row-l">
+            <span class="setting-icon">↕</span>
+            <div><div class="setting-lbl">Line Spacing</div><div class="setting-sub">Control paragraph breath</div></div>
+          </div>
+          <div class="seg-ctrl line-space-ctrl" id="line-space-ctrl">
+            <button class="seg-btn" data-val="compact" onclick="applyLineSpace('compact',this)">Tight</button>
+            <button class="seg-btn active" data-val="normal" onclick="applyLineSpace('normal',this)">Normal</button>
+            <button class="seg-btn" data-val="relaxed" onclick="applyLineSpace('relaxed',this)">Airy</button>
+          </div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-row-l">
+            <span class="setting-icon">↔</span>
+            <div><div class="setting-lbl">Reading Width</div><div class="setting-sub">How wide content spans</div></div>
+          </div>
+          <div class="seg-ctrl read-width-ctrl" id="read-width-ctrl">
+            <button class="seg-btn" data-val="narrow" onclick="applyReadWidth('narrow',this)">Narrow</button>
+            <button class="seg-btn active" data-val="normal" onclick="applyReadWidth('normal',this)">Normal</button>
+            <button class="seg-btn" data-val="wide" onclick="applyReadWidth('wide',this)">Wide</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Novel Experience ── -->
+    <div class="sc">
+      <div class="sc-hdr"><h2>Novel Experience</h2></div>
+      <div class="sc-body">
+        <div class="setting-row">
+          <div class="setting-row-l">
+            <span class="setting-icon">·</span>
+            <div><div class="setting-lbl">Continue Where You Left Off</div><div class="setting-sub">Novel page opens at your last chapter</div></div>
+          </div>
+          <label class="toggle-wrap">
+            <input type="checkbox" id="autocontinue" checked onchange="savePref('nl_autocontinue',this.checked)"/>
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+        <div class="setting-row">
+          <div class="setting-row-l">
+            <span class="setting-icon">·</span>
+            <div><div class="setting-lbl">Show Reading Progress</div><div class="setting-sub">Display progress bar on novel page</div></div>
+          </div>
+          <label class="toggle-wrap">
+            <input type="checkbox" id="showprogress" checked onchange="savePref('nl_showprogress',this.checked)"/>
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+        <div class="setting-row">
+          <div class="setting-row-l">
+            <span class="setting-icon">✓</span>
+            <div><div class="setting-lbl">Auto-Mark on Finish</div><div class="setting-sub">Chapter marked read automatically when you reach the end</div></div>
+          </div>
+          <label class="toggle-wrap">
+            <input type="checkbox" id="automark80" checked onchange="savePref('nl_automark80',this.checked)"/>
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+        <div class="setting-divider"></div>
+        <div id="settings-novel-list"></div>
+      </div>
+    </div>
+
+    <!-- ── Notifications Preferences ── -->
+    <div class="sc">
+      <div class="sc-hdr"><h2>Notifications</h2></div>
+      <div class="sc-body">
+        <div class="setting-row">
+          <div class="setting-row-l">
+            <span class="setting-icon">·</span>
+            <div><div class="setting-lbl">Chapter Updates</div><div class="setting-sub">Notify when a new chapter drops</div></div>
+          </div>
+          <label class="toggle-wrap">
+            <input type="checkbox" id="notif-chapters" checked onchange="savePref('nl_notif_chapters',this.checked)"/>
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+        <div class="setting-row">
+          <div class="setting-row-l">
+            <span class="setting-icon">·</span>
+            <div><div class="setting-lbl">Announcements</div><div class="setting-sub">Platform news and events</div></div>
+          </div>
+          <label class="toggle-wrap">
+            <input type="checkbox" id="notif-announce" checked onchange="savePref('nl_notif_announce',this.checked)"/>
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+        <div class="setting-row">
+          <div class="setting-row-l">
+            <span class="setting-icon">+</span>
+            <div><div class="setting-lbl">New Novels</div><div class="setting-sub">Alert when fresh titles are added</div></div>
+          </div>
+          <label class="toggle-wrap">
+            <input type="checkbox" id="notif-new" onchange="savePref('nl_notif_new',this.checked)"/>
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Accessibility ── -->
+    <div class="sc">
+      <div class="sc-hdr"><h2>Accessibility</h2></div>
+      <div class="sc-body">
+        <div class="setting-row">
+          <div class="setting-row-l">
+            <span class="setting-icon">·</span>
+            <div><div class="setting-lbl">Reduce Motion</div><div class="setting-sub">Minimise animations & transitions</div></div>
+          </div>
+          <label class="toggle-wrap">
+            <input type="checkbox" id="reduce-motion" onchange="applyReduceMotion(this.checked)"/>
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+        <div class="setting-row">
+          <div class="setting-row-l">
+            <span class="setting-icon">◎</span>
+            <div><div class="setting-lbl">High Contrast</div><div class="setting-sub">Boost border and text contrast</div></div>
+          </div>
+          <label class="toggle-wrap">
+            <input type="checkbox" id="high-contrast" onchange="applyHighContrast(this.checked)"/>
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Privacy & Data ── -->
+    <div class="sc">
+      <div class="sc-hdr"><h2>Privacy &amp; Data</h2></div>
+      <div class="sc-body">
+        <div class="setting-row">
+          <div class="setting-row-l">
+            <span class="setting-icon">↻</span>
+            <div><div class="setting-lbl">Reading History</div><div class="setting-sub">Stored locally on your device</div></div>
+          </div>
+          <button class="setting-action-btn danger" onclick="clearHistory()"> Clear</button>
+        </div>
+        <div class="setting-row">
+          <div class="setting-row-l">
+            <span class="setting-icon">↺</span>
+            <div><div class="setting-lbl">Reset All Settings</div><div class="setting-sub">Restore to defaults</div></div>
+          </div>
+          <button class="setting-action-btn danger" onclick="resetAllSettings()">↺ Reset</button>
+        </div>
+        <div class="setting-row">
+          <div class="setting-row-l">
+            <span class="setting-icon">·</span>
+            <div><div class="setting-lbl">Local Storage</div><div class="setting-sub">NovéLore stores no cookies</div></div>
+          </div>
+          <span style="font-size:.72rem;color:var(--carrot);font-weight:600;">✓ Clean</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── About ── -->
+    <div class="sc">
+      <div class="sc-hdr"><h2>About</h2></div>
+      <div class="sc-body"><p style="font-size:.82rem;color:var(--text-muted);line-height:1.8;">Version: <strong style="color:var(--text-main)">Beta v0.7.0</strong><br/>Built with ❤️ and 🥕 by Frenzyyy.<br/><span style="font-size:.74rem;">Hosted on GitHub Pages.</span></p>
+      <div style="margin-top:12px;">
+        <button class="setting-action-btn" onclick="goAbout()" style="width:100%;justify-content:center;"> View Full About Page →</button>
+      </div></div>
+    </div>
+  </div><footer><strong>NovéLore</strong> — Read Without Limits · <span class="footer-link" onclick="goAbout()">About</span> · <span class="footer-link" onclick="goTos()">Terms of Service</span></footer></div>
+</div>
+
+
+<div id="screen-about" class="screen">
+  <header class="topnav-secondary" id="topnav-about">
+    <button class="burger" onclick="openSB()"><span></span><span></span><span></span></button>
+    <span class="nav-logo">Novél<em>ore</em> <span style="font-size:.75rem;opacity:.6;font-family:'DM Sans',sans-serif;font-weight:400;">About</span></span>
+  </header>
+  <div class="page-scroll">
+    <div class="about-hero"><h1>About NovéLore</h1><p>A home for stories that refuse to be forgotten — built for readers, by readers.</p></div>
+    <div class="page-body">
+      <div style="display:flex;gap:8px;padding:0 0 4px;">      
+</div>
+<div class="ab-sec"><h2>Our <span>Mission</span></h2><p>NovéLore gives readers a beautiful, distraction-free place to explore stories and works from Frenzyyy and his other dear friends worldwide.</p></div>
+      <div class="ab-sec"><h2>Our <span>Values</span></h2><div class="vg">
+        <div class="vc"><div class="vi"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><h3>Reader First</h3><p>Every decision starts with the reading experience.</p></div>
+        <div class="vc"><div class="vi"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div><h3>Creators</h3><p>Authors are the heartbeat of our platform.</p></div>
+        <div class="vc"><div class="vi"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><h3>Open to All</h3><p>Stories from every culture are welcome.</p></div>
+        <div class="vc"><div class="vi"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><h3>Privacy</h3><p>No tracking. No ads. Just reading.</p></div>
+      </div></div>
+      <div class="ab-sec"><h2>Contact <span>Us</span></h2>
+      <div class="contact-card">
+  <div class="contact-item">
+    <div class="contact-icon">@</div>
+    <div class="contact-info">
+      <div class="contact-label">Business Email</div>
+      <div class="contact-text"><a href="mailto:frenzyyybusinessemail@gmail.com" class="contact-link">frenzyyybusinessemail@gmail.com</a></div>
+    </div>
+  </div>
+
+  <div class="contact-item">
+    <div class="contact-icon">#</div>
+    <div class="contact-info">
+      <div class="contact-label">Discord</div>
+      <div class="contact-text">Frenzyyy</div>
+    </div>
+  </div>
+</div>
+      </div>
+    </div>
+    <footer><strong>NovéLore</strong> — Read Without Limits · © <span id="fy2"></span> · <span class="footer-link" onclick="goAbout()">About</span> · <span class="footer-link" onclick="goTos()">Terms of Service</span></footer>
+  </div>
+</div>
+
+
+<div id="screen-changelog" class="screen">
+  <header class="topnav-secondary" id="topnav-changelog">
+    <button class="burger" onclick="openSB()"><span></span><span></span><span></span></button>
+    <span class="nav-logo">Novél<em>ore</em> <span style="font-size:.75rem;opacity:.6;font-family:'DM Sans',sans-serif;font-weight:400;">Changelog</span></span>
+  </header>
+  <div class="page-scroll">
+    <div class="about-hero changelog-hero">
+      <h1 style="font-size:clamp(1.5rem,5vw,2.2rem);">What's Changed</h1>
+      <p>Every fix, feature, and update to NovéLore, tracked and documented.</p>
+    </div>
+    <div class="page-body">
+                
+      <div class="ab-sec">
+        <h2>v0.7.0 <span>— Current</span></h2>
+        <div class="changelog-version-meta">April 2026 · Beta</div>
+        <div class="changelog-list">
+            <div class="changelog-item tweak">Novélore does not allow copy-paste function anymore</div>
+            <div class="changelog-item fix">A bug found in novel section where arrays couldn't be loaded properly if the browser was closed or refreshed, leading to an empty page, has been finally fully fixed</div>
+          <div class="changelog-item new">ToS has been added for more secure rules</div>
+        </div>
+      </div>
+
+      <div class="ab-sec">
+        <h2>v0.6.9 <span>— Previous</span></h2>
+        <div class="changelog-version-meta"> April 2026 · Beta</div>
+        <div class="changelog-list">
+          <div class="changelog-item new">Reader Preferences panel — tap "Aa" in the chapter nav to adjust settings mid-read</div>
+          <div class="changelog-item new">Font size, line spacing, and reading width now adjustable without leaving the chapter</div>
+          <div class="changelog-item new">Theme switcher (Light / Dark / System) accessible directly from the reader</div>
+          <div class="changelog-item new">Auto-Mark on Finish and Continue Where You Left Off toggles in reader panel</div>
+          <div class="changelog-item tweak">Preference controls now stay in sync between Reader panel and Settings screen</div>
+        </div>
+      </div>
+
+      <div class="ab-sec">
+        <h2>v0.6.8 <span>— Previous</span></h2>
+        <div class="changelog-version-meta"> April 2026 · Beta</div>
+        <div class="changelog-list">
+          <div class="changelog-item fix">Removed Dojo Duels tab from the home screen</div>
+          <div class="changelog-item new">Book Updates section added to the Updates tab</div>
+          <div class="changelog-item new">Volume Updates section added to the Updates tab</div>
+          <div class="changelog-item tweak">Updates tab now shows Book → Volume → Chapter in order</div>
+        </div>
+      </div>
+
+      <div class="ab-sec">
+        <h2>v0.6.7 <span>— Previous</span></h2>
+        <div class="changelog-version-meta"> April 2026 · Beta</div>
+        <div class="changelog-list">
+          <div class="changelog-item new">Changelog page now fully respects your theme — Light, Dark, and System modes all apply correctly</div>
+          <div class="changelog-item tweak">Changelog hero banner is now theme-aware (removed hardcoded dark gradient)</div>
+          <div class="changelog-item tweak">About hero banner now adapts to Light Mode for consistent theming across all pages</div>
+        </div>
+      </div>
+
+      <div class="ab-sec">
+        <h2>v0.6.6 <span>— Previous</span></h2>
+        <div class="changelog-version-meta"> April 2026 · Beta</div>
+        <div class="changelog-list">
+            <div class="changelog-item tweak">Removed "Clear all" button from notifications drawer</div>
+<div class="changelog-item tweak">Removed "Clear all" button from bookmarks drawer</div>
+            <div class="changelog-item new">Bookmarks now persist — saved and restored across visits</div>
+            <div class="changelog-item new">Notifications now persist — read/cleared state saved and restored across visits</div>
+          <div class="changelog-item fix">Fixed end screen looping back when clicking the back button after finishing a chapter</div>
+          <div class="changelog-item fix">Fixed NEW tag showing on last 3 chapters — now only shows on the latest chapter</div>
+          <div class="changelog-item fix">Fixed chapter scroll not resetting to top when clicking Prev / Next</div>
+          <div class="changelog-item fix">Fixed nav strip causing scroll anchor issues — moved outside scroll container</div>
+          <div class="changelog-item fix">Fixed duplicate coverImg syntax error in bookmark logic</div>
+          <div class="changelog-item new">Added cover image for The Lantern Pact: Prologue across all views</div>
+          <div class="changelog-item new">Added The Lantern Pact to Hot Picks tab</div>
+          <div class="changelog-item new">Added Changelog page (you're reading it!)</div>
+          <div class="changelog-item tweak">All tab and panel switches now snap instantly to top</div>
+          <div class="changelog-item tweak">Cleared default bookmark data</div>
+        </div>
+      </div>
+
+      <div class="ab-sec">
+        <h2>v0.5.0 <span>— Reading Experience</span></h2>
+        <div class="changelog-version-meta"> March 2026 · Beta</div>
+        <div class="changelog-list">
+          <div class="changelog-item new">Chapter reader with per-chapter scroll progress tracking</div>
+          <div class="changelog-item new">Auto-mark chapter as read at 95% scroll</div>
+          <div class="changelog-item new">End-of-story screen with random messages</div>
+          <div class="changelog-item new">Reading progress bar at top of chapter</div>
+          <div class="changelog-item new">Prev / Next chapter navigation strip</div>
+          <div class="changelog-item tweak">Continue Where You Left Off feature added to settings</div>
+        </div>
+      </div>
+
+      <div class="ab-sec">
+        <h2>v0.4.0 <span>— Library & Discovery</span></h2>
+        <div class="changelog-version-meta"> February 2026 · Alpha</div>
+        <div class="changelog-list">
+          <div class="changelog-item new">Trending, Hot Picks, Frenzyyy's Work tabs</div>
+          <div class="changelog-item new">What's New section with novel cards</div>
+          <div class="changelog-item new">Chapter updates feed</div>
+          <div class="changelog-item new">Announcements panel</div>
+          <div class="changelog-item new">Hero slider with featured novels</div>
+          <div class="changelog-item new">Novel detail page with synopsis, genres, and volume list</div>
+        </div>
+      </div>
+
+      <div class="ab-sec">
+        <h2>v0.3.0 <span>— Bookmarks & Notifications</span></h2>
+        <div class="changelog-version-meta"> January 2026 · Alpha</div>
+        <div class="changelog-list">
+          <div class="changelog-item new">Bookmark system with mini popup and full drawer</div>
+          <div class="changelog-item new">Notification system with unread badges</div>
+          <div class="changelog-item new">Mark all as read / clear all notifications</div>
+          <div class="changelog-item tweak">Sidebar navigation added (burger menu)</div>
+        </div>
+      </div>
+
+      <div class="ab-sec">
+        <h2>v0.2.0 <span>— Settings & Themes</span></h2>
+        <div class="changelog-version-meta"> January 2026 · Alpha</div>
+        <div class="changelog-list">
+          <div class="changelog-item new">Dark / Light / System theme support</div>
+          <div class="changelog-item new">Font size, line spacing, reading width controls</div>
+          <div class="changelog-item new">Reduce motion and high contrast toggles</div>
+          <div class="changelog-item new">Settings screen with reading preferences</div>
+          <div class="changelog-item new">About page</div>
+        </div>
+      </div>
+
+      <div class="ab-sec">
+        <h2>v0.1.0 <span>— Foundation</span></h2>
+        <div class="changelog-version-meta"> January 2026 · Alpha</div>
+        <div class="changelog-list">
+          <div class="changelog-item new">Initial build of NovéLore</div>
+          <div class="changelog-item new">Single-file HTML app architecture</div>
+          <div class="changelog-item new">Screen system (home, settings, about, novel, chapter)</div>
+          <div class="changelog-item new">Dark theme with carrot/amber color palette</div>
+          <div class="changelog-item new">Staged loading screen</div>
+          <div class="changelog-item new">The Lantern Pact: Prologue added as first novel</div>
+        </div>
+      </div>
+
+    </div>
+    <footer><strong>NovéLore</strong> — Read Without Limits · © <span id="fy3"></span> · <span class="footer-link" onclick="goAbout()">About</span> · <span class="footer-link" onclick="goTos()">Terms of Service</span></footer>
+  </div>
+</div>
+
+
+<!-- ── Novel Modal — slides in from right over home screen ── -->
+<div id="novel-modal">
+  <nav class="page-nav reader-nav" style="position:sticky;flex-shrink:0;">
+    <button class="back-btn" onclick="closeNovelModal()">← Back</button>
+    <div class="reader-nav-info">
+      <div class="reader-nav-ch" id="novel-nav-title" style="font-size:.9rem;"></div>
+    </div>
+    <button class="back-btn" onclick="goHome()" style="font-size:.78rem;color:var(--carrot);white-space:nowrap;">Home</button>
+  </nav>
+  <div class="page-scroll" id="novel-scroll">
+    <div class="novel-hero-band" id="novel-hero-band"></div>
+    <div class="synopsis-section" id="novel-synopsis-section"></div>
+    <div class="novel-progress-section" id="novel-progress-section"></div>
+    <div class="volumes-section" id="novel-volumes-section"></div>
+  </div>
+</div>
+
+<button id="scrolltop" onclick="stTop()">↑</button>
+<div id="toast"></div>
+
+<script>
+(function(){
+  function forceRemoveLoader() {
+    var ls = document.getElementById('loading-screen');
+    if (ls) { ls.style.transition='none'; ls.style.opacity='0'; ls.style.pointerEvents='none'; setTimeout(function(){ ls.remove(); },50); }
+    var app = document.getElementById('screen-app');
+    if (app) { app.style.display='flex'; app.classList.add('active'); }
+  }
+  window._loaderFailsafe = setTimeout(forceRemoveLoader, 6000);
+})();
+</script>
+
+<script src="data.js" onerror="console.error('data.js failed')"></script>
+<script src="utils.js" onerror="console.error('utils.js failed')"></script>
+<script src="home.js" onerror="(function(){ clearTimeout(window._loaderFailsafe); var ls=document.getElementById('loading-screen'); if(ls){ls.style.transition='none';ls.remove();} var app=document.getElementById('screen-app'); if(app){app.style.display='flex';app.classList.add('active');} })()"></script>
+<!-- SEE-ALL MODAL -->
+<div id="see-all-modal" role="dialog" aria-modal="true" aria-labelledby="sa-title-text">
+  <div class="sa-header">
+    <button class="sa-back" onclick="closeSeeAll()" aria-label="Close">&#8592;</button>
+    <span class="sa-title" id="sa-title-text"></span>
+    <span class="sa-count" id="sa-count-badge"></span>
+  </div>
+  <div class="sa-body" id="sa-body"></div>
+</div>
+
+</body>
+</html>
